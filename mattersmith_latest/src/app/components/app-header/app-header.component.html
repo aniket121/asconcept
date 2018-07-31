@@ -1,0 +1,70 @@
+<header id="topHeader">
+    <div class="row" style="margin-right:0px;margin-right:0px">
+      <div class="col-sm-8">
+          <div>
+            <img id="logo" src="assets/img/smithlogo.png" >
+          </div><br/>
+          <div class="headertop">                  
+              <a style="margin-left:5%">
+                  <a class="col-1 colr font"  routerLink="/home"  routerLinkActive="active" >Home</a>
+              </a>
+              <a>
+                <a  class="col-1 colr font" routerLink="/about-us"  routerLinkActive="active" > About us</a> 
+              </a>
+              <a >
+                <a class="col-1 colr font"  routerLink="/contact-us"  routerLinkActive="active"  > Contact us</a>      
+              </a>
+                <a  >               
+                  <div class="btn-group inlineservice"  dropdown >
+                      <!-- class="dropdown-toggle" -->
+                      <a routerLink="services"  class="col-1 colr font" routerLinkActive="active" >
+                          <a dropdownToggle  >Law <i class="fa fa-caret-down"></i></a>
+                      </a>
+                      <ul *dropdownMenu   class="dropdown-menu logout-dropdown popup"  role="menu">
+                        <li role="menuitem"><a routerLink="/advice" class="dropdown-item">Advice</a></li> 
+                        <li role="menuitem"><a routerLink="/technology" class="dropdown-item">Technology</a></li> 
+                        <li role="menuitem"><a routerLink="/nda-s" class="dropdown-item">NDA</a></li>                   
+                      </ul>
+                  </div>
+              </a>
+               <a  >               
+                  <div class="btn-group inlineservice"  dropdown >
+                      <!-- class="dropdown-toggle" -->
+                      <a routerLink="services"  class="col-1 colr font" routerLinkActive="active" >
+                          <a dropdownToggle  >Technology <i class="fa fa-caret-down"></i></a>
+                      </a>
+                      <ul *dropdownMenu   class="dropdown-menu logout-dropdown popup"  role="menu">
+                        <li role="menuitem" ><a href="http://repindex.com:4200/html/knowledge" target="_blank" class="dropdown-item">Knowledge  <i class="fa fa-sign-in alignicon" aria-hidden="true"></i> </a></li> 
+                        <li role="menuitem"><a href="https://asconceptreviewer.com" target="_blank" class="dropdown-item">Review <i class="fa fa-sign-in alignicon" aria-hidden="true"></i></a></li> 
+                                           
+                      </ul>
+                  </div>
+              </a>
+             <!--  <a> -->
+               <!--  <a class="col-1 colr font" routerLink="/Knowledge" routerLinkActive="active">Knowledge</a>  -->
+           <!--      <a class="col-1 colr font knowledgealign" href="http://repindex.com:4200/html/knowledge" target="_blank">Knowledge <i class="fa fa-sign-in" aria-hidden="true"></i>
+</a>     
+              </a>
+              <a> -->
+               <!--  <a class="col-1 colr font" routerLink="/review" routerLinkActive="active"> Review</a> -->
+               <!--  <a class="col-1 colr font knowledgealign" href="https://asconceptreviewer.com" target="_blank">Review <i class="fa fa-sign-in" aria-hidden="true"></i>
+</a>        
+              </a> -->
+              <!-- <a>
+                <a class="col-1 colr font" routerLink="/login" routerLinkActive="active"> Users</a>      
+              </a> -->
+          </div>
+      </div>
+      <div class="col-sm-4 legal" *ngIf="show_home"> 
+          <hr *ngIf="line" class="blankline">    
+        <p class="sublogo"><font size="4" class="mydiv" >{{home_content}}</font></p>
+      </div>
+    </div>      
+
+
+
+
+</header>
+
+
+

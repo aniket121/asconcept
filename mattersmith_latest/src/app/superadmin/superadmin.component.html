@@ -1,0 +1,165 @@
+<div class="alignheight">
+<p-growl [(value)]="msgs"></p-growl>
+		<p-dataTable [value]="users" class="prime-ng-data-table" reorderableColumns="true" selectionMode="single"  columnResizeMode="expand" [responsive]="true"  [paginator]="true" [rows]="20" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]" #dt>
+				<p-header>
+					<div class= "col-12 breadcrum ">
+						<div class="row alignbutton">
+								<button class="btn  user-header" (click)="addUser()" > Add Client</button>
+
+
+						</div> 
+					</div>			
+				</p-header>
+				<p-column   field="action" header="Action" [filter]="false" [sortable]="false">			
+					<ng-template let-col let-user="rowData" let-i="rowIndex" pTemplate="body">
+							<div class="container h-100 d-flex justify-content-center">
+								<i *ngIf="user.status=='InActive'" pTooltip="Active User" class="fa fa-lock" (click)="changeUserStatus(user)" ></i> &nbsp;&nbsp;
+								<i  *ngIf="user.status=='Active'" pTooltip="Inactive User" class="fa fa-unlock" (click)="changeUserStatus(user)" ></i> &nbsp;&nbsp;
+
+								<i class="fa fa-edit" pTooltip="Edit " (click)="edit(user)" ></i> &nbsp;&nbsp;
+								<i class="fa fa-trash" pTooltip="Delete" (click)="delete(user.id)"></i>
+							</div>
+					</ng-template>
+				</p-column>
+				<p-column field="username"   header="Username"   [filter]="true" [sortable]="true"></p-column>
+				<p-column field="first_name" header="Firstname"  [filter]="true" [sortable]="true"></p-column>
+				<p-column field="last_name"  header="Lastname"   [filter]="true" [sortable]="true"></p-column>
+				<p-column field="email"      header="Email"      [filter]="true" [sortable]="true"></p-column>
+				<p-column field="user_limit" header="User Limit" [filter]="true" [sortable]="true"></p-column>
+				<p-column field="status"     header="Status"     [filter]="true" [sortable]="true"></p-column>
+				<p-column field="is_staff"  header="Role"       [filter]="true" [sortable]="true"></p-column>					
+		</p-dataTable>
+
+		<p-dialog [(visible)]="showDialog" header="Add/Edit User"  [width]="500">
+			<div >	
+          <form  method="post" (ngSubmit)="saveUser()" #userForm="ngForm" class="form-horizontal">
+            <div class="form-group row">
+							<div class="col-sm-5" >
+								<label class="container h-100 d-flex "  for="input-small">First Name:<div class="mendatory-color"> *</div>  </label>
+							</div>
+							<div class="col-sm-6">
+								<input type="text" [(ngModel)]="user.first_name" name="first_name" pattern="^[a-zA-Z]+$"  class="form-control form-control-sm" required #first_name="ngModel">
+								<div *ngIf="first_name.errors && (first_name.dirty || first_name.touched)" class="danger" >
+									<div [hidden]="!first_name.errors.required">
+										Firstname is required!
+									</div>
+									<div [hidden]="first_name.errors.required">
+										
+										Please enter only characters!
+									</div>                    
+                </div> 
+							</div>				
+            </div>
+            <div class="form-group row">
+							<div class="col-sm-5" >
+								<label class="container h-100 d-flex" pattern="^[a-zA-Z]+$"  for="input-small">Last Name*:<div class="mendatory-color"> *</div> </label>
+							</div>
+							<div class="col-sm-6">
+								<input type="text" name="last_name" [(ngModel)]="user.last_name" pattern="^[a-zA-Z]+$"  required class="form-control form-control-sm" #last_name="ngModel" >
+								<div *ngIf="last_name.errors && (last_name.dirty || last_name.touched)" class="danger" >
+										<div [hidden]="!last_name.errors.required">
+											Lastname is required!
+										</div>
+										<div [hidden]="last_name.errors.required">
+											Please enter only characters!
+										</div>													
+								</div> 
+							</div>				
+            </div>
+            <div class="form-group row">
+							<div class="col-sm-5" >
+								<label class="container h-100 d-flex "  for="input-small">Email ID:<div class="mendatory-color">*</div> </label>
+							</div>
+							<div class="col-sm-6">
+								<input type="text" name="email" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$" [(ngModel)]="user.email" required class="form-control form-control-sm"  #email="ngModel">
+								<div *ngIf="email.errors && (email.dirty || email.touched)" class="danger" >
+													<div [hidden]="!email.errors.required">
+														Email is required!
+													</div>
+													<div [hidden]="email.errors.required">
+														Please enter valid email address
+													</div>													
+										</div> 
+							</div>				
+						</div>
+						<div class="form-group row">
+							<div class="col-sm-5" >
+								<label class="container h-100 d-flex "  for="input-small">Username:<div class="mendatory-color"> *</div> </label>
+							</div>
+							<div class="col-sm-6">
+								<input type="text" name="username" [(ngModel)]="user.username" required class="form-control form-control-sm"   #username="ngModel" >
+								<div *ngIf="username.errors && (username.dirty || username.touched)" class="danger" >
+													<div [hidden]="!username.errors.required">
+														Username is required!
+													</div>
+													<div [hidden]="username.errors.required">
+														Username is required!
+													</div>
+										</div> 
+							</div>				
+            </div>
+            <div class="form-group row" *ngIf="passwordField">
+							<div class="col-sm-5" >
+								<label class="container h-100 d-flex"  for="input-small">Password:<div class="mendatory-color"> *</div> </label>
+							</div>
+							<div class="col-sm-6">
+								<input type="password" name="password"  [(ngModel)]="user.password" required class="form-control form-control-sm" #password="ngModel">
+								<div *ngIf="password.errors && (password.dirty || password.touched)" class="danger" >
+											<div [hidden]="!password.errors.required">
+												Password is required!
+											</div>
+											<div [hidden]="password.errors.required">
+												Password is required!
+											</div>
+								</div> 
+							</div>				
+						</div>
+
+            <div class="form-group row" >
+								<div class="col-sm-5" >
+									<label class="container h-100 d-flex"  for="input-small">Role:<div class="mendatory-color"> *</div> </label>
+								</div>
+								<div class="col-sm-6">								
+										<select  class="form-control"  (change)="changeRole($event.target.value)">
+													<option [value]=1 [selected]=2>admin</option>
+													<option [value]=2  >Viewer Editor</option>
+													<option [value]=3  >Viewer Read only</option>
+										</select>
+								</div>				
+						</div>						
+						
+            <div class="form-group row" *ngIf="user_role.user_limit_state">
+							<div class="col-sm-5" >
+								<label class="container h-100 d-flex"  for="input-small">Userlimit:<div class="mendatory-color"> *</div> </label>
+							</div>
+							<div class="col-sm-6">
+								<input type="text" pattern="^[0-9]" name="user_limit"  [(ngModel)]="user.user_limit" required class="form-control form-control-sm" #userlimit__userlimit="ngModel">
+								<div *ngIf="userlimit__userlimit.errors && (userlimit__userlimit.dirty || userlimit__userlimit.touched)" class="danger" >
+										<div [hidden]="!userlimit__userlimit.errors.required">
+											Userlimit is required!
+										</div>
+										<div [hidden]="userlimit__userlimit.errors.required">
+											Please enter only numbers
+										</div>
+								</div> 
+							</div>				
+            </div>
+
+            <div class="form-group row container h-100 d-flex justify-content-center">
+				<button type="submit" [disabled]="userForm.form.invalid"  class="btn">Save</button> <div class="col-2"></div>
+				<button (click)="showDialog = !showDialog" class="btn">Close</button>
+            </div>
+
+          </form>
+	</div>
+</p-dialog>
+
+<p-dialog [(visible)]="deleteDialog" header="Delete User">
+				
+				<h6 class="popup-title container h-100 d-flex justify-content-center">Do you want to delete User</h6>
+				<div class="form-group row container h-100 d-flex justify-content-center">
+					<button (click)="deleteUser()" class="btn">Yes</button><div class="col-2"></div>
+					<button (click)="deleteDialog = !deleteDialog" class="btn">Close</button>
+				</div>
+</p-dialog>
+</div>

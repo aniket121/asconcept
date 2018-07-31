@@ -1,0 +1,1307 @@
+
+<header class="app-header navbar">
+  <style>
+    
+/* Popup container - can be anything you want */
+ 
+.sidebar .nav .nav-item.nav-dropdown.open > ul, .sidebar .nav .nav-item.nav-dropdown.open > ol {    max-height: 15000px !important;}
+
+.textmenu,subMenuForFolders{
+  display:none;
+  background-color:#a0938f;
+  border-radius: 6px;
+  color:white;
+  text-align: left;
+      z-index: 37;
+    margin-left:85px;
+    position: fixed;
+    width:140px;
+    padding-left:15px;
+    padding-right:15px;
+    padding-top:10px;
+    padding-bottom:10px;
+        top: 29%;
+     font-size:12px;
+}
+p{
+    width: 10em;  
+    word-wrap: break-word;
+}
+p:hover {
+    background-color: #996600;
+}
+.loader {
+  border: 5px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 5px solid black;
+  border-right: 5px solid black;
+  border-bottom: 5px solid black;
+  width: 50px;
+  height: 50px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.context-menu-p{
+      margin-bottom: 3px;
+}
+
+</style>
+ 
+  <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">&#9776;</button>
+  <a class="" href="#"></a>
+  
+  <ul class="nav navbar-nav hidden-md-down">
+    <li class="nav-item">
+      <a  style="color:black;margin-left:-15px;" id="toglerbtn" class="nav-link navbar-toggler sidebar-toggler" href="#">&#9776;</a>
+    </li>
+    <!--<b style="font-size:19px;color:black;"> RepindexApp</b>-->
+     <img src="assets/img/LOG.png" style="width: 200px;
+    height: 54px;margin-left:-50px;" >
+  
+  </ul>
+  <ul class="nav navbar-nav ml-auto">
+   
+    <li class="nav-item dropdown" dropdown (onToggle)="toggled($event)">
+      <a style="color:black;" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle>
+        <span class="hidden-md-down" style="color:white;font-size:12px">{{userName}}</span>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right" dropdownMenu aria-labelledby="simple-dropdown">
+
+        <div class="dropdown-header text-center"><strong>Account</strong></div>
+
+      
+        <a class="dropdown-item" href="#" (click)="logout()"><i class="fa fa-lock"></i> Logout</a>
+      </div>
+    </li>
+    <li class="nav-item hidden-md-down">
+      <a style="display:none;"class="nav-link navbar-toggler aside-menu-toggler" href="#">&#9776;</a>
+    </li>
+  </ul>
+  
+</header>
+
+<div class="app-body" (click)="allClose()"  >
+  <div class="sidebar" >
+    <nav class="sidebar-nav">
+
+    <div *ngIf="username==='admin'">
+      <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard']"><i class="fa fa-user"style="color:#808080;"></i>{{'Clients' | translate}}</a>
+          </li>
+          <li class="nav-item nav-dropdown" routerLinkActive="open">
+            <a     (contextmenu)="ConceptStopListMenu($event)" class="nav-link nav-dropdown-toggle" href="#">
+                <i  class="fa fa-file-text fa-lg mt-4" ></i> {{'stop-list'| translate}}
+                <div class="textmenu" id="m10">
+                  <p (click)="newConceptStopListImport()" style="cursor:pointer;"  class="context-menu-p">{{'Import-Stoplist'| translate}}</p>
+                  <p (click)="closeStopList()" style="cursor:pointer;"  class="context-menu-p">Quit</p>
+                </div>
+              
+            </a>
+            <ul>
+                <li  class="nav-item nav-dropdown" *ngFor="let child of  getstop"> 
+                  <a class="nav-link" (contextmenu)="ConceptStopListMenuChild($event)" id="{{child.fields.name}}@{{child.pk}}">
+                      <i  class="fa fa-long-arrow-right fa-lg mt-4"></i>
+                      {{child.fields.name}}
+                      <div  class="textmenu" id="m11">
+                        <p (click)="renameStopList()" style="cursor:pointer;"  class="context-menu-p">Rename Stoplist</p>
+                        <p (click)="deleteStopList(child.pk)" style="cursor:pointer;"  class="context-menu-p">Delete Stoplist</p>
+                        <p (click)="closeStopListChild()" style="cursor:pointer;"  class="context-menu-p">Quit</p>
+                          <input type="hidden"  id="hiddenId-of-stop-list">
+                          <input type="hidden"  id="textOfStopList">
+                      </div>
+                  </a>
+                </li>
+            </ul>
+          </li>
+      </ul>
+    </div>
+   <div *ngIf="username==='superuser'">
+   <ul class="nav">
+    <li class="nav-item">
+          <a class="nav-link" routerLinkActive="active" [routerLink]="['/superdashboard']"><i class="fa fa-user"style="color:#ffffff;"></i>Admins</a>
+        </li>
+
+     </ul>
+     <ul class="nav">
+      <li class="nav-item" class="nav-item nav-dropdown"  routerLinkActive="open">
+            <a class="nav-link" class="nav-link nav-dropdown-toggle" (contextmenu)="showMasterList($event)" routerLinkActive="active" >
+                <i class="fa fa-book"style="color:#ffffff">
+                  </i>masterlist
+            </a>
+            <div class="textmenu" id="masterlist">
+              <p (click)="newMasterListImport()" style="cursor:pointer;"  class="context-menu-p">Import MasterList</p>
+              <p (click)="closeMasterList()" style="cursor:pointer;"  class="context-menu-p">Quit</p>
+            </div>
+              <ul>               
+                  <li *ngFor="let master  of masterConcepts" class="nav-item nav-dropdown" routerLinkActive="open">
+                    <a class="nav-link" class="nav-link nav-dropdown-toggle" (contextmenu)="MasterListMenuChild($event)" id="{{master.id}}">
+                      <i  class="fa fa-file-word-o fa-lg mt-4"></i>
+                         {{master.name}}
+                    </a>
+                    <div  class="textmenu" id="masterChileId">
+                      <a (click)="renameMasterList()" style="cursor:pointer;"  class="context-menu-p">Rename Masterlist</a>
+                      <p (click)="deleteMasterList()" style="cursor:pointer;"  class="context-menu-p">Delete Masterlist</p>
+                      <p (click)="closemasterChild()" style="cursor:pointer;"  class="context-menu-p">Quit</p>
+                        <input type="hidden"  id="hiddenId-of-master-list">
+                        <input type="hidden"  id="textOfMasterList">
+                    </div>
+                    <ul>
+                      <li *ngFor="let mas  of master.values" class="nav-item nav-dropdown" routerLinkActive="open">
+                          <a class="nav-link" class="nav-link nav-dropdown-toggle">
+                            <i  class="fa fa-arrows-v fa-lg mt-4"></i>
+                              {{mas.umbrella}}
+                          </a>
+                    <ul>
+                      <li *ngFor="let ma  of mas.lst_terms" class="nav-item nav-dropdown" routerLinkActive="open">
+                          <a class="nav-link">
+                            <i  class="fa fa-long-arrow-right fa-lg mt-4"></i>
+                              {{ma}}
+                          </a>
+                      </li>
+                    </ul>
+                      </li>
+                    </ul>
+                  </li>
+          </ul>
+      </li>
+     </ul>
+   </div>
+
+
+
+   <div *ngIf="project==='afterproject'">
+    
+   <ul class="nav">
+       <!--Project Name-->
+          <li class="nav-item nav-dropdown" routerLinkActive="open">
+          <a class="nav-link nav-dropdown-toggle"  style="font-size:12px;" href="#"><i class="fa fa-book fa-lg mt-4"></i>{{projectName}}</a>
+          
+        </li>
+
+         <!--Project Name-->
+          <li class="nav-item nav-dropdown" routerLinkActive="open">
+          <a style="font-size:12px;" class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-search-plus fa-lg mt-4"></i> {{'Query'| translate }}</a>
+          <ul class="nav-dropdown-items">
+            <li class="nav-item">
+              <a class="nav-link" style="font-size:12px;" (click)="newQueryPgae()"><i class="icon-puzzle"></i>{{'New-Query'| translate }}</a>
+            </li>
+          
+          </ul>
+        </li>
+         <!--Query-->
+ 
+          <!--TEXT LIST-->
+          <li class="nav-item nav-dropdown" routerLinkActive="open">
+              <a style="font-size:12px;" (contextmenu)="demo1($event)" class="nav-link nav-dropdown-toggle" href="#">
+                <i  class="fa fa-file-text fa-lg mt-4" ></i> {{'text-list'| translate }}
+              </a>
+              <div class="textmenu" id="m1">
+                <p  (click)="addNewFolderToTextList()" style="cursor:pointer;"  class="context-menu-p"> {{'New-folder'| translate }}</p>
+                <p   (click)="closem1()" style="cursor:pointer;"  class="context-menu-p"> {{'Quit'| translate }}</p>
+              </div>
+                <ul class="nav-dropdown-items">
+                  <!--*ngFor="let folder  of textlistfolders"-->
+                    <li  *ngFor="let folder  of text_folders" class="nav-item nav-dropdown">
+                        <a style="font-size:12px;cursor:pointer;" *ngIf="folder.fields.parent_folder_id == null"  (contextmenu)="demo3($event)" class="nav-link nav-dropdown-toggle" id="{{folder.pk}}@{{folder.fields.name}}"  >
+                              <i class="fa fa-folder fa-lg mt-4" style="font-size:12px;margin-left: 0px;color:yellow;cursor:pointer;"></i>
+                              {{folder.fields.name}}           
+                        </a>
+                        <div class="textmenu" id="m3">
+                            <p (click)="addNewTextList()"style="cursor:pointer;" class="context-menu-p">{{'Add-textlist'| translate }}</p>
+                            <p (click)="importUrl()" style="cursor:pointer;" class="context-menu-p">Import URL</p>
+                            <p (click)="addSubfolder()"style="cursor:pointer;" class="context-menu-p">Add NewFolder</p>
+                            <p (click)="renameTextListFolder()" style="cursor:pointer;"  class="context-menu-p">{{'rename-folder'| translate }}</p>
+                            <p (click)="deleteTextListFolder()" style="cursor:pointer;" class="context-menu-p">{{'delete-folder'| translate }}</p>
+                            <p (click)="closem3()" style="cursor:pointer;"  class="context-menu-p">{{'Quit'| translate }}</p>
+                            <input type="hidden"  id="hiddenId-of">
+                            <input type="hidden"  id="textOfFolder">
+                        </div> 
+                        <ul class="nav-dropdown-items" >
+                          <li  class="nav-item nav-dropdown" *ngFor="let list of text_list_data">
+                              <a style="font-size:12px" *ngIf="folder.pk == list.fields.folder_id" class="nav-link  " (contextmenu)="TextListMenuChild($event,list)" id="{{list.pk}}">
+                                <i  class="fa fa-file-word-o fa-lg mt-4"></i>
+                                {{list.fields.name}}
+                                <div  class="textmenu" id="p1">
+                                    <p (click)="deleteTextListData()" style="cursor:pointer;"  class="context-menu-p">Delete Text</p>
+                                    <p (click)="closeTxtList()" style="cursor:pointer;"  class="context-menu-p">Quit</p>
+                                    <input type="hidden"  id="hiddenId-of-text-list" >
+                                    <input type="hidden"  id="textListId">
+                                </div>
+                            </a>
+                        </li>
+
+
+
+
+                         <li  class="nav-item nav-dropdown" *ngFor="let ul of urls">
+                              <a *ngIf="folder.pk == ul.fields.folder_id" class="nav-link" (contextmenu)="TextListUrl($event,ul.pk)" id="{{ul.pk}}">
+                                 <i style="color:aqua;" class="fa fa-external-link fa-4"></i>
+                                  <font color="aqua"> {{ul.fields.name}}.url </font>
+                                        <div  class="textmenu" id="url_menu">
+                                            <p (click)="deleteTextListUrl()" style="cursor:pointer;"  class="context-menu-p">Delete URL</p>
+                                            <p (click)="closeurl()" style="cursor:pointer;"  class="context-menu-p">Quit</p>
+                                            <input type="hidden"  id="hiddenId-of-text-list-url" >
+                                            <input type="hidden"  id="textListurlId">
+                                        </div>
+                             </a>
+                        </li>
+
+                          <li  *ngFor="let fold  of text_folders" class="nav-item nav-dropdown">
+                            <a style="font-size:12px" *ngIf="fold.fields.parent_folder_id == folder.pk"   (contextmenu)="demos3($event)" class="nav-link nav-dropdown-toggle" id="{{fold.pk}}@{{fold.fields.name}}"  >
+                                <i class="fa fa-folder fa-lg mt-4" style="font-size:12px;margin-left: 10px;color:cornflowerblue;cursor:pointer;"></i>
+                                    {{fold.fields.name}}            
+                            </a>
+                            <div class="textmenu" id="mm3"> 
+                                <p (click)="addNewSubTextList()"style="cursor:pointer;" class="context-menu-p">{{'Add-textlist'| translate }}</p>
+                                <p (click)="renameSubTextListFolder()" style="cursor:pointer;"  class="context-menu-p">{{'rename-folder'| translate }}</p>
+                                <p (click)="deleteSubTextListFolder()"  class="context-menu-p">{{'delete-folder'| translate }}</p>
+                                <p (click)="closem3()" style="cursor:pointer;"  class="context-menu-p">{{'Quit'| translate }}</p>
+                                <input type="hidden"  id="hiddenId-ofsubfolder">
+                                <input type="hidden"  id="textOfsubFolder">
+                            </div>
+                            <ul class="nav-dropdown-items" >
+                                  <li  class="nav-item nav-dropdown" *ngFor="let list of text_list_data">
+                                      <a style="font-size:12px" style="font-size:12px" *ngIf="fold.pk == list.fields.folder_id" class="nav-link  " (contextmenu)="TextListMenuChild($event,list)" id="{{list.pk}}">
+                                        <i  class="fa fa-file-word-o fa-lg mt-4"></i>
+                                        {{list.fields.name}}
+                                        <div  class="textmenu" id="p1">
+                                            <p (click)="deleteTextListData()" style="cursor:pointer;"  class="context-menu-p">Delete Text</p>
+                                            <p (click)="closeTxtList()" style="cursor:pointer;"  class="context-menu-p">Quit</p>
+                                            <input type="hidden"  id="hiddenId-of-text-list" >
+                                            <input type="hidden"  id="textListId">
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                          </li>
+                      </ul>  
+                   </li>
+                </ul>
+          </li>
+       
+
+<!-- Concept List -->
+<li class="nav-item nav-dropdown" routerLinkActive="open">
+   <a  style="font-size:12px;" (contextmenu)="demo2($event)" class="nav-link nav-dropdown-toggle" href="#" >
+      <i class="fa fa-list fa-lg mt-4"></i> 
+      {{'Concept-list'| translate }}
+   </a>
+   <div class="textmenu" id="m2">
+      <p  (click)="addNewFolderToConceptList()" style="cursor:pointer;"  class="context-menu-p"> {{'New-folder'| translate }} </p>
+      <p (click)="deletemultiple()" style="cursor:pointer;"  class="context-menu-p">Delete Multiple</p>
+      <p   (click)="closem1()" style="cursor:pointer;"  class="context-menu-p"> {{'Quit'| translate }}</p>
+   </div> 
+   <ul class="nav-dropdown-items">
+      <li *ngFor="let fold  of conceptFolder" class="nav-item nav-dropdown">
+         <!--<a (contextmenu)="showConceptListMenu($event)" class="nav-link nav-dropdown-toggle" id="{{conceptlist.name}}@{{conceptlist.id}}">
+              <i class="fa fa-file-text fa-lg mt-4;"></i>
+              {{conceptlist.name}} 
+         </a>-->
+         <!--foldername-->
+           <a style="font-size:12px;cursor:pointer;" (contextmenu)="demo4($event)" class="nav-link nav-dropdown-toggle" id="{{fold.pk}}@{{fold.fields.name}}"  >
+                  <i class="fa fa-folder fa-lg mt-4" style="font-size:12px;margin-left: 0px;color:yellow;cursor:pointer;"></i>
+                  {{fold.fields.name}}
+          </a> 
+          <!--foldername-->
+           <div class="textmenu" id="mm5">
+                <p (click)="newConceptListImport()" style="cursor:pointer;"  class="context-menu-p">{{'import-csv'| translate }}</p>
+                <p (click)="renameConceptListFolder()" style="cursor:pointer;"  class="context-menu-p">{{'rename-folder'| translate }}</p>
+                <p  (click)="deleteConceptListFolder()" style="cursor:pointer;"  class="context-menu-p">{{'delete-folder'| translate }}</p>
+                <p (click)="closem4()" style="cursor:pointer;"  class="context-menu-p">{{'Quit'| translate }}</p>
+                <input type="hidden"  id="hiddenId-of-concept-list-folder-id">
+                <input type="hidden"  id="textOfConceptListFolder">
+           </div>
+           <ul style="overflow:scroll">
+               
+               <li *ngFor="let conceptlist of concept" class="nav-item nav-dropdown">
+                         
+                        <a style="font-size:12px" *ngIf="conceptlist.folder_id === fold.pk" (contextmenu)="showConceptListMenu($event)" class="nav-link nav-dropdown-toggle" id="{{conceptlist.name}}@{{conceptlist.id}}">
+                            <i class="fa fa-file-text fa-lg mt-4;"></i>
+                            {{conceptlist.name}}
+                        </a>
+              <div *ngIf="concept_status === 'true'" class="textmenu" id="m4">
+                  <p  (click)="renameConceptList()" style="cursor:pointer;"  class="context-menu-p">{{'Rename-concept'| translate }}</p>
+                  <p  (click)="deleteConceptList()" style="cursor:pointer;"  class="context-menu-p">{{'delete-concept'| translate }}</p>
+                  <p (click)="closem4()" style="cursor:pointer;"  class="context-menu-p">{{'Quit'| translate }}</p>
+                  <input type="hidden"  id="hiddenId-of-concept-list">
+                  <input type="hidden"  id="textOfConceptList">
+              </div>
+              <ul>
+                  <li  class="nav-item nav-dropdown" *ngFor="let item of conceptlist.values" >
+                    <a style="font-size:12px" (contextmenu)="showConceptListMenuUmbrella($event)"  id="{{item.umbrella}}@{{item.terms}}@{{item.id}}" class="nav-link nav-dropdown-toggle">
+                    <i  class="fa fa-arrows-v fa-lg mt-4"></i>
+                    {{item.umbrella}}
+                    </a>
+                    <div class="textmenu" id="m5">
+                        <p *ngIf="concept_status === 'true'" (click)="selectTerms()"style="cursor:pointer;"  class="context-menu-p">{{'select-terms'| translate }}</p>
+                        <p (click)="insertIntosearch()"style="cursor:pointer;"  class="context-menu-p">{{'Insertsearch'| translate }}</p>
+                        <p *ngIf="concept_status === 'true'" (click)="userComment(item.id)"style="cursor:pointer;"  class="context-menu-p">{{'addefination'| translate }}</p>
+                       <!--  <p *ngIf="concept_status === 'true'" (click)="insertintoand()" style="cursor:pointer;"  class="context-menu-p">{{'Insertand'| translate }}</p> -->
+                        <p (click)="closeM5()" style="cursor:pointer;"  class="context-menu-p">{{'Quit'| translate }}</p>
+                        <input type="hidden"  id="hidenTermsOfUmbrella">
+                        <input type="hidden"  id="hidenUmbrella">
+                        <input type="hidden"  id="conceptid">
+                    </div>
+                    <ul *ngIf="concept_status === 'true'">
+                        <li  class="nav-item nav-dropdown" *ngFor="let child of  item.lst_terms">
+                          <a style="font-size:12px" class="nav-link  " (contextmenu)="ConceptListMenuChild($event,child)">
+                              <i  class="fa fa-long-arrow-right fa-lg mt-4"></i>
+                              {{child}}
+                              <div  class="textmenu" id="mm9">
+                                <p (click)="insertIntosearchChild()" style="cursor:pointer;"  class="context-menu-p">{{'Insertsearch'| translate }}</p>
+                                <!-- <p (click)="insertintoand()" style="cursor:pointer;"  class="context-menu-p">{{'Insertand'| translate }}</p> -->
+                                <!-- <p (click)="addNewTextList()"style="cursor:pointer;"  class="context-menu-p"> Rename concept</p>
+                                    <p (click)="renameTextListFolder()" style="cursor:pointer;"  class="context-menu-p">Delete concept</p>-->
+                                <p (click)="closeMM9()" style="cursor:pointer;"  class="context-menu-p">{{'Quit'| translate }}</p>
+                                <input type="hidden"  id="hidenTermsOfUmbrellaChild">
+                                <input type="hidden"  id="hidenUmbrellaChild">
+                              </div>
+                          </a>
+                        </li>
+                    </ul>
+                  </li>
+              </ul>
+      </li>
+         </ul>
+      </li>
+   </ul>
+</li>
+        </ul>
+   </div>
+   
+    <div *ngIf="project==='addproject'">
+    
+   </div>
+   
+
+
+     
+    </nav>
+  </div>
+
+  <!-- Main content -->
+  <main class="main">
+
+ 
+
+    <div class="container-fluid">
+      <router-outlet></router-outlet>
+    </div><!-- /.conainer-fluid -->
+  </main>
+
+  <!--ADD FOLDER-->
+
+   <button id="uniq"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal.show()">
+            Launch demo modal
+          </button>
+<div bsModal #myModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h6 class="modal-title" id="exampleModalLabel" style=font-size:15px;>{{'New-folder'| translate }}</h6>
+        <button type="button" class="close" (click)="myModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="text" class="form-control" id="text-list-new-folder-name" placeholder="Add new folder">  
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModal.hide()">{{'close'| translate }}</button>
+        <button type="button" class="btn btn-primary" (click)="createNewFolder()" style=background-color:#808080;color:white;>{{'Save'| translate }}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<button id="clist"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="mynewModal.show()">
+     Launch demo modal
+</button>
+<div bsModal #mynewModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mynewModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h6 class="modal-title" id="exampleModalLabel" style=font-size:15px;>{{'New-folder'| translate }}</h6>
+          <button type="button" class="close" (click)="mynewModal.hide()" aria-label="Close">
+            <span aria-hidden = "true"> &times; </span>
+          </button>
+      </div>
+      <div class="modal-body">
+        <input type="text" class="form-control" id="concept-list-new-folder-name" placeholder="Add new folder">  
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="mynewModal.hide()">{{'close'| translate }}</button>
+        <button type="button" class="btn btn-primary" (click)="createNewFolderConceptList()" style=background-color:#808080;color:white;>{{'Save'| translate }}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<!--delete multipl text-->
+<button id="deletemultiple"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal21.show()">
+            Launch demo modal
+          </button>
+<div bsModal #myModal21="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h6 class="modal-title" id="exampleModalLabel" style=font-size:15px;>Delete Multiple files </h6>
+        <button type="button" class="close" (click)="myModal21.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <div id="termsvalue"> <span *ngFor="let list of multipleconceptList"> 
+   
+    <input type="checkbox" (click)="selectconceptvalue(list.pk)" > {{list.fields.name}}<br>
+      </span></div>
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModal21.hide()">{{'close'| translate }}</button>
+        <button type="button" class="btn btn-primary" (click)="getmultipleconceptids()" style=background-color:#808080;color:white;>{{'ok'| translate }}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--end of multiple text-->
+
+
+<!--select terms-->
+<button id="terms"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal14.show()">
+     Launch demo modal
+</button>
+<div bsModal #myModal14="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h6 class="modal-title" id="exampleModalLabel" style=font-size:15px;>{{'select-terms'| translate }}</h6>
+        <button type="button" class="close" (click)="myModal14.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <div id="termsvalue"> <span *ngFor="let color of finaltermlist"> 
+   
+    <input type="checkbox" (click)="selecttermsvalue(color)" > {{color}}<br>
+      </span></div>
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModal14.hide()">{{'close'| translate }}</button>
+        <button type="button" class="btn btn-primary" (click)="insertTerms()" style=background-color:#808080;color:white;>{{'ok'| translate }}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!--DELETE CONCEPT LIST Url-->
+ <button id="delete-text-listurl"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="deleteUrlModal.show()">
+            deleteTextListUrl
+ </button>
+<div bsModal #deleteUrlModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby = "myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" style=font-size:15px;>Delete URL</h4>
+        <button type="button" class="close" (click)="deleteUrlModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> 
+      </div>  
+      <div class="modal-body">
+        Do you really want to delete this URL....?
+             <input type="hidden" id="delete-text-list-url">
+           
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="deleteUrlModal.hide()">Close</button>
+        <button  style="background-color:#808080; color:white;;" type="button" class="btn btn-primary" (click)="deleteUrl()">Ok</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal --> 
+                        
+
+<button id="defination"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal16.show()">
+      Launch demo modal
+</button>
+<div bsModal #myModal16="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h6 class="modal-title" id="exampleModalLabel" style=font-size:15px;>{{'addefination'| translate}}</h6>
+        <button type="button" class="close" (click)="myModal16.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="definationdiv">
+     
+   
+    <textarea rows=4 cols=56 #defination id="def"> </textarea>
+     
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModal16.hide()">{{'close'| translate }}</button>
+        <button type="button" class="btn btn-primary" (click)="saveDef(defination.value)" style=background-color:#808080;color:white;>{{'Save'| translate }}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!--RENAME FOLDER-->
+ <button id="renameFolder"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal1.show()">
+            REname Folder
+          </button>
+<div bsModal #myModal1="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" style=font-size:15px;>{{'rename-folder'| translate }}</h4>
+        <button type="button" class="close" (click)="myModal1.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>  
+      <div class="modal-body">
+          <input type="text" class="form-control" id="folderRenameText">  
+          <input type="text" hidden class="form-control" id="folderRenameId"> 
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModal1.hide()">{{'close'| translate }}</button>
+        <button type="button" class="btn btn-primary" (click)="renameFolder()" style=background-color:#808080;color:white;>{{'Save'| translate }}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--select terms-->
+
+<!--RENAME FOLDER-->
+ <button id="renameConceptFolder"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="mylastModal1.show()">
+            REname Folder
+</button>
+<div bsModal #mylastModal1="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" style=font-size:15px;>{{'rename-folder'| translate }}</h4>
+        <button type="button" class="close" (click)="mylastModal1.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>  
+      <div class="modal-body">
+          <input type="text" class="form-control" id="folderRenameConceptText">  
+          <input type="text" hidden class="form-control" id="folderRenameConceptId"> 
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="mylastModal1.hide()">{{'close'| translate }}</button>
+        <button type="button" class="btn btn-primary" (click)="renameFolderConcept()" style=background-color:#808080;color:white;>{{'Save'| translate }}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--select terms-->
+
+
+
+
+
+
+
+
+<!--DELETE FOLDER-->
+ <button id="deleteFolder"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal2.show()">
+            delete
+          </button>
+<div bsModal #myModal2="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" style=font-size:15px;>{{'delete-folder'| translate }}</h4>
+        <button type="button" class="close" (click)="myModal2.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>  
+      <div class="modal-body">
+           {{'delete-folder-msg'| translate}}
+          <input type="text" hidden class="form-control" id="folderDeleteId"> 
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModal2.hide()">{{'close'| translate }}</button>
+        <button style="background-color:#808080;color:white;" type="button" class="btn btn-primary" (click)="deleteFolder()">{{'ok'| translate }}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!--DELETE FOLDER-->
+ <button id="deleteConceptFolder"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myconceptModal2.show()">
+            delete
+          </button>
+<div bsModal #myconceptModal2="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" style=font-size:15px;>{{'delete-folder'| translate }}</h4>
+        <button type="button" class="close" (click)="myconceptModal2.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>  
+      <div class="modal-body">
+           {{'delete-folder-msg'| translate}}
+          <input type="text" hidden class="form-control" id="folderDeleteConceptId"> 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myconceptModal2.hide()">{{'close'| translate }}</button>
+        <button style="background-color:#808080;color:white;" type="button" class="btn btn-primary" (click)="deleteConceptFolder()">{{'ok'| translate }}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+<!--ADD TEXT LIST-->
+ <button id="addTextList"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal3.show()">
+            newTextList
+          </button>
+<div bsModal #myModal3="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" style=font-size:15px;>{{'New-Text-List'| translate }}</h4>
+        <button type="button" class="close" (click)="myModal3.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> 
+      </div>  
+      <div class="modal-body">
+            
+          <input type="file" (change)="fileChangeEvent($event)" multiple name="text-list-new" class="form-control" id="newTextListFile"> 
+          <input type="hidden" id="id-hidden-for-new-text-list">
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModal2.hide()">{{'close'| translate }}</button>
+        <button   type="button" class="btn btn-primary" (click)="addTextList()" style=background-color:#808080;color:white;>{{'ok'| translate }}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class={{loaderFlag}} ></div>
+
+<!--ADD CONCEPT LIST-->
+<button id="addConceptList"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal4.show()">
+newconceptlist
+</button>
+<div bsModal #myModal4="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4 class="modal-title" style=font-size:15px;>{{'New-Concept-List'| translate }}</h4>
+            <button type="button" class="close" (click)="myModal4.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button> 
+         </div>
+         <div class="modal-body">
+            <input type="file" (change)="fileChangeEvent2($event)" name="text-list-new" class="form-control" id="newConceptListFile"> 
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="myModal4.hide()">{{'close'| translate }}</button>
+            <button   type="button" class="btn btn-primary" (click)="addConceptList()" style=background-color:#808080;color:white;>{{'ok'| translate }}</button>
+         </div>
+      </div>
+      <!-- /.modal-content -->
+   </div>
+   <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!--ADD Stop LIST-->
+<div>
+   <button id="addConceptStopList"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal11.show()">
+   New Stop List
+   </button>
+   <div bsModal #myModal11="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h4 class="modal-title" style=font-size:15px;>New Stop List</h4>
+               <button type="button" class="close" (click)="myModal11.hide()" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+               </button> 
+            </div>
+            <div class="modal-body">
+               <input type="file" (change)="fileChangeEventStopList($event)" name="text-list-new" class="form-control" id="newStopListFile"> 
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" (click)="myModal11.hide()">{{'close'| translate }}</button>
+               <button   type="button" class="btn btn-primary" (click)="addStopList()" style=background-color:#808080;color:white;>{{'ok'| translate }}</button>
+            </div>
+         </div>
+         <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+   </div>
+   <!-- /.modal -->
+</div>
+
+
+
+
+<!--DELETE CONCEPT LIST-->
+<button id="deleteConceptList"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal5.show()">
+      deleteconceptlist
+</button>
+<div bsModal #myModal5="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" style=font-size:15px;>{{'delete-concept'| translate }}</h4>
+        <button type="button" class="close" (click)="myModal5.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> 
+      </div>  
+      <div class="modal-body">
+        {{'delete-concept-list'| translate }}
+             <input type="hidden" id="delete-concept-list-hidden-pop">
+           
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModal5.hide()">{{'close'| translate }}</button>
+        <button  style="background-color:#808080; color:white;;" type="button" class="btn btn-primary" (click)="deleteeConceptList()">{{'ok'| translate }}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!--RENAME CONCEPT LIST-->
+<button id="renameConceptList"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal6.show()">
+renameconceptlist
+</button>
+<div bsModal #myModal6="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4 class="modal-title"style=font-size:15px;>{{'Rename-Concept-List'| translate }}</h4>
+            <button type="button" class="close" (click)="myModal6.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button> 
+         </div>
+         <div class="modal-body">
+            <input type="hidden" id="pop-up-concpt-id" >
+            <input type="text" id="pop-up-concept-name"  class="form-control"  >
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="myModal6.hide()">{{'close'| translate }}</button>
+            <button  style="background-color:#808080; color:white;" type="button" class="btn btn-primary" (click)="renameeConceptList()">{{'ok'| translate }}</button>
+         </div>
+      </div>
+      <!-- /.modal-content -->
+   </div>
+   <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+  <!--RENAME STOP  LIST-->
+    <button id="renameStopList"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal12.show()">
+    renamestoplist
+    </button>
+    <div bsModal #myModal12="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"style=font-size:15px;>Rename Stop List</h4>
+                <button type="button" class="close" (click)="myModal12.hide()" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button> 
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="pop-up-stop-id" >
+                <input type="text" id="pop-up-stop-name"  class="form-control"  >
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="myModal12.hide()">{{'close'| translate }}</button>
+                <button  style="background-color:#808080; color:white;" type="button" class="btn btn-primary" (click)="renameGivenStopList()">{{'ok'| translate }}</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+<!--DELETE Stop LIST-->
+<button id="deleteStopList"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal13.show()">
+deletestoplist
+</button>
+<div bsModal #myModal13="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4 class="modal-title" style=font-size:15px;>Delete Stop List</h4>
+            <button type="button" class="close" (click)="myModal13.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button> 
+         </div>
+         <div class="modal-body">
+            Do you really want to delete this Stop list....?
+            <input type="hidden" id="delete-stop-list-hidden-pop">
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="myModal13.hide()">{{'close'| translate }}</button>
+            <button  style="background-color:#808080; color:white;;" type="button" class="btn btn-primary" (click)="deletedStopList()">{{'ok'| translate }}</button>
+         </div>
+      </div>
+      <!-- /.modal-content -->
+   </div>
+   <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+  <aside class="aside-menu">
+    <tabset>
+      <tab>
+        <template tabHeading><i class="icon-list"></i></template>
+        <div class="callout m-0 py-h text-muted text-center bg-faded text-uppercase">
+          <small><b>Today</b></small>
+        </div>
+        <hr class="transparent mx-1 my-0">
+        <div class="callout callout-warning m-0 py-1">
+          <div class="avatar float-right">
+            <img src="assets/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+          </div>
+          <div>Meeting with <strong>Lucas</strong></div>
+          <small class="text-muted mr-1"><i class="icon-calendar"></i>&nbsp; 1 - 3pm</small>
+          <small class="text-muted"><i class="icon-location-pin"></i>&nbsp; Palo Alto, CA </small>
+        </div>
+        <hr class="mx-1 my-0">
+        <div class="callout callout-info m-0 py-1">
+          <div class="avatar float-right">
+            <img src="assets/img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+          </div>
+          <div>Skype with <strong>Megan</strong></div>
+          <small class="text-muted mr-1"><i class="icon-calendar"></i>&nbsp; 4 - 5pm</small>
+          <small class="text-muted"><i class="icon-social-skype"></i>&nbsp; On-line </small>
+        </div>
+        <hr class="transparent mx-1 my-0">
+        <div class="callout m-0 py-h text-muted text-center bg-faded text-uppercase">
+          <small><b>Tomorrow</b></small>
+        </div>
+        <hr class="transparent mx-1 my-0">
+        <div class="callout callout-danger m-0 py-1">
+          <div>New UI Project - <strong>deadline</strong></div>
+          <small class="text-muted mr-1"><i class="icon-calendar"></i>&nbsp; 10 - 11pm</small>
+          <small class="text-muted"><i class="icon-home"></i>&nbsp; Repindex </small>
+          <div class="avatars-stack mt-h">
+            <div class="avatar avatar-xs">
+              <img src="assets/img/avatars/2.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="avatar avatar-xs">
+              <img src="assets/img/avatars/3.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="avatar avatar-xs">
+              <img src="assets/img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="avatar avatar-xs">
+              <img src="assets/img/avatars/5.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="avatar avatar-xs">
+              <img src="assets/img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+        </div>
+        <hr class="mx-1 my-0">
+        <div class="callout callout-success m-0 py-1">
+          <div><strong>#10 Startups.Garden</strong> Meetup</div>
+          <small class="text-muted mr-1"><i class="icon-calendar"></i>&nbsp; 1 - 3pm</small>
+          <small class="text-muted"><i class="icon-location-pin"></i>&nbsp; Palo Alto, CA </small>
+        </div>
+        <hr class="mx-1 my-0">
+        <div class="callout callout-primary m-0 py-1">
+          <div><strong>Team meeting</strong></div>
+          <small class="text-muted mr-1"><i class="icon-calendar"></i>&nbsp; 4 - 6pm</small>
+          <small class="text-muted" style="font-size:12px;"><i class="icon-home"></i>&nbsp; Copyright © 2018 Repindex Ltd. All rights reserved.</small>
+          <div class="avatars-stack mt-h">
+            <div class="avatar avatar-xs">
+              <img src="assets/img/avatars/2.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="avatar avatar-xs">
+              <img src="assets/img/avatars/3.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="avatar avatar-xs">
+              <img src="assets/img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="avatar avatar-xs">
+              <img src="assets/img/avatars/5.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="avatar avatar-xs">
+              <img src="assets/img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="avatar avatar-xs">
+              <img src="assets/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="avatar avatar-xs">
+              <img src="assets/img/avatars/8.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+        </div>
+        <hr class="mx-1 my-0">
+      </tab>
+      <tab>
+        <template tabHeading><i class="icon-speech"></i></template>
+        <div class="p-1">
+          <div class="message">
+            <div class="py-1 pb-3 mr-1 float-left">
+              <div class="avatar">
+                <img src="assets/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                <span class="avatar-status badge-success"></span>
+              </div>
+            </div>
+            <div>
+              <small class="text-muted">Lukasz Holeczek</small>
+              <small class="text-muted float-right mt-q">1:52 PM</small>
+            </div>
+            <div class="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
+            <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</small>
+          </div>
+          <hr>
+          <div class="message">
+            <div class="py-1 pb-3 mr-1 float-left">
+              <div class="avatar">
+                <img src="assets/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                <span class="avatar-status badge-success"></span>
+              </div>
+            </div>
+            <div>
+              <small class="text-muted">Lukasz Holeczek</small>
+              <small class="text-muted float-right mt-q">1:52 PM</small>
+            </div>
+            <div class="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
+            <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</small>
+          </div>
+          <hr>
+          <div class="message">
+            <div class="py-1 pb-3 mr-1 float-left">
+              <div class="avatar">
+                <img src="assets/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                <span class="avatar-status badge-success"></span>
+              </div>
+            </div>
+            <div>
+              <small class="text-muted">Lukasz Holeczek</small>
+              <small class="text-muted float-right mt-q">1:52 PM</small>
+            </div>
+            <div class="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
+            <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</small>
+          </div>
+          <hr>
+          <div class="message">
+            <div class="py-1 pb-3 mr-1 float-left">
+              <div class="avatar">
+                <img src="assets/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                <span class="avatar-status badge-success"></span>
+              </div>
+            </div>
+            <div>
+              <small class="text-muted">Lukasz Holeczek</small>
+              <small class="text-muted float-right mt-q">1:52 PM</small>
+            </div>
+            <div class="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
+            <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</small>
+          </div>
+          <hr>
+          <div class="message">
+            <div class="py-1 pb-3 mr-1 float-left">
+              <div class="avatar">
+                <img src="assets/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                <span class="avatar-status badge-success"></span>
+              </div>
+            </div>
+            <div>
+              <small class="text-muted">Lukasz Holeczek</small>
+              <small class="text-muted float-right mt-q">1:52 PM</small>
+            </div>
+            <div class="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
+            <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</small>
+          </div>
+        </div>
+      </tab>
+      <tab>
+        <template tabHeading><i class="icon-settings"></i></template>
+        <div class="p-1">
+          <h6>Settings</h6>
+
+          <div class="aside-options">
+            <div class="clearfix mt-2">
+              <small><b>Option 1</b></small>
+              <label class="switch switch-text switch-pill switch-success switch-sm float-right">
+                <input type="checkbox" class="switch-input" checked>
+                <span class="switch-label" data-on="On" data-off="Off"></span>
+                <span class="switch-handle"></span>
+              </label>
+            </div>
+            <div>
+              <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</small>
+            </div>
+          </div>
+
+          <div class="aside-options">
+            <div class="clearfix mt-1">
+              <small><b>Option 2</b></small>
+              <label class="switch switch-text switch-pill switch-success switch-sm float-right">
+                <input type="checkbox" class="switch-input">
+                <span class="switch-label" data-on="On" data-off="Off"></span>
+                <span class="switch-handle"></span>
+              </label>
+            </div>
+            <div>
+              <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</small>
+            </div>
+          </div>
+
+          <div class="aside-options">
+            <div class="clearfix mt-1">
+              <small><b>Option 3</b></small>
+              <label class="switch switch-text switch-pill switch-success switch-sm float-right">
+                <input type="checkbox" class="switch-input">
+                <span class="switch-label" data-on="On" data-off="Off"></span>
+                <span class="switch-handle"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="aside-options">
+            <div class="clearfix mt-1">
+              <small><b>Option 4</b></small>
+              <label class="switch switch-text switch-pill switch-success switch-sm float-right">
+                <input type="checkbox" class="switch-input" checked>
+                <span class="switch-label" data-on="On" data-off="Off"></span>
+                <span class="switch-handle"></span>
+              </label>
+            </div>
+          </div>
+
+          <hr>
+          <h6>System Utilization</h6>
+
+          <div class="text-uppercase mb-q mt-2"><small><b>CPU Usage</b></small></div>
+          <div class="progress progress-xs">
+            <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+          <small class="text-muted">348 Processes. 1/4 Cores.</small>
+
+          <div class="text-uppercase mb-q mt-h"><small><b>Memory Usage</b></small></div>
+          <div class="progress progress-xs">
+            <div class="progress-bar bg-warning" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+          <small class="text-muted">11444GB/16384MB</small>
+
+          <div class="text-uppercase mb-q mt-h"><small><b>SSD 1 Usage</b></small></div>
+          <div class="progress progress-xs">
+            <div class="progress-bar bg-danger" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+          <small class="text-muted">243GB/256GB</small>
+
+          <div class="text-uppercase mb-q mt-h"><small><b>SSD 2 Usage</b></small></div>
+          <div class="progress progress-xs">
+            <div class="progress-bar bg-success" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+          <small class="text-muted">25GB/256GB</small>
+        </div>
+      </tab>
+    </tabset>
+  </aside>
+</div>
+<!--DELETE CONCEPT LIST-->
+ <button id="deleteTextList"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal66.show()">
+            deleteTextList
+          </button>
+<div bsModal #myModal66="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby = "myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" style=font-size:15px;>Delete Text List</h4>
+        <button type="button" class="close" (click)="myModal66.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> 
+      </div>  
+      <div class="modal-body">
+        Do you really want to delete this Text list....?
+             <input type="hidden" id="delete-text-list-hidden-pop">
+           
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModal66.hide()">Close</button>
+        <button  style="background-color:#808080; color:white;;" type="button" class="btn btn-primary" (click)="deleteeTextList()">Ok</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal --> 
+
+<div>
+<button id="addMasterList"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal51.show()">
+   New Master List
+   </button>
+   <div bsModal #myModal51="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h4 class="modal-title" style=font-size:15px;>New Master List</h4>
+               <button type="button" class="close" (click)="myModal51.hide()" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+               </button> 
+            </div>
+            <div class="modal-body">
+               <input type="file" (change)="fileChangeEventMasterList($event)" name="text-list-new" class="form-control" id="newMasterListFile"> 
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" (click)="myModal51.hide()">Close</button>
+               <button   type="button" class="btn btn-primary" (click)="addMasterList()" style=background-color:#808080;color:white;>Ok</button>
+            </div>
+         </div>
+         <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+   </div>
+   <!-- /.modal -->
+</div>
+
+ <button id="myModalMaster"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModalMaster.show()">
+    renamemasterlist
+    </button>
+    <div bsModal #myModalMaster="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"style=font-size:15px;>Rename Master List</h4>
+                <button type="button" class="close" (click)="myModalMaster.hide()" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button> 
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="pop-up-master-id" >
+                <input type="text" id="pop-up-master-name"  class="form-control"  >
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="myModalMaster.hide()">Close</button>
+                <button  style="background-color:#808080; color:white;" type="button" class="btn btn-primary" (click)="renameGivenMasterList()">Ok</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+    <button id="subfolder"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal27.show()">
+            newTextList
+          </button>
+<div bsModal #myModal27="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" style=font-size:15px;>Add Newfolder</h4>
+        <button type="button" class="close" (click)="myModal27.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> 
+      </div>  
+      <div class="modal-body">
+            
+          <input type="text"  name="sub" class="form-control" id="sub"> 
+          <input type="hidden" id="hiddenfolderId">
+          
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModal27.hide()">{{'close'| translate }}</button>
+        <button   type="button" class="btn btn-primary" (click)="addsub()" style=background-color:#808080;color:white;>{{'ok'| translate }}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<button id="addurl"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="urlModal.show()">
+            newTextList
+</button>
+<div bsModal #urlModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h4 class="modal-title" style=font-size:15px;>Add URL</h4>
+          <button type="button" class="close" (click)="urlModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button> 
+      </div>  
+      <div class="modal-body">
+          <input type="text"  name="name" class="form-control" id="urlname" placeholder="URL Name"> <br>            
+          <input type="text"  name="url" class="form-control" id="url" placeholder="URL"> 
+          <input type="hidden" id="hiddenurlId">          
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="urlModal.hide()">{{'close'| translate }}</button>
+        <button   type="button" class="btn btn-primary" (click)="addUrl()" style=background-color:#808080;color:white;>{{'ok'| translate }}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+ <!--DELETE Master LIST-->
+<button id="deleteMasterList"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal101.show()">
+            deleteMasterList 
+</button>
+<div bsModal #myModal101="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby = "myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" style=font-size:15px;>Delete Master List</h4>
+        <button type="button" class="close" (click)="myModal101.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> 
+      </div>  
+      <div class="modal-body">
+        Do you really want to delete this Master concept  list....?
+             <input type="hidden" id="delete-master-list-hidden-pop">
+           
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModal101.hide()">Close</button>
+        <button  style="background-color:#808080; color:white;;" type="button" class="btn btn-primary" (click)="deleteeMasterList()">Ok</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal --> 
+
+
+<footer class="app-footer" style="font-size:12px;">
+  <a href="http://coreui.io"></a> Copyright © 2018 Repindex Ltd. All rights reserved.
+  <span class="float-right"> </span>
+</footer>
+
+
+
+

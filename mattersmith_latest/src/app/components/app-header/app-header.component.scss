@@ -1,0 +1,167 @@
+#logoutdropdown
+{
+	background-color:#2e5480 !important;
+	color:white;
+	font-size:12px;
+}
+.sublogo{
+	color:white;
+	font-family: "Arial";
+	 
+}
+.inlineservice{
+  display:inline !important;
+  margin-top:2px !important;
+}
+.knowledgealign{
+  top:2px;
+}
+
+.sublogo:hover {
+  
+}
+.headertop{
+  margin-top:-15%;
+}
+#logo{
+    height: 325px;
+    width: 53%;
+    margin-top: -17%;
+    margin-left: 2%;
+}
+.btn-primary{
+	background-color:#0f2d50 !important;
+}
+#header1
+{
+	z-index:-1;
+}
+.active {
+   color : #F0503C !important;
+	
+	}
+
+
+@media (max-width: 500px) {
+  .active
+  {
+   border:3px solid #FFFF94 !important;
+  }
+  #logo{
+	width:100%;
+	margin-left:0px;
+}
+.sublogo{
+	color:white;
+	margin-left:1%;
+	font-family: "Times New Roman";
+
+}
+
+}
+@media (min-width: 1500px) {
+  .active
+  {
+   border:0px solid #FFFF94 !important;
+  }
+  #logo{
+    height: 325px;
+    width: 53%;
+    margin-top: -14%;
+    margin-left: 2%;
+}
+.sublogo{
+  color:white;
+  margin-left:1%;
+  font-family: "Times New Roman";
+
+}
+.headertop{
+  margin-top:-13%;
+}
+
+}
+
+@media (max-width: 1000px) {
+#logo{
+    height: 325px;
+    width: 53%;
+    margin-top: -26%;
+    margin-left: 2%;
+}
+  .active
+  {
+   border:0px solid #FFFF94 !important;
+  }
+  .headertop{
+  margin-top:-25%;
+}
+}
+
+.colr{
+		color:white;
+}
+.font
+{
+	font-size: 13px;
+	font-family: "Arial";
+	color:white
+}
+
+@-moz-document url-prefix() {
+   .menuList
+{
+  margin-top:-8px !important;
+}
+}
+#topHeader{
+margin-bottom:5%;
+margin-top:2%;
+}
+.legal{
+	margin-top:2%;
+}
+a:hover { 
+    color: #F0503C;
+}
+
+
+@font-face {
+    font-family: "lawMatters";
+    src: url("/html/mattersmith/assets/font/NoeDisplayMedium.woff") format('woff');
+    font-weight: normal;
+    font-style: arial;
+}
+.mydiv {
+	color:white;
+	font-size: 135%;
+    font-family: lawMatters
+}
+
+
+.popup {
+    left: -49px !important;
+}
+.text-color{
+	color: white;	
+}
+
+.dropdown-item:hover {
+    color: #F0503C;
+    text-decoration: none;
+    background-color:darkgrey;
+}
+.alignicon{
+  margin-left:-3%;
+  color:black;
+}
+.blankline{
+    background-color: #F0503C;
+    width: 9%;
+    margin-left: 0%;
+	margin-top: -2%;
+	margin-bottom: 6px;
+}
+
+// /home/admin1/project/mattersmith/smSite/MatterSmith/src/scss/core/_layout.scss
+

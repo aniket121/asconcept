@@ -1,0 +1,27 @@
+<br>
+
+
+ <!-- <ckeditor
+    [(ngModel)]="ckeditorContent"
+    [config]="{uiColor: ''}"
+    [readonly]="false"
+    (change)="onChange($event)"
+    (ready)="onReady($event)"
+    (focus)="onFocus($event)"
+    (blur)="onBlur($event)"
+    debounce="500">
+  </ckeditor>  -->
+   <textarea [(ngModel)]="content" rows="20" cols="70"  #myTextArea   id="editor1">
+      
+    </textarea> 
+    <!--<textarea [(ngModel)]="content"  id="editor1" wid></textarea>-->
+  
+   
+   
+ <div class="row" style="padding-top: 10px">
+    <button style="margin-left: 21px;" type="button" id=""  (click)="download()" class="btn btn-primary pull-right" >Download</button>
+    <!--  <button style="margin-left: 6px;" type="button" id="down"  (click)="downloadpdf()" class="btn btn-primary pull-right" >Download as PDF</button>-->&nbsp;&nbsp;
+    <button type="button" id="save"  class="btn btn-primary pull-right" (click)="saveDocument(myTextArea.value)">Save</button>
+</div>
+
+<br>

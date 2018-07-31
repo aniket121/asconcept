@@ -1,0 +1,57 @@
+.login-page-color{
+    background-color: #2e5480;
+}
+
+.mendatory-color{
+    color: red;
+}
+.delete-popup{
+    background-color: cornflowerblue;
+}
+
+.breadcrum{
+    font-size:15px;
+    color:cornflowerblue;
+}
+#adduser{
+	margin-left:1% !important;
+
+}
+#activeDropdwon
+{
+	margin-left:85%;
+}
+.danger{
+    background-color:#f2dede;
+}
+#font-size
+{
+	font-size:12px;
+	margin-left:1%;
+}
+.user-header{
+    font-size:16px;
+    margin-left: -5%;
+    margin-top: 0%;
+    color:#2e5480;
+    cursor:pointer;
+}
+.active-inactive{
+	width: 15%;
+    margin-left: 72%;
+}
+.ng-valid[required], .ng-valid.required  {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form)  {
+  border-left: 5px solid #a94442; /* red */
+}
+
+
+ 
+.prime-ng-data-table {
+    font-weight: normal !important;
+    font-size: 12px !important;
+}
+
