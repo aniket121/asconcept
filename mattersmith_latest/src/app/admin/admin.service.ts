@@ -32,7 +32,7 @@ export class AdminService   {
     }
 
     getUsers(id:any) {
-        return this.http.get<UserResponse>(environment.BASE_URL + '/user/'+id).map(res => res);
+        return this.http.get<UserResponse>(environment.BASE_URL + '/user/'+id+'/').map(res => res);
     }
     addUser(data: any) {
         return this.http.post<UserResponse>(environment.BASE_URL + '/user/', data).map(res => res);
@@ -41,7 +41,7 @@ export class AdminService   {
         return this.http.put<UserResponse>(environment.BASE_URL + '/user/'+data.id+'/',data,{}).map(res => res);
     }
     deleteUser(id:any) {
-        return this.http.delete<UserResponse>(environment.BASE_URL + '/user/'+id).map(res => res);
+        return this.http.delete<UserResponse>(environment.BASE_URL + '/user/'+id+'/').map(res => res);
     }  
 
 }

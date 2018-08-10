@@ -2,8 +2,8 @@
     background-color: #2e5480;
 }
 .alignheight{
-    margin-top:-3% !important;
-    height:600px !important;
+    margin-top:-3% ;
+    height:600px ;
 }
 
 .mendatory-color{
@@ -13,7 +13,11 @@
     background-color: cornflowerblue;
 }
 .alignbutton{
-    margin-left:92%;
+    margin-left:83%;
+    display:inline;
+}
+.organisationn-button{
+    margin-left:80%;
 }
 .breadcrum{
     font-size:15px;
@@ -22,6 +26,9 @@
 #adduser{
 	margin-left:1% !important;
 
+}
+.deleteicon{
+    width:15%;
 }
 .danger{
     background-color:#f2dede;
@@ -91,4 +98,14 @@
 
 
 }
+@-moz-document url-prefix() {
+ 
+.alignheight{
+    margin-top:1% !important;
+}
+
+
+
+}
+
 

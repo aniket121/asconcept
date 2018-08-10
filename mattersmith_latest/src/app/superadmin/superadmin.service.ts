@@ -14,7 +14,7 @@ export class UserService {
     }
 
     getUsers(id) {
-        return this.http.get<UserResponse>(environment.BASE_URL + '/user/'+id).map(res => res);
+        return this.http.get<UserResponse>(environment.BASE_URL + '/user/'+id+'/').map(res => res);
     }
     addUser(data: any) {
         return this.http.post<UserResponse>(environment.BASE_URL + '/user/', data).map(res => res);
@@ -23,10 +23,20 @@ export class UserService {
         return this.http.put<UserResponse>(environment.BASE_URL + '/user/'+data.id+'/',data,{}).map(res => res);
     }    
     deleteUser(id:any) {
-        return this.http.delete<UserResponse>(environment.BASE_URL + '/user/'+id).map(res => res);
+        return this.http.delete<UserResponse>(environment.BASE_URL + '/user/'+id+'/').map(res => res);
     }
     changeUserStatus(id:any) {
         return this.http.put<UserResponse>(environment.BASE_URL + '/user-status/'+id+'/',{}).map(res => res);
-    }  
+    }
+    addOrganisation(data:any) {
+        return this.http.post<UserResponse>(environment.BASE_URL + '/organisation/',data).map(res => res);
+    }
+    getOrganisation() {
+        return this.http.get<UserResponse>(environment.BASE_URL + '/organisation/').map(res => res);
+    }
+    deleteOrganisation(id:any) {
+        return this.http.delete<UserResponse>(environment.BASE_URL + '/organisation/'+id+'/').map(res => res);
+    }
+    
     
 }

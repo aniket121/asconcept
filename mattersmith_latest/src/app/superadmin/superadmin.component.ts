@@ -20,14 +20,21 @@ export class SuperadminComponent implements OnInit {
   public hideField:boolean = false;
   public hideCheckbox:boolean=false;
   public activeobject={}
-
+  public selectedRole=''
   public showDialog:boolean = false;//modal status
   public deleteDialog:boolean =false;
   public selected_role:number = 1;
   public passwordField:boolean=true;
   public user_id:any;
+  public duplicateUser:boolean=false;
   public user:any={};
-
+  public duplicate:boolean=false;
+  public deleteorgDialog:boolean=false;
+  public addOrgnaisation:boolean=false;
+  public org_id:any;
+  public org={orgname:'',orgemail:''}
+  public orglist={}
+  public selectedOrg:any;
   public users: {
     id :number,
     action:any,
@@ -38,7 +45,8 @@ export class SuperadminComponent implements OnInit {
     is_active:string,
     user_limit:string,
     is_staff:string,
-    rw_permission : string
+    rw_permission : string,
+    org : string
 
   }[];
 
@@ -50,16 +58,38 @@ export class SuperadminComponent implements OnInit {
   constructor(private router: Router,private userService : UserService) {}
 
   ngOnInit() {
+     debugger;
       var id =  Cookie.get('user_id')
       this.userService.getUsers(id).subscribe((res: any) => {
-      this.users =  res          
+      this.users =  res  
+      console.log(this.users);        
+      }, error => {               
+        console.info('error', error);
+      })
+       this.userService.getOrganisation().subscribe((res: any) => {
+      
+      this.orglist=res.org
+       
+    
       }, error => {               
         console.info('error', error);
       })
   }
+  validateUser(){
+    for(var i=0;i<this.users.length;i++){
+       if(this.users[i]["email"]==this.user.email){
+         console.log("duplicate")
+         this.duplicate=true;
+       }
+       else{
+         this.duplicate=false;
+       }
+    }
+  }
 
   addUser(){    
     this.user ={};
+    this.passwordField=true;
     this.selected_role = 1
     this.user_id = 0
     this.user.rw_permission = 0;
@@ -93,6 +123,7 @@ export class SuperadminComponent implements OnInit {
   }
 
   edit(user){
+    console.log(user);
     this.user = {}
     if(user.is_staff == 'Admin'){
       this.user.is_staff = 1  
@@ -104,6 +135,7 @@ export class SuperadminComponent implements OnInit {
       this.user.is_staff = 0
       this.selected_role = 3
     }
+    this.user.org=user.Organization
     this.passwordField=false;
     this.modal_title = "Edit User";    
     this.user = user;
@@ -116,19 +148,44 @@ export class SuperadminComponent implements OnInit {
     }else{
       this.createUser()
     }
+     this.showDialog=false;
+     this.user = {}
   }
 
   createUser(){
     if(this.user.is_staff === 1){
-      this.user.username = this.user.username +'-' + 'admin'
+      this.user.username = this.user.username +'-' + 'admin';
+      this.selectedRole="admin"
     }
-    if(this.user.rw_permission === 1){
+    else if(this.user.rw_permission === 1){
+      this.user.username = this.user.username + '-' + 'editor'
+      this.selectedRole="editor"
+    }
+    else{
       this.user.username = this.user.username + '-' + 'viewer'
+      this.selectedRole="viewer"
     }
     this.user.created_by = Cookie.get('user_id')
+    console.log(this.users);
+    this.user.org=this.selectedOrg;
     this.userService.addUser(this.user).subscribe((res: any) => {
+      if(res.msg==="duplicate"){
+      this.duplicateUser=true;
+      }
+      
+      let role='';
+      if(this.selectedRole === "admin"){
+        role="Admin";
+      }
+      else if(this.selectedRole === "editor"){
+        role="Editor";
+      }
+      else{
+        role="Viewer"
+      }
+
       if(res.status == 201){
-          this.showSuccess('Admin has been added successfully');
+          this.showSuccess(role+' '+' has been added successfully');
           this.showDialog =false;
           this.ngOnInit()   
       }}, error => {       
@@ -162,6 +219,7 @@ export class SuperadminComponent implements OnInit {
       var username = this.user.username.split("-");
       this.user.username = username[0];
     }
+    this.user.org=this.selectedOrg;
     this.userService.updateUser(this.user).subscribe((res: any) => {
       if(res.status == 201){
           this.showSuccess('Admin has been Updated successfully');
@@ -200,4 +258,42 @@ export class SuperadminComponent implements OnInit {
           console.info('error', error);
       })
   }
+  addOrg(){
+    this.addOrgnaisation=true;
+    this.org={orgname:'', orgemail:''}
+  }
+  saveOrg(){
+    console.log(this.org);
+     this.userService.addOrganisation(this.org).subscribe((res: any) => {   
+      if(res.status == 200){
+        this.showSuccess('Orginsation has been added Successfully');
+        this.showDialog =false;
+        this.addOrgnaisation=false;
+        this.ngOnInit()   
+      }}, error => {
+          console.info('error', error);
+      })
+  }
+  deleteorgid(id){
+    this.org_id=id;  
+    this.deleteorgDialog=true; 
+  }
+deleteorg(){
+    this.userService.deleteOrganisation(this.org_id).subscribe((res: any) => {   
+      if(res.status == 200){
+        this.showSuccess('Organisation has been deleted');
+        this.showDialog =false;
+        this.ngOnInit()   
+      }}, error => {
+          console.info('error', error);
+      })
+      this.deleteorgDialog=false;
+      this.addOrgnaisation=false;
+     
+  
+}
+changeOrg(data:any){
+this.selectedOrg=data;
+console.log(this.selectedOrg)
+}
 }

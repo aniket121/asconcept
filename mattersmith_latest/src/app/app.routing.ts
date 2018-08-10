@@ -43,7 +43,7 @@ export const routes: Routes = [
   },
   { path: "login",loadChildren: './login/login.module#LoginModule'},
   { path: "admin",component: SimpleLayoutComponent,canActivate:[AdminService],loadChildren: './admin/admin.module#AdminModule'},
-  { path: "superadmin",component: SimpleLayoutComponent,  loadChildren: './superadmin/superadmin.module#SuperAdminModule'},
+  { path: "superadmin",component: SimpleLayoutComponent,canActivate:[AppService],  loadChildren: './superadmin/superadmin.module#SuperAdminModule'},
 
   
    

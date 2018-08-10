@@ -1,13 +1,14 @@
 <div class="alignheight">
 <p-growl [(value)]="msgs"></p-growl>
-		<p-dataTable [value]="users" class="prime-ng-data-table" reorderableColumns="true" selectionMode="single"  columnResizeMode="expand" [responsive]="true"  [paginator]="true" [rows]="20" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]" #dt>
+		<p-dataTable [value]="users" class="prime-ng-data-table" reorderableColumns="true" selectionMode="single"  columnResizeMode="expand" [responsive]="true"  [paginator]="true" [rows]="15" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15,20]" #dt>
 				<p-header>
 					<div class= "col-12 breadcrum ">
 						<div class="row alignbutton">
 								<button class="btn  user-header" (click)="addUser()" > Add Client</button>
-
+                               <button class="btn  user-header" (click)="addOrg()" > Add Organisation</button>
 
 						</div> 
+						
 					</div>			
 				</p-header>
 				<p-column   field="action" header="Action" [filter]="false" [sortable]="false">			
@@ -27,7 +28,9 @@
 				<p-column field="email"      header="Email"      [filter]="true" [sortable]="true"></p-column>
 				<p-column field="user_limit" header="User Limit" [filter]="true" [sortable]="true"></p-column>
 				<p-column field="status"     header="Status"     [filter]="true" [sortable]="true"></p-column>
-				<p-column field="is_staff"  header="Role"       [filter]="true" [sortable]="true"></p-column>					
+				<p-column field="is_staff"  header="Role"       [filter]="true" [sortable]="true"></p-column>
+				<p-column field="created_by"  header="Added By"       [filter]="true" [sortable]="true"></p-column>
+				<p-column field="Organization"  header="Organization"       [filter]="true" [sortable]="true"></p-column>						
 		</p-dataTable>
 
 		<p-dialog [(visible)]="showDialog" header="Add/Edit User"  [width]="500">
@@ -38,7 +41,7 @@
 								<label class="container h-100 d-flex "  for="input-small">First Name:<div class="mendatory-color"> *</div>  </label>
 							</div>
 							<div class="col-sm-6">
-								<input type="text" [(ngModel)]="user.first_name" name="first_name" pattern="^[a-zA-Z]+$"  class="form-control form-control-sm" required #first_name="ngModel">
+								<input type="text" maxlength="20" [(ngModel)]="user.first_name" name="first_name" pattern="^[a-zA-Z]+$"  class="form-control form-control-sm" required #first_name="ngModel">
 								<div *ngIf="first_name.errors && (first_name.dirty || first_name.touched)" class="danger" >
 									<div [hidden]="!first_name.errors.required">
 										Firstname is required!
@@ -52,10 +55,10 @@
             </div>
             <div class="form-group row">
 							<div class="col-sm-5" >
-								<label class="container h-100 d-flex" pattern="^[a-zA-Z]+$"  for="input-small">Last Name*:<div class="mendatory-color"> *</div> </label>
+								<label class="container h-100 d-flex" pattern="^[a-zA-Z]+$"  for="input-small">Last Name:<div class="mendatory-color"> *</div> </label>
 							</div>
 							<div class="col-sm-6">
-								<input type="text" name="last_name" [(ngModel)]="user.last_name" pattern="^[a-zA-Z]+$"  required class="form-control form-control-sm" #last_name="ngModel" >
+								<input type="text" maxlength="20" name="last_name" [(ngModel)]="user.last_name" pattern="^[a-zA-Z]+$"  required class="form-control form-control-sm" #last_name="ngModel" >
 								<div *ngIf="last_name.errors && (last_name.dirty || last_name.touched)" class="danger" >
 										<div [hidden]="!last_name.errors.required">
 											Lastname is required!
@@ -71,7 +74,7 @@
 								<label class="container h-100 d-flex "  for="input-small">Email ID:<div class="mendatory-color">*</div> </label>
 							</div>
 							<div class="col-sm-6">
-								<input type="text" name="email" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$" [(ngModel)]="user.email" required class="form-control form-control-sm"  #email="ngModel">
+								<input type="text" (keyup)="validateUser()" name="email" pattern="^[_a-zA-Z0-9]+(\.[_a-z0-9]+)*@[a-zA-Z0-9-]+(\.[a-z0-9-]+)*(\.[a-zA-Z]{2,4})$" [(ngModel)]="user.email" required class="form-control form-control-sm"  #email="ngModel">
 								<div *ngIf="email.errors && (email.dirty || email.touched)" class="danger" >
 													<div [hidden]="!email.errors.required">
 														Email is required!
@@ -126,6 +129,16 @@
 													<option [value]=3  >Viewer Read only</option>
 										</select>
 								</div>				
+						</div>
+			 <div class="form-group row" >
+								<div class="col-sm-5" >
+									<label class="container h-100 d-flex"  for="input-small">Organization:<div class="mendatory-color"> *</div> </label>
+								</div>
+								<div class="col-sm-6">								
+										<select  class="form-control"  (change)="changeOrg($event.target.value)">
+											<option  *ngFor="let org of orglist" [value]="org.name" >{{org.name}}</option>
+										</select>
+								</div>				
 						</div>						
 						
             <div class="form-group row" *ngIf="user_role.user_limit_state">
@@ -133,7 +146,7 @@
 								<label class="container h-100 d-flex"  for="input-small">Userlimit:<div class="mendatory-color"> *</div> </label>
 							</div>
 							<div class="col-sm-6">
-								<input type="text" pattern="^[0-9]" name="user_limit"  [(ngModel)]="user.user_limit" required class="form-control form-control-sm" #userlimit__userlimit="ngModel">
+								<input type="text" pattern="^(0|[1-9][0-9]*)$" name="user_limit"  [(ngModel)]="user.user_limit" maxlength="3" required class="form-control form-control-sm" #userlimit__userlimit="ngModel">
 								<div *ngIf="userlimit__userlimit.errors && (userlimit__userlimit.dirty || userlimit__userlimit.touched)" class="danger" >
 										<div [hidden]="!userlimit__userlimit.errors.required">
 											Userlimit is required!
@@ -144,9 +157,8 @@
 								</div> 
 							</div>				
             </div>
-
             <div class="form-group row container h-100 d-flex justify-content-center">
-				<button type="submit" [disabled]="userForm.form.invalid"  class="btn">Save</button> <div class="col-2"></div>
+				<button type="submit" [disabled]="userForm.form.invalid" class="btn">Save</button> <div class="col-2"></div>
 				<button (click)="showDialog = !showDialog" class="btn">Close</button>
             </div>
 
@@ -159,7 +171,78 @@
 				<h6 class="popup-title container h-100 d-flex justify-content-center">Do you want to delete User</h6>
 				<div class="form-group row container h-100 d-flex justify-content-center">
 					<button (click)="deleteUser()" class="btn">Yes</button><div class="col-2"></div>
-					<button (click)="deleteDialog = !deleteDialog" class="btn">Close</button>
+					<button (click)="deleteDialog = !deleteDialog" class="btn">No</button>
+				</div>
+</p-dialog>
+<p-dialog [(visible)]="duplicateUser" header="Alert">
+				
+	<h6 class="popup-title container h-100 d-flex justify-content-center">User Alredy Exits ! Please try with different username and email</h6>
+	<div class="form-group row container h-100 d-flex justify-content-center">	
+		<button (click)="duplicateUser = !duplicateUser" class="btn">Close</button>
+	</div>
+</p-dialog>
+<p-dialog [(visible)]="addOrgnaisation" header="Add Organization" [width]="600">
+	
+
+<form  method="post" (ngSubmit)="saveOrg()" #orgForm="ngForm" class="form-horizontal">
+	<div class="form-group row">
+							<div class="col-sm-5" >
+								<label class="container h-100 d-flex" pattern="^[a-zA-Z]+$"  for="input-small">Organization Name:<div class="mendatory-color"> *</div> </label>
+							</div>
+							<div class="col-sm-6">
+								<input type="text" maxlength="20" name="orgname" [(ngModel)]="org.orgname"   required class="form-control form-control-sm" #orgname="ngModel" >
+								<div *ngIf="orgname.errors && (orgname.dirty || orgname.touched)" class="danger" >
+										<div [hidden]="!orgname.errors.required">
+											Organization is required!
+										</div>
+										<div [hidden]="orgname.errors.required">
+											Please enter only characters!
+										</div>													
+								</div> 
+							</div>				
+            </div>
+            <div class="form-group row">
+							<div class="col-sm-5" >
+								<label class="container h-100 d-flex "  for="input-small">Email ID:<div class="mendatory-color">*</div> </label>
+							</div>
+							<div class="col-sm-6">
+								<input type="text"  name="orgemail" pattern="^[_a-zA-Z0-9]+(\.[_a-z0-9]+)*@[a-zA-Z0-9-]+(\.[a-z0-9-]+)*(\.[a-zA-Z]{2,4})$" [(ngModel)]="org.orgemail" required class="form-control form-control-sm"  #orgemail="ngModel">
+								<div *ngIf="orgemail.errors && (orgemail.dirty || orgemail.touched)" class="danger" >
+													<div [hidden]="!orgemail.errors.required">
+														Email is required!
+													</div>
+													<div [hidden]="orgemail.errors.required">
+														Please enter valid email address
+													</div>													
+										</div> 
+							</div>				
+				</div>	
+		<div class="form-group row container h-100 d-flex justify-content-center">	
+		
+	        <button type="submit" [disabled]="orgForm.form.invalid" class="btn">Save</button> <div class="col-2"></div>
+	         <button (click)="addOrgnaisation = !addOrgnaisation" class="btn">Close</button>
+        </div>
+  </form>	
+<p-dataTable [value]="orglist" class="prime-ng-data-table" reorderableColumns="true" selectionMode="single"  columnResizeMode="expand" [responsive]="true"  [paginator]="true" [rows]="5" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15,20]" #dt>
+			
+				<p-column  class="deleteicon" field="action" header="Action">			
+					<ng-template let-col  let-user="rowData" let-i="rowIndex" pTemplate="body">
+							<div class="container h-100 d-flex justify-content-center">
+								<i class="fa fa-trash" pTooltip="Delete" (click)="deleteorgid(user.id)"></i>
+							</div>
+					</ng-template>
+				</p-column>
+				<p-column field="name"  header="Name"       [filter]="true" [sortable]="true"></p-column>
+				<p-column field="email"  header="Email"       [filter]="true" [sortable]="true"></p-column>					
+		</p-dataTable>
+	
+</p-dialog>
+<p-dialog [(visible)]="deleteorgDialog" header="Delete Organization">
+				
+				<h6 class="popup-title container h-100 d-flex justify-content-center">Do you want to delete Organization</h6>
+				<div class="form-group row container h-100 d-flex justify-content-center">
+					<button (click)="deleteorg()" class="btn">Yes</button><div class="col-2"></div>
+					<button (click)="deleteorgDialog = !deleteorgDialog" class="btn">No</button>
 				</div>
 </p-dialog>
 </div>

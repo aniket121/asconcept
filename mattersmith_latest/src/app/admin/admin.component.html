@@ -6,7 +6,11 @@
        
         
 		<div class="row">
-				<li class="fa fa-user-plus col-2 user-header" (click)="addUser()" > Add User</li>
+				<div class="row alignbutton">
+								<button class="btn  user-header" (click)="addUser()" > Add Client</button>
+
+
+			</div>
 		</div> 
 
 	 </div>
@@ -27,6 +31,8 @@
 		<p-column field="first_name" header="Firstname"  [filter]="true" [sortable]="true"></p-column>
 		<p-column field="last_name"  header="Lastname"   [filter]="true" [sortable]="true"></p-column>
 		<p-column field="email"      header="Email"      [filter]="true" [sortable]="true"></p-column>
+		<p-column field="created_by"  header="Added by"      [filter]="true" [sortable]="true"></p-column>
+		<p-column field="is_staff"  header="Role"       [filter]="true" [sortable]="true"></p-column>
 </p-dataTable>
 
 
@@ -164,7 +170,7 @@
 				<h6 class="popup-title container h-100 d-flex justify-content-center">Do you want to delete User</h6>
 				<div class="form-group row container h-100 d-flex justify-content-center">
 					<button (click)="deleteUser()" class="btn">Yes</button><div class="col-2"></div>
-					<button (click)="deleteDialog = !deleteDialog" class="btn">Close</button>
+					<button (click)="deleteDialog = !deleteDialog" class="btn">No</button>
 				</div>
 </p-dialog>
 
@@ -173,6 +179,13 @@
 	<h6 class="popup-title container h-100 d-flex justify-content-center">Add user limit for your account has been exceeded</h6>
 	<div class="form-group row container h-100 d-flex justify-content-center">	
 		<button (click)="limitDialog = !limitDialog" class="btn">Close</button>
+	</div>
+</p-dialog>
+<p-dialog [(visible)]="duplicateUser" header="Alert">
+				
+	<h6 class="popup-title container h-100 d-flex justify-content-center">User Alredy Exits ! Please try with different username and email</h6>
+	<div class="form-group row container h-100 d-flex justify-content-center">	
+		<button (click)="duplicateUser = !duplicateUser" class="btn">Close</button>
 	</div>
 </p-dialog>
 

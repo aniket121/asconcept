@@ -25,11 +25,13 @@ export class AdminComponent implements OnInit {
   public delete_id:boolean;
   public hidePasswordField:boolean =false;
   public modal_title:string = "";
+  public selectRole=''
   public showDialog:boolean = false;//modal status
   public deleteDialog:boolean =false;
   public msgs:any=[];
   public limitDialog = false;
-  
+  public duplicateUser:boolean=false;
+
 
   constructor(private router: Router,public AdminService:AdminService) {}
 
@@ -82,6 +84,7 @@ export class AdminComponent implements OnInit {
     }else{
       this.createUser()
     }
+    this.showDialog=false;
   }
 
 
@@ -89,14 +92,28 @@ export class AdminComponent implements OnInit {
     this.user.is_staff = 0;
     
     if(this.user.rw_permission === 1){
-      this.user.username = this.user.username + '-' + 'viewer'
+      this.user.username = this.user.username + '-' + 'editor'
+      this.selectRole="Editor";
     }else{
-      this.user.rw_permission = 0
+      this.user.rw_permission = 0;
+      this.user.username = this.user.username + '-' + 'viewer';
+        this.selectRole="Viewer";
     }
     this.user.created_by = Cookie.get('user_id')
     this.AdminService.addUser(this.user).subscribe((res: any) => {
+      if(res.msg==="duplicate"){
+       this.duplicateUser=true;
+      }
+      let role=''
+      if(this.selectRole==="Editor"){
+        role="Editor"
+      }
+      else{
+        role="Viewer";
+      }
       if(res.status == 201){
-          this.showSuccess('User has been added successfully');
+
+          this.showSuccess( role +" "+' has been added successfully');
           this.showDialog =false;
           this.ngOnInit()   
       }}, error => {       

@@ -20,13 +20,13 @@
               </div>
                <div *ngIf="userInput.errors && (userInput.dirty || userInput.touched)" class="alert alert-danger" >
                     <div [hidden]="!userInput.errors.required">
-                      username is required!
+                      Username is required!
                     </div>
                     <div [hidden]="!userInput.errors.minlength">
-                      username is required .
+                      Username is required .
                     </div>
                     <div [hidden]="!userInput.errors.maxlength">
-                      username cannot be more than 30 characters long.
+                      Username cannot be more than 30 characters long.
                     </div>
                </div> 
               Password
