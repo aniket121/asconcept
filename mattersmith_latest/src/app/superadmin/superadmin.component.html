@@ -30,7 +30,7 @@
 				<p-column field="status"     header="Status"     [filter]="true" [sortable]="true"></p-column>
 				<p-column field="is_staff"  header="Role"       [filter]="true" [sortable]="true"></p-column>
 				<p-column field="created_by"  header="Added By"       [filter]="true" [sortable]="true"></p-column>
-				<p-column field="Organization"  header="Organization"       [filter]="true" [sortable]="true"></p-column>						
+				<p-column field="Organization"  header="Organisation"       [filter]="true" [sortable]="true"></p-column>						
 		</p-dataTable>
 
 		<p-dialog [(visible)]="showDialog" header="Add/Edit User"  [width]="500">
@@ -132,7 +132,7 @@
 						</div>
 			 <div class="form-group row" >
 								<div class="col-sm-5" >
-									<label class="container h-100 d-flex"  for="input-small">Organization:<div class="mendatory-color"> *</div> </label>
+									<label class="container h-100 d-flex"  for="input-small">Organisation:<div class="mendatory-color"> *</div> </label>
 								</div>
 								<div class="col-sm-6">								
 										<select  class="form-control"  (change)="changeOrg($event.target.value)">
@@ -181,19 +181,19 @@
 		<button (click)="duplicateUser = !duplicateUser" class="btn">Close</button>
 	</div>
 </p-dialog>
-<p-dialog [(visible)]="addOrgnaisation" header="Add Organization" [width]="600">
+<p-dialog [(visible)]="addOrgnaisation" header="Add Organisation" [width]="600">
 	
 
 <form  method="post" (ngSubmit)="saveOrg()" #orgForm="ngForm" class="form-horizontal">
 	<div class="form-group row">
 							<div class="col-sm-5" >
-								<label class="container h-100 d-flex" pattern="^[a-zA-Z]+$"  for="input-small">Organization Name:<div class="mendatory-color"> *</div> </label>
+								<label class="container h-100 d-flex" pattern="^[a-zA-Z]+$"  for="input-small">Organisation Name:<div class="mendatory-color"> *</div> </label>
 							</div>
 							<div class="col-sm-6">
 								<input type="text" maxlength="20" name="orgname" [(ngModel)]="org.orgname"   required class="form-control form-control-sm" #orgname="ngModel" >
 								<div *ngIf="orgname.errors && (orgname.dirty || orgname.touched)" class="danger" >
 										<div [hidden]="!orgname.errors.required">
-											Organization is required!
+											Organisation is required!
 										</div>
 										<div [hidden]="orgname.errors.required">
 											Please enter only characters!
@@ -237,9 +237,9 @@
 		</p-dataTable>
 	
 </p-dialog>
-<p-dialog [(visible)]="deleteorgDialog" header="Delete Organization">
+<p-dialog [(visible)]="deleteorgDialog" header="Delete Organisation">
 				
-				<h6 class="popup-title container h-100 d-flex justify-content-center">Do you want to delete Organization</h6>
+				<h6 class="popup-title container h-100 d-flex justify-content-center">Do you want to delete Organisation</h6>
 				<div class="form-group row container h-100 d-flex justify-content-center">
 					<button (click)="deleteorg()" class="btn">Yes</button><div class="col-2"></div>
 					<button (click)="deleteorgDialog = !deleteorgDialog" class="btn">No</button>

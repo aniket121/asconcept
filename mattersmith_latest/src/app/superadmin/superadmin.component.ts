@@ -5,11 +5,13 @@ import { RouterModule, Router } from '@angular/router';
 import * as _ from 'lodash'; 
 import { Cookie } from 'ng2-cookies/ng2-cookies';
 // import { create } from 'domain';
+
 @Component({
   selector: 'app-superadmin',
   templateUrl: './superadmin.component.html',
   styleUrls: ['./superadmin.component.scss']
 })
+
 export class SuperadminComponent implements OnInit {
 
   public msgs:any=[];  
@@ -57,8 +59,9 @@ export class SuperadminComponent implements OnInit {
 
   constructor(private router: Router,private userService : UserService) {}
 
+  
   ngOnInit() {
-     debugger;
+     
       var id =  Cookie.get('user_id')
       this.userService.getUsers(id).subscribe((res: any) => {
       this.users =  res  
@@ -75,6 +78,7 @@ export class SuperadminComponent implements OnInit {
         console.info('error', error);
       })
   }
+
   validateUser(){
     for(var i=0;i<this.users.length;i++){
        if(this.users[i]["email"]==this.user.email){
