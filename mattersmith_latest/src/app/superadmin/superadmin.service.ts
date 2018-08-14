@@ -4,7 +4,9 @@ import 'rxjs/add/operator/map';
 import { environment } from './../../environments/environment';
 export interface UserResponse {
    user:string,
-   data:string
+   data:string,
+   org:any,
+   res:any
 }
 @Injectable()
 export class UserService {

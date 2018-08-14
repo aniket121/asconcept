@@ -24,6 +24,9 @@
 .danger{
     background-color:#f2dede;
 }
+.align-yes{
+    margin-left:12%;
+}
 #font-size
 {
 	font-size:12px;
@@ -50,6 +53,9 @@
 .alignbutton{
     margin-left:92%;
 }
+.align-close{
+ margin-left:10%;   
+}
 .user-header{
     font-size:12px;
     margin-top: 0%;
@@ -57,11 +63,50 @@
     cursor:pointer;
     background-color:#003746 !important;
 }
-
+.alignheight{
+    margin-top:-3% ;
+    height:600px ;
+}
 
  
 .prime-ng-data-table {
     font-weight: normal !important;
     font-size: 12px !important;
+}
+@media (max-width: 500px) {
+  
+  .alignheight{
+    margin-top:-3% !important;
+}
+
+}
+@media (min-width: 1500px) {
+ 
+ .alignheight{
+    margin-top:-3% !important;
+}
+
+}
+
+@media (max-width: 1000px) {
+
+.alignheight{
+    margin-top:-3% !important;
+}
+}
+@media (max-width: 768px) {
+
+.alignheight{
+    margin-top:-3% !important;
+}
+
+
+}
+@-moz-document url-prefix() {
+ 
+.alignheight{
+    margin-top:1% !important;
+}
+
 }
 

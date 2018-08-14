@@ -133,7 +133,7 @@ export class AdminComponent implements OnInit {
     }
     this.AdminService.updateUser(this.user).subscribe((res: any) => {
       if(res.status == 201){
-          this.showSuccess('User has been Updated successfully');
+          this.showSuccess('Record edited successfully');
           this.showDialog =false;
           this.ngOnInit()   
       }}, error => {       

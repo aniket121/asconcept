@@ -35,7 +35,7 @@ export class SuperadminComponent implements OnInit {
   public addOrgnaisation:boolean=false;
   public org_id:any;
   public org={orgname:'',orgemail:''}
-  public orglist={}
+  public orglist:{}[]
   public selectedOrg:any;
   public users: {
     id :number,
@@ -68,15 +68,20 @@ export class SuperadminComponent implements OnInit {
       console.log(this.users);        
       }, error => {               
         console.info('error', error);
-      })
-       this.userService.getOrganisation().subscribe((res: any) => {
+      });
+      this.userService.getOrganisation().subscribe((res: any) => {
       
       this.orglist=res.org
-       
+      console.log(this.orglist); 
     
       }, error => {               
         console.info('error', error);
       })
+      
+    
+  }
+  ngAfterViewInit(){
+
   }
 
   validateUser(){
@@ -132,10 +137,10 @@ export class SuperadminComponent implements OnInit {
     if(user.is_staff == 'Admin'){
       this.user.is_staff = 1  
       this.selected_role = 1
-    }if(user.is_staff == 'Viewer'){
+    }if(user.is_staff == 'Editor'){
       this.user.is_staff = 0
       this.selected_role = 2
-    }if(user.is_staff == 'User'){
+    }if(user.is_staff == 'Viewer'){
       this.user.is_staff = 0
       this.selected_role = 3
     }
@@ -198,35 +203,43 @@ export class SuperadminComponent implements OnInit {
   }
 
   updateUser(){
-    if(this.user.is_staff == 'User'){
+    if(this.user.is_staff == 'Editor'){
         this.user.is_staff = 0
     }else if(this.user.is_staff == 'Viewer'){
         this.user.is_staff = 0
     }else if(this.user.is_staff == 'Admin'){
         this.user.is_staff = 1
     }
+    
     if(this.user.is_staff === 1){
       var username = this.user.username.split("-");
       this.user.username = username[0] +'-' + 'admin'
       this.user.rw_permission = 0;
     }
-    if(this.user.rw_permission === 1){
+    else if(this.user.rw_permission === 1){
       var username = this.user.username.split("-");
-      this.user.username = username[0] + '-' + 'viewer'
+      this.user.username = username[0] + '-' + 'editor'
       this.user.is_staff = 0;
       this.user.user_limit = 0
       this.user.rw_permission = 1;
     }
-    if(this.user.rw_permission == 0 && this.user.is_staff ==0 ){
-      this.user.is_staff = 0;
-      this.user.user_limit = 0
+    else{
       var username = this.user.username.split("-");
-      this.user.username = username[0];
+      this.user.username = this.user.username[0] + '-' + 'viewer'
+      this.user.rw_permission = 0;
+      this.user.is_staff = 0;
+      
+    }
+    if(this.user.rw_permission == 0 && this.user.is_staff ==0 ){
+      //this.user.is_staff = 0;
+      //this.user.user_limit = 0
+      //var username = this.user.username.split("-");
+      //this.user.username = username[0];
     }
     this.user.org=this.selectedOrg;
     this.userService.updateUser(this.user).subscribe((res: any) => {
       if(res.status == 201){
-          this.showSuccess('Admin has been Updated successfully');
+          this.showSuccess('Record edited successfully');
           this.showDialog =false;
           this.ngOnInit()   
       }}, error => {       
