@@ -33,10 +33,12 @@ export class SuperadminComponent implements OnInit {
   public duplicate:boolean=false;
   public deleteorgDialog:boolean=false;
   public addOrgnaisation:boolean=false;
+  public duplicateorg:boolean=false
   public org_id:any;
   public org={orgname:'',orgemail:''}
   public orglist:{}[]
   public selectedOrg:any;
+  public roleName:string;
   public users: {
     id :number,
     action:any,
@@ -61,7 +63,7 @@ export class SuperadminComponent implements OnInit {
 
   
   ngOnInit() {
-     
+      this.roleName='Admin';
       var id =  Cookie.get('user_id')
       this.userService.getUsers(id).subscribe((res: any) => {
       this.users =  res  
@@ -99,6 +101,7 @@ export class SuperadminComponent implements OnInit {
   addUser(){    
     this.user ={};
     this.passwordField=true;
+    this.roleName='Admin';
     this.selected_role = 1
     this.user_id = 0
     this.user.rw_permission = 0;
@@ -108,31 +111,39 @@ export class SuperadminComponent implements OnInit {
   }
 
   changeRole(role:number){
+
     if(role == 1){
       this.user_role['user_limit_state']=true;
       this.user.is_staff =  1;
-      this.user.rw_permission = 0;      
+      this.user.rw_permission = 0;  
+      this.roleName='Admin';    
     }
     if(role == 2){
        this.user_role['user_limit_state']=false;
        this.user.is_staff = 0;
        this.user.rw_permission = 1;
        this.user.user_limit = 0;
+       this.roleName='Editor';
     }
     if(role == 3){
       this.user_role['user_limit_state']=false;
       this.user.rw_permission = 0;
       this.user.is_staff =  0;
       this.user.user_limit = 0;
+       this.roleName='Viewer';
     }  
   }
 
   showSuccess(recordStatus) {
     this.msgs =[{severity:'success', summary:recordStatus}];
   }
+  showError(recordStatus) {
+    this.msgs =[{severity:'info', summary:recordStatus}];
+  }
 
   edit(user){
     console.log(user);
+
     this.user = {}
     if(user.is_staff == 'Admin'){
       this.user.is_staff = 1  
@@ -146,8 +157,11 @@ export class SuperadminComponent implements OnInit {
     }
     this.user.org=user.Organization
     this.passwordField=false;
-    this.modal_title = "Edit User";    
+    this.modal_title = "Edit User";
+    
     this.user = user;
+    this.roleName=this.user.is_staff 
+    console.log(typeof(this.user.is_staff));
     this.showDialog = true;    
   }
 
@@ -158,7 +172,7 @@ export class SuperadminComponent implements OnInit {
       this.createUser()
     }
      this.showDialog=false;
-     this.user = {}
+     //this.user = {}
   }
 
   createUser(){
@@ -180,6 +194,7 @@ export class SuperadminComponent implements OnInit {
     this.userService.addUser(this.user).subscribe((res: any) => {
       if(res.msg==="duplicate"){
       this.duplicateUser=true;
+      this.showDialog=true;
       }
       
       let role='';
@@ -194,7 +209,11 @@ export class SuperadminComponent implements OnInit {
       }
 
       if(res.status == 201){
+          if(res.msg=="duplicate"){
+          this.showError("Username/Email already exits !")
+          }else{
           this.showSuccess(role+' '+' has been added successfully');
+          }
           this.showDialog =false;
           this.ngOnInit()   
       }}, error => {       
@@ -225,7 +244,7 @@ export class SuperadminComponent implements OnInit {
     }
     else{
       var username = this.user.username.split("-");
-      this.user.username = this.user.username[0] + '-' + 'viewer'
+      this.user.username = username[0] + '-' + 'viewer'
       this.user.rw_permission = 0;
       this.user.is_staff = 0;
       
@@ -277,15 +296,22 @@ export class SuperadminComponent implements OnInit {
   }
   addOrg(){
     this.addOrgnaisation=true;
+    this.duplicateorg=false;
     this.org={orgname:'', orgemail:''}
   }
   saveOrg(){
     console.log(this.org);
      this.userService.addOrganisation(this.org).subscribe((res: any) => {   
       if(res.status == 200){
-        this.showSuccess('Orginsation has been added Successfully');
+       
         this.showDialog =false;
+        if(res.msg=="duplicate"){
+        this.addOrgnaisation=true;
+        this.duplicateorg=true;
+        }else{
         this.addOrgnaisation=false;
+         this.showSuccess('Orginsation has been added Successfully');
+        }
         this.ngOnInit()   
       }}, error => {
           console.info('error', error);

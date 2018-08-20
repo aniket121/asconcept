@@ -103,6 +103,7 @@ export class AdminComponent implements OnInit {
     this.AdminService.addUser(this.user).subscribe((res: any) => {
       if(res.msg==="duplicate"){
        this.duplicateUser=true;
+       this.showDialog=true;
       }
       let role=''
       if(this.selectRole==="Editor"){
