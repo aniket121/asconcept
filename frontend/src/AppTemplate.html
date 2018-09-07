@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html>
+ 
+
+  <style>
+    
+
+body {
+    background: #eee;    
+}
+
+.wrapper {  
+    margin-top: 130px;
+  margin-bottom: 80px;
+}
+
+.form-signin {
+  width: 430px;
+  padding: 15px 35px 45px;
+  margin: 0 auto;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,0.1);  
+
+  .form-signin-heading,
+    .checkbox {
+      margin-bottom: 30px;
+    }
+
+    .checkbox {
+      font-weight: normal;
+    }
+
+    .form-control {
+      position: relative;
+      font-size: 16px;
+      height: auto;
+      padding: 10px;
+        @include box-sizing(border-box);
+
+        &:focus {
+          z-index: 2;
+        }
+    }
+
+    input[type="text"] {
+      margin-bottom: -1px;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    input[type="password"] {
+      margin-bottom: 20px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+    .removepanel{
+      display:none;
+    }
+}
+
+
+
+  </style>
+   <style>
+                *{margin: 0;padding:0px}
+
+                
+
+                
+
+                .icons li {
+                    background: none repeat scroll 0 0 #fff;
+                    height: 4px;
+                    width: 4px;
+                    line-height: 0;
+                    list-style: none outside none;
+                    margin-right: 15px;
+                    margin-top: 3px;
+                    vertical-align: top;
+                    border-radius:50%;
+                    pointer-events: none;
+                }
+
+                .btn-left {
+                    left: 0.4em;
+                }
+
+                .btn-right {
+                    
+                }
+
+                .btn-left, .btn-right {
+                    position: absolute;
+                    top: 28px;
+                }
+
+                .dropbtn {
+                 
+                    position: fixed;
+                    color: white;
+                    font-size: 16px;
+                    border: none;
+                    cursor: pointer;
+                }
+
+                .dropbtn:hover, .dropbtn:focus {
+                    
+                }
+
+                .dropdown {
+                    position: absolute;
+                    display: inline-block;
+                    right: 0.4em;
+                }
+
+                .dropdown-content {
+                    display: none;
+                    position: absolute;
+                    
+                    background-color: #f9f9f9;
+                    min-width: 274px;
+                    overflow: auto;
+                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                    z-index:3;
+                }
+                
+                  
+                .showLeft{
+                  margin-left:22%;
+                }
+                .dropdown-content a {
+                    color: black;
+                    padding: 12px 16px;
+                    text-decoration: none;
+                   display: block;
+                }
+
+                .dropdown a:hover {background-color: #ccc}
+
+               
+                 @media only screen and (min-width: 1500px) {
+                 .showLeft{
+                  margin-left:20%;
+                }
+                }
+            </style>
+    <head>
+
+        <meta charset="UTF-8">
+        <title><%= htmlWebpackPlugin.options.title %></title>
+
+
+    </head>
+   <body onload="checkUser()"  class="body">
+        <script>
+        (function(){
+            window._logtrace = [];
+            window._realconsolefns = {
+                "log": console.log,
+                "info": console.info,
+                "warn": console.warn,
+                "error": console.error,
+            };
+
+            function logatlevelfn(level) {
+                return function() {
+                    let argsarr = Array.prototype.slice.call(arguments);
+                    window._logtrace.push({
+                        "level": level,
+                        "arguments": argsarr,
+                        "timestamp": Date.now()
+                    });
+                    window._realconsolefns.log.apply(console, argsarr);
+                }
+            }
+
+            console.log   = logatlevelfn("log");
+            console.info  = logatlevelfn("info");
+            console.warn  = logatlevelfn("warn");
+            console.error = logatlevelfn("error");
+
+            window.onerror = function(message, source, lineNo, colNo, error) {
+                // TODO: do something
+            };
+        // don't load this for now
+        }); // ();
+        </script>
+        <script>
+            window.OPENSECRET_UPLOAD_URL = "/upload";
+            window.OPENSECRET_API_URL = "/api";
+        </script>
+
+        <div class="sidebar homepage"   style="display:none"">
+          <div class="header">
+
+                <!-- three dot menu -->
+                <div class="dropdown">
+                    <!-- three dots -->
+                    <ul class="dropbtn icons btn-right showLeft" onclick="showDropdown()">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                    <!-- menu -->
+                    <div id="myDropdown" class="dropdown-content">
+                        <span id="import"><a href="#about" class="import" data-toggle="modal" data-target="#usermanual" >Upload User Guide</a></span>
+                        <a  id="download" target="_blank" href="http://localhost:4200/html/Mattersmith.pdf">Download User Guide</a>
+                    </div>
+                </div>
+
+            </div>
+            <div>
+                <a href="/"><img src="/assets/logo-cropped-red.png" width="250" style="margin-top:-17%; "></a>
+            </div>
+          
+            <div id="mock-info" class="hidden"></div>
+            <div id="sidebar-menu" class="top">
+                <button data-toggle="tooltip" data-placement="bottom" title="Reload node data from server" id="btn-reload" class="btn btn-ms-ora btn-sm"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+                <div id="rhs-view-controls" class="btn-group btn-group-sm" role="group" data-toggle="buttons">
+                    <label class="btn btn-ms-turq active" data-rhs-view="schema" title="Display the class schema in the right hand panel." data-placement="bottom" data-container="body" data-toggle="tooltip">
+                        <input type="radio" name="rhs-view"
+                               id="rhs-schema-btn" autocomplete="off" checked>
+                        Schema
+                    </label>
+                    <label class="btn btn-ms-turq" data-rhs-view="topics" title="Display the available Topics in the right hand panel." data-placement="bottom" data-container="body" data-toggle="tooltip">
+                        <input type="radio" name="rhs-view"
+                               id="rhs-topics-btn" autocomplete="off">
+                        Topics
+                    </label>
+                    <label class="btn btn-ms-turq" data-rhs-view="playbook" title="Display the current Playbook in the right hand panel." data-placement="bottom" data-toggle="tooltip" data-container="body">
+                        <input type="radio" name="rhs-view"
+                               id="rhs-playbook-btn" autocomplete="off">
+                        Playbook
+                    </label>
+                </div>
+                <button data-toggle="tooltip" data-placement="bottom" title="Reset to an empty graph." id="btn-clear-inst" class="btn btn-ms-ora btn-sm pull-right">&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;</button>
+            </div>
+
+            <div id="sidebar-filter">Class Filter: Loading</div>
+            <div id="sidebar-topic-filter">Topic Filter: Loading</div>
+
+            <div id="sidebar-search" class="nothidden">
+                Sidebar Search: Loading
+            </div>
+
+            <div id="sidebar-filter-info" class="nothidden">
+                Filter Info: Loading
+            </div>
+
+            <hr/>
+
+            <div id="sidebar-info" class="nothidden">
+                Sidebar Info: Loading
+            </div>
+
+            <hr/>
+
+            <div id="sidebar-form" class="hidden">
+                Sidebar Editor: Loading
+                <hr />
+            </div>
+            <!-- <button id="btn-init-layout" class="btn btn-default">InitLayout</button>
+                 <button id="btn-relayout" class="btn btn-default">ReLayout</button> -->
+<div id="testview"></div>
+            
+             
+            <div style="display:inline;"><small>User <i id="usrname"></i>, in <em id="scopeinfo"></em> mode</small> </div>
+            <div id="user-mode-switcher" style="display: none">Mode:
+                <div class="btn-group" role="group">
+                    <button id="btn-switchuser-admin" type="button" class="btn btn-default btn-xs">Editor</button>
+                    <!-- <button id="btn-switchuser-editor" type="button" class="btn btn-default btn-xs">Editor</button> -->
+                    <button id="btn-switchuser-viewer" type="button" class="btn btn-default btn-xs">Viewer</button>
+                </div>
+                <input type="checkbox" checked id="chk-su-preserve-state">
+                <label for="chk-su-preserve-state">Preserve Filters</label>
+            </div>
+            <div>
+                <label for="current-state-url">Link to current setup:</label>
+                <input type="text" id="current-state-url" class="form-control" readonly></input>
+            </div>
+             <p style="margin-top:46%; ">
+        <button type="button" onClick="logout()" class="btn btn-default btn-sm pull-left">
+          <span class="glyphicon glyphicon-log-out"></span> Log out
+        </button>
+      </p>
+        </div>
+          <div class=" header" style="display:none;background-color:#003746 "><img src="logo-cropped-red.png"  width="180" height="50"></div>
+          <div class="wrapper login"  style="display:none">
+
+    <div method="post" class="form-signin">       
+      
+      <img src="logo-cropped-red.png" style="margin-left:17%" width="230" height="50">
+      <p class="form-signin-heading">Sign in to your Mattersmith Knowledge Account</p>
+      <br>
+      <input type="text" class="form-control" name="username" id="username" placeholder="Username" required="" autofocus="" /><p></p>
+      <input type="password" class="form-control" name="password" id="password" placeholder="Password" required=""/>      
+      <p></p>
+
+   <div class="row">
+            <button class="btn btn " style="background-color: #00B4AF;margin-left: 4%;" onclick="login()"><b>Login</b></button> 
+            <a data-toggle="modal" data-target="#myModal" style="margin-left: 38%;">Forgot password ?</a>
+      </div>
+    </div>
+    
+
+  </div>
+  <div class="wrapper forgot"  style="display:none">
+     <div method="post" class="form-signin">       
+       
+      <img src="logo-cropped-red.png" style="margin-left:17%" width="230" height="50">
+      <p class="form-signin-heading">Reset password</p>
+      
+      <div class="alert alert-danger" id="mismatch" style="display:none">password and confirm password should be matched</div>
+      <div class="alert alert-success" id="match" style="display:none">password has been updated successfully.</div>
+      <input type="password" class="form-control" name="newpassword" id="newpassword" placeholder="New password" required="" autofocus="" /><p></p>
+      <input type="password" class="form-control" name="cpassword" id="cpassword" placeholder="conform Password" required=""/>      
+      <p></p>
+
+      <button class="btn btn " style="background-color: #00B4AF" onclick="resetPassword()"><b>submit</b></button> 
+      <p></p>
+     
+    </div>
+  </div>
+       <!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content" style="width:77%">
+      <div class="modal-header" style="background-color: rgb(0, 55, 70);">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" style="color:white">Forgot Password</h4>
+      </div>
+
+      <div class="modal-body">
+        <div class="alert alert-danger" id="notpresnt" style="display:none">Email ID not registered with the account. Please enter a valid email address</div>
+         <div class="alert alert-success" id="presnt" style="display:none">Email ID not registered with the account. Please enter a valid email address</div>
+        <p>Enter your email here</p>
+        <input type="text" class="form-control" name="email" id="email">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" style="background-color: #00B4AF"><b>Close</b></button>
+        <button type="button" class="btn btn-default" style="background-color: #00B4AF" onclick="forgotPassword()"><b>Submit</b></button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div id="usermanual" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content" style="width:50%;margin-left:-58%;">
+      <div class="modal-header" style="background-color: rgb(0, 55, 70);">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" style="color:white">Upload User Guide</h4>
+      </div>
+
+      <div class="modal-body">
+         <div class="alert alert-success" id="upload" style="display:none">User Guide Uploaded Successfully.</div>
+        <p>Upload User Guide</p>
+        <input type="file" class="form-control" name="file" id="image-file">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" style="background-color: #00B4AF"><b>Close</b></button>
+        <button type="button" class="btn btn-default" style="background-color: #00B4AF" onclick="uploadManual()"><b>Upload</b></button>
+      </div>
+    </div>
+
+  </div>
+</div>
+ 
+        <div class="lhsoverlay" id="lhszoominfo" style="display:none"></div>
+
+        <div class="hoverbars footer" id="countbar " style="display:none;width: 29em;"></div>
+        <div class="hoverbars footer"   style="display:none" id="hoverbar">Hoverbar For Info <span class="glyphicon glyphicon-search" aria-hidden="true"></span> </div>
+        <div class="Knowledge-footer"   style="display:block" id="hoverbar"> <span></span> </div>
+
+    </body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+function checkUser()
+{   
+    loggin=localStorage.getItem("mattersmith");
+    console.log("storage",loggin)
+   
+    if(loggin){
+       if(window.location.href.indexOf('token') > -1) {
+               var tokenPresentCheck = window.location.href.split('/');
+               $('.forgot').css("display","block")
+               $('.body').css("background-color","red !important")
+              $('.body').attr("style", "background-color: #e4e5e6 !important");
+              $('.header').css("display","block")
+              localStorage.setItem("token",tokenPresentCheck[tokenPresentCheck.length-1]);
+              
+               
+            }
+     
+      else{
+       
+        $('.footer').css("display","block")
+        $('.leftfooter').css("display","block")
+        $('.homepage').css("display","block")
+        $('.login').css("display","none")
+        $('#countbar').css("display","block")
+        $('#countbar').css("width","29em")
+        $('#lhszoominfo').css("display","block")
+        $('#user-mode-switcher').css('display','block')
+       
+        
+        console.log("user in")
+      }
+    }
+    else
+    {    
+         if(window.location.href.indexOf('token') > -1) {
+               var tokenPresentCheck = window.location.href.split('/');
+               $('.forgot').css("display","block")
+               $('.body').css("background-color","red !important")
+              $('.body').attr("style", "background-color: #e4e5e6 !important");
+              $('.header').css("display","block")
+              localStorage.setItem("token",tokenPresentCheck[tokenPresentCheck.length-1]);
+              
+               
+            }
+          else if(window.location.href.indexOf('filter_includeManual') > -1){
+        
+              $('.footer').css("display","block")
+              $('.leftfooter').css("display","block")
+              $('.homepage').css("display","block")
+              $('.login').css("display","none")
+              $('#countbar').css("display","block")
+              $('#countbar').css("width","29em")
+              $('#lhszoominfo').css("display","block")
+              $('#user-mode-switcher').css('display','block')
+
+      }
+         else{
+               $('.login').css("display","block")
+               $('.body').css("background-color","red !important")
+              $('.body').attr("style", "background-color: #e4e5e6 !important");
+              $('.header').css("display","block")
+         }
+
+          
+
+
+         console.log("user out")
+    }
+
+    
+    
+
+}
+
+     function login(){
+    var credential={
+          username: $("#username").val(),
+          password: $("#password").val()
+    };
+    console.log(credential)
+    $.ajax({
+        url: "http://93.93.135.31:9090/user-login/",
+        type: "POST",
+        data: JSON.stringify(credential),
+        dataType: 'json',
+        contentType: 'application/json',
+        async: false,
+        success: function(msg) {
+            console.log(msg.username)
+            if(msg.username)
+            {
+               localStorage.setItem("mattersmith", "true");
+               var role=msg.username.split("-")[1]
+               if(role=="admin"){
+                localStorage.removeItem("mattersmith");
+               }
+               localStorage.setItem("role", role);
+               localStorage.setItem("username", msg.username);
+               
+               console.log("usernmae",localStorage.getItem("username"))
+               
+               $('.homapage').css("display","block")
+               $('.login').css("display","none")
+
+               
+
+               window.location.reload()
+            }
+            else{
+              $("#msg").css("display","block");
+            }
+        },
+        error: function(msg) {
+            
+            $("#msg").css("display","block");
+            
+        }
+    });
+ }
+ function forgotPassword(){
+   var credential={
+          email: $("#email").val(),
+         
+    };
+    console.log(credential)
+    $.ajax({
+        url: "http://localhost:8000/forgot-Password/",
+        type: "POST",
+        data: JSON.stringify(credential),
+        dataType: 'json',
+        contentType: 'application/json',
+        async: false,
+        success: function(msg) {
+            console.log(msg.username)
+            if(msg.status==200)
+            {
+              
+               $("#email").val('')
+               $("#presnt").css("display","block");
+               $("#notpresnt").css("display","none");
+               setInterval(function(){ 
+               $("#presnt").css("display","none");
+               $("#notpresnt").css("display","none"); 
+               }, 2000);
+
+            }
+            else{
+              $("#notpresnt").css("display","block");
+              $("#presnt").css("display","none");
+              $("#email").val('')
+               setInterval(function(){ 
+               $("#presnt").css("display","none");
+               $("#notpresnt").css("display","none"); 
+               }, 2000);
+            }
+           
+        },
+        error: function(msg) {
+            
+            $("#msg").css("display","block");
+            
+        }
+    });
+ }
+ function resetPassword(){
+   if($("#newpassword").val()==$("#cpassword").val())
+   {
+     var credential={
+          password: $("#newpassword").val(),
+          token:localStorage.getItem("token")
+   }
+         
+    
+    $.ajax({
+        url: "http://localhost:8000/forgot-Password/",
+        type: "PUT",
+        data: JSON.stringify(credential),
+        dataType: 'json',
+        contentType: 'application/json',
+        async: false,
+        success: function(msg) {
+            console.log(msg.username)
+            if(msg.status==200)
+            {
+               $("#match").css("display","block");
+               $("#mismatch").css("display","none");
+               $("#newpassword").val('')
+               $("#cpassword").val('')
+               $("#passwordmatch").css("display","block");
+               //window.location=window.location.origin;
+               window.location.href = 'http://localhost:9999/html/dist';
+
+            }
+            else{
+               $("#match").css("display","none");
+               $("#mismatch").css("display","block");
+              $("#email").val('')
+            }
+           
+        },
+        error: function(msg) {
+            
+            $("#msg").css("display","block");
+            
+        }
+    });
+  }
+  else{
+    alert("password and confirm password should be same")
+  }
+
+ }
+ function logout()
+ {
+  
+  localStorage.removeItem("mattersmith");
+  localStorage.removeItem("role");
+  localStorage.removeItem("username");
+  window.location.reload()
+  window.location="/"
+ }
+ function uploadManual()
+ {
+   
+   let photo = document.getElementById("image-file").files[0] // get file from input
+
+   let formData = new FormData();
+   formData.append("file", photo);        
+
+   let xhr = new XMLHttpRequest();
+   xhr.onreadystatechange = function() {
+    if (this.readyState == 4  && this.status == 200) {
+      console.log(this.responseText)
+      var array = JSON.parse("[" + this.responseText + "]");
+      if(array[0].success=="true"){
+        $("#upload").css("display","block")
+      }
+       
+      setTimeout(function(){ $("#upload").css("display","none");}, 3000);         
+
+    }
+  };
+   xhr.open("POST", 'http://localhost:8000/user-manaul/');
+   xhr.send(formData);
+
+ }
+ function changeLanguage(language) {
+                    var element = document.getElementById("url");
+                    element.value = language;
+                    element.innerHTML = language;
+                }
+
+                function showDropdown() {
+                    if(localStorage.getItem("username")=="admin"){
+                      $("#import").css("display","block")
+                      document.getElementById("myDropdown").classList.toggle("show");
+                      $('#image-file').val(''); 
+                      $("#upload").css("display","none")
+                    }
+                   else{
+                     
+                      document.getElementById("myDropdown").classList.toggle("show");
+                      $("#import").css("display","none")
+                     }
+                    
+                }
+
+                // Close the dropdown if the user clicks outside of it
+                window.onclick = function(event) {
+                    if (!event.target.matches('.dropbtn')) {
+                        var dropdowns = document.getElementsByClassName("dropdown-content");
+                        var i;
+                        for (i = 0; i < dropdowns.length; i++) {
+                            var openDropdown = dropdowns[i];
+                            if (openDropdown.classList.contains('show')) {
+                                openDropdown.classList.remove('show');
+                            }
+                        }
+                    }
+                }
+document.getElementById("usrname").innerHTML =localStorage.getItem("username")
+
+</script>
