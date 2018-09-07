@@ -11,7 +11,12 @@
     color: white  !important;
     font-size: 1.75rem !important;
 }
-
+.arrangeDiv{
+    margin-left:6%;
+    height:400px;
+    overflow:scroll;
+    font-family: "Arial"
+}
 @font-face {
     font-family: "lawMatters";
     src: url("/html/mattersmith/assets/font/NoeDisplayMedium.woff") format('woff');
@@ -47,10 +52,15 @@
 
 .text-color {
     color:white;
-    justify-content: center;
-    display: flex;
+    font-size:14px;
+    
 }
 .blankline{
+    margin-left:1%;
 	background-color:white;
-	width:89%;
+	width:95%;
+}
+
+@media (min-width: 1500px) {
+
 }
