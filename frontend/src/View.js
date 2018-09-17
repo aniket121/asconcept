@@ -8,7 +8,7 @@ export class View {
             console.error("Tried to create view with undefined container");
         }
         this.container = container;
-
+         
         Action.on(ActionTypes.LOADED_SCHEMA_GRAPH, (e, data) => { this.onLoadSchemaGraph(data.cy); });
         Action.on(ActionTypes.LOADED_INSTANCE_GRAPH, (e, data) => { this.onLoadInstanceGraph(data.cy, data.reload_data); });
 

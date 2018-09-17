@@ -8,6 +8,7 @@ class PlaybookRule {
     constructor(ruleNode) {
         this.ruleNode = ruleNode;
         this.chosenAnswer = null;
+
     }
 
     getName() {
@@ -72,16 +73,16 @@ export class PlaybookView extends View {
             playbookNode: null
         };
 
-        /*
-        Action.on(ActionTypes.SELECT_INSTANCES, (e, data) => {
-            if(data.nodes.length === 1) {
-                let n = graphService.instance.$id(data.nodes[0]);
-                if(n.data().cls === 'Playbook') {
-                    Action.trigger(ActionTypes.SELECT_PLAYBOOK, { node: n.id() });
-                }
-            }
-        });
-        */
+        
+        // Action.on(ActionTypes.SELECT_INSTANCES, (e, data) => {
+        //     if(data.nodes.length === 1) {
+        //         let n = graphService.instance.$id(data.nodes[0]);
+        //         if(n.data().cls === 'Playbook') {
+        //             Action.trigger(ActionTypes.SELECT_PLAYBOOK, { node: n.id() });
+        //         }
+        //     }
+        // });
+        
 
         Action.on(ActionTypes.SELECT_PLAYBOOK, (e, data) => {
             let n = graphService.instance.$id(data.node);

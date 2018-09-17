@@ -148,7 +148,7 @@ body {
 
         <meta charset="UTF-8">
         <title><%= htmlWebpackPlugin.options.title %></title>
-
+        <script src="https://cdn.ckeditor.com/4.10.1/standard/ckeditor.js"></script>
 
     </head>
    <body onload="checkUser()"  class="body">
@@ -263,7 +263,7 @@ body {
                  <button id="btn-relayout" class="btn btn-default">ReLayout</button> -->
 <div id="testview"></div>
             
-             
+             <textarea name="editor1" style="display:none"></textarea>
             <div style="display:inline;"><small>User <i id="usrname"></i>, in <em id="scopeinfo"></em> mode</small> </div>
             <div id="user-mode-switcher" style="display: none">Mode:
                 <div class="btn-group" role="group">
@@ -371,6 +371,10 @@ body {
 
   </div>
 </div>
+
+
+
+
  
         <div class="lhsoverlay" id="lhszoominfo" style="display:none"></div>
 
@@ -399,6 +403,7 @@ function checkUser()
               
                
             }
+
      
       else{
        
@@ -427,18 +432,19 @@ function checkUser()
               
                
             }
-          else if(window.location.href.indexOf('filter_includeManual') > -1){
-        
-              $('.footer').css("display","block")
-              $('.leftfooter').css("display","block")
-              $('.homepage').css("display","block")
-              $('.login').css("display","none")
-              $('#countbar').css("display","block")
-              $('#countbar').css("width","29em")
-              $('#lhszoominfo').css("display","block")
-              $('#user-mode-switcher').css('display','block')
 
-      }
+      //     else if(window.location.href.indexOf('filter_includeManual') > -1){
+        
+      //         // $('.footer').css("display","block")
+      //         // $('.leftfooter').css("display","block")
+      //         // $('.homepage').css("display","block")
+      //         // $('.login').css("display","none")
+      //         // $('#countbar').css("display","block")
+      //         // $('#countbar').css("width","29em")
+      //         // $('#lhszoominfo').css("display","block")
+      //         // $('#user-mode-switcher').css('display','block')
+
+      // }
          else{
                $('.login').css("display","block")
                $('.body').css("background-color","red !important")
@@ -450,12 +456,37 @@ function checkUser()
 
 
          console.log("user out")
-    }
+      }
+ if(window.location.href.indexOf('filter_includeManual')){
+   
+   var fileName=window.location.href.split("&")[3].split("=")[1].split("/")[1];
+  
+   var path={path: fileName};
+   $.ajax({
+        url: "http://localhost:8002/FileContent",
+        type: "POST",
+        data: JSON.stringify(path),
+        dataType: 'json',
+        contentType: 'application/json',
+        async: false,
+        success: function(data) {
+            
+            //$("#editor1").css("display":"block");
+            CKEDITOR.replace( 'editor1' );
+            CKEDITOR.instances['editor1'].setData(data.FileContent);
+        },
+        error: function(msg) {
+            
+           console.log("error occured");
+            
+        }
+       });
+ }
 
-    
     
 
 }
+
 
      function login(){
     var credential={
@@ -479,7 +510,11 @@ function checkUser()
                if(role=="admin"){
                 localStorage.removeItem("mattersmith");
                }
+
                localStorage.setItem("role", role);
+               if(msg.username=="admin"){
+                 localStorage.setItem("role","editor");
+               }
                localStorage.setItem("username", msg.username);
                
                console.log("usernmae",localStorage.getItem("username"))
@@ -621,7 +656,7 @@ function checkUser()
         $("#upload").css("display","block")
       }
        
-      setTimeout(function(){ $("#upload").css("display","none");}, 3000);         
+      setTimeout(function(){ $("#upload").css("display","none");window.location.reload()}, 3000);         
 
     }
   };

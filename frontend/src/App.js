@@ -322,7 +322,7 @@ export class App {
     _setupViewSwitcher() {
         
 
-         if(localStorage.getItem("mattersmith") || window.location.href.indexOf('filter_includeManual') > -1){
+         if(localStorage.getItem("mattersmith")){
         this.lhsViewSwitcher = new ViewSwitcher('hidden', 'lhsgraph');
         this.rhsViewSwitcher = new ViewSwitcher('hidden', 'rhsgraph');
         this.sidebarViewSwitcher = new ViewSwitcher('hidden', null);

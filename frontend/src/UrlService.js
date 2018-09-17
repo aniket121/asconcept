@@ -71,10 +71,10 @@ export class UrlService {
             return;
         }
 
-        // if(cause === UrlService.ON_URLCHANGE && !this.donePostLoaded) {
-        //     console.log('UrlService.handleUrlHash IGNORING ON_CHANGEURL before finished loading');
-        //     return;
-        // }
+        if(cause === UrlService.ON_URLCHANGE && !this.donePostLoaded) {
+            console.log('UrlService.handleUrlHash IGNORING ON_CHANGEURL before finished loading');
+            return;
+        }
 
 
         let data = parseQuery(urlHash);
