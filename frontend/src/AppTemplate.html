@@ -457,31 +457,7 @@ function checkUser()
 
          console.log("user out")
       }
- if(window.location.href.indexOf('filter_includeManual')){
-   
-   var fileName=window.location.href.split("&")[3].split("=")[1].split("/")[1];
-  
-   var path={path: fileName};
-   $.ajax({
-        url: "http://localhost:8002/FileContent",
-        type: "POST",
-        data: JSON.stringify(path),
-        dataType: 'json',
-        contentType: 'application/json',
-        async: false,
-        success: function(data) {
-            
-            //$("#editor1").css("display":"block");
-            CKEDITOR.replace( 'editor1' );
-            CKEDITOR.instances['editor1'].setData(data.FileContent);
-        },
-        error: function(msg) {
-            
-           console.log("error occured");
-            
-        }
-       });
- }
+
 
     
 

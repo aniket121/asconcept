@@ -27,6 +27,37 @@ const fieldType2Alpaca = {
         //        "field": "token", // FIXME
     },
 };
+ function getFileContent(fileName){
+   
+   var path={path: fileName.split("/")[1]};
+   $.ajax({
+        url: "http://localhost:8002/FileContent",
+        type: "POST",
+        data: JSON.stringify(path),
+        dataType: 'json',
+        contentType: 'application/json',
+        async: false,
+        success: function(data) {
+            
+            //$("#editor1").css("display":"block");
+            CKEDITOR.replace('editor1', {
+            on: {
+               change: function() {
+              this.updateElement();    
+               }
+                }
+              })
+            CKEDITOR.instances['editor1'].setData(data.FileContent);
+        
+        },
+        error: function(msg) {
+            
+           console.log("error occured");
+            
+        }
+       });
+    }
+
 
 // probably not very efficient, but this is the only way it seems to work...?!
 function getPatchedAlpaca(uploadService) {
@@ -48,6 +79,9 @@ function getPatchedAlpaca(uploadService) {
                     if(self.control && self.data && self.data !== '') {
                         //debugger;
                         $(self.control).after( $('<a>').attr('href', "http://localhost:8002/"+self.data).attr('target', '_blank').text('Download File') );
+                        $(self.control).after( $('<a>').attr('onclick', getFileContent(self.data)).attr('target', '_blank').text('') );
+
+                        window.fileName=self.data;
                         $(self.control).hide();
                     }
 
@@ -152,7 +186,7 @@ export class Alpaca {
         this.uploadService = uploadService;
         this.patchedAlpaca = getPatchedAlpaca(uploadService);
     }
-
+ 
     getControl(ele) {
         return this.patchedAlpaca(ele, "get");
     }
