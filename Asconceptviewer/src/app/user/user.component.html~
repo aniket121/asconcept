@@ -143,7 +143,7 @@ tr:nth-child(even){background-color: #f2f2f2}
     
    <li><a class="pull-right"  (click)="openlimit()"><i data-toggle="tooltip" title="{{'setHorizontal'| translate }}" class="fa fa-gear" style="font-size:23px;color:#808080;cursor:pointer; "></i> </a></li>
     <a (click)="delteMultiple()"><i data-toggle="tooltip" title="Delete Text files" class="fa fa-trash-o pull-right" style="font-size:23px;margin-right: 7px;cursor:pointer"></i> </a>
-<a href="http://repindex.com:4200/html/RepindexUserGuide.pdf"><i data-toggle="tooltip" title="Download User Manual" class="fa fa-question-circle pull-right" style="font-size:23px;margin-right: 0px;cursor:pointer"></i> </a>
+<a href="https://asconceptreviewer.com/RepindexUserGuide.pdf"><i data-toggle="tooltip" title="Download User Manual" class="fa fa-question-circle pull-right" style="font-size:23px;margin-right: 0px;cursor:pointer"></i> </a>
 
     <!--<select class="form-control col-sm-3 pull-right" id="lang" [(ngModel)]="lang" (ngModelChange)="setlang($event)" >
         <option  value="en">English</option>
@@ -396,7 +396,7 @@ tr:nth-child(even){background-color: #f2f2f2}
      <strong>No values found !</strong> select a suitable concept and text.
   </div>
   <br>
- <a href="http://repindex.com:4200/html/range.csv"  class="btn btn-primary" role="button">Download to CSV </a>
+ <a href="https://asconceptreviewer.com/range.csv"  class="btn btn-primary" role="button">Download to CSV </a>
 
   &nbsp;<a (click)="closeAll()"  class="btn btn-primary" role="button">Close </a>
 </table>
@@ -453,8 +453,8 @@ tr:nth-child(even){background-color: #f2f2f2}
     overflow: scroll;width:1044px;">
         <i *ngIf="loadingStatus"> <i class='fa fa-spinner fa-spin' style="font-size:50px;    margin-left: 515px"></i></i>
         <div class="card-block">
-         <a *ngIf="self" href="http://repindex.com:4200/html/exportResult.csv"  style="margin-bottom:1%;" class="btn btn-primary" role="button">Export Result</a> 
-  <a *ngIf="constatus" href="http://repindex.com:4200/html/ConcordanceResult.csv"  style="margin-bottom:1%;" class="btn btn-primary" role="button">Export Result</a> 
+         <!--<a *ngIf="self" href="https://asconceptreviewer.com/exportResult.csv"  style="margin-bottom:1%;" class="btn btn-primary" role="button">Export Result</a> 
+  <!--<a *ngIf="constatus" href="https://asconceptreviewer.com/ConcordanceResult.csv"  style="margin-bottom:1%;" class="btn btn-primary" role="button">Export Result</a> -->
  
 <table id="tableshow" style="width:100%" (click)="closeAll()">
 
@@ -492,7 +492,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 <ul class="breadcrumb" *ngIf="frquecnycount && !self">
    <button type="button" (click)="gotoCharts()" style="font-size:12px" class="col-sm-3 btn btn-primary pull-right">Visualise Results</button>
-    <a href="http://repindex.com:4200/html/FrequencyResult.csv" style="font-size:12px" role="button" class="col-sm-3 btn btn-primary pull-left">Export Result</a>  
+    <a href="https://asconceptreviewer.com/FrequencyResult.csv" style="font-size:12px" role="button" class="col-sm-3 btn btn-primary pull-left">Export Result</a>  
 </ul>
   <div class="card " *ngIf="frquecnycount && !self || document_count" >
       <div class="card-block" style="height: 400px;overflow: scroll;width:1044px;">

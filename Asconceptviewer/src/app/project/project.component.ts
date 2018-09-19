@@ -26,12 +26,13 @@ export class ProjectComponent implements OnInit{
 
  constructor( private activeRoute: ActivatedRoute,private router: Router,private ProjectService: ProjectService,private cdrf: ChangeDetectorRef) {
  this.router=router;
-  localStorage.setItem("addproject","beforeproject" ); 
+  localStorage.setItem("addproject","afterproject" );  
   localStorage.setItem("lang","en");
  
 }
 
   ngOnInit(): void {
+     
       window.history.forward()
      var access=window.location.href.split("/");
 
@@ -45,7 +46,7 @@ export class ProjectComponent implements OnInit{
      {
      localStorage.setItem("access_token","undefined" );
      }
-      localStorage.setItem("addproject","beforeproject" );  
+      //localStorage.setItem("addproject","beforeproject" );  
       this. getAllprojects().then((data) => {
      });
   
@@ -167,13 +168,19 @@ export class ProjectComponent implements OnInit{
 
 goTo(pid,pname)
 {   
-var url = 'http://repindex.com:4200/html/dist/#/user?projectId='+ pid +'&project='+ pname + '&uristatus=ok';
- window.location.replace( url ) 
+var uid=localStorage.getItem('userId');
+localStorage.setItem("userId",uid ); 
+localStorage.setItem("projectId",pid ); 
+ localStorage.setItem('projectName', pname);
+ localStorage.setItem("addproject","afterproject" );  
+
+
+ //window.location.href='https://www.asconceptreviewer.com/#/user?projectId='+ pid +'&project='+ pname + '&uristatus=ok';
+ this.router.navigate(['/user'],{ queryParams: { projectId:pid,project:pname,uristatus:"ok"}})
  
- localStorage.removeItem('addproject');
  localStorage.setItem("addproject","afterproject" );  
  localStorage.setItem("projectId",pid ); 
  localStorage.setItem('projectName', pname);
- window.location.reload(); 
+ //setTimeout(function(){ window.location.reload();console.log("redirect to user") }, 2000);
  }
 } 

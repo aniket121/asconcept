@@ -70,6 +70,15 @@ public updateData: any = {};
 
 
   ngOnInit(): void {
+      
+      var userType=localStorage.getItem('usertype')
+       if(userType=="admin"){
+        
+       }
+       else{
+         
+        window.location.href="/login"
+       }
       $( "#datepicker" ).datepicker();  
       this.getAllCategories(localStorage.getItem('userId')).then((data) => {
      });

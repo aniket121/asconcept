@@ -131,6 +131,12 @@ export class UserService {
 			return response.json();			
 		})
 	}
+        getKnowledgeNode(){
+	  return this.http.get("http://localhost:8001/graph")
+		.map((response: Response) => {	
+			return response.json();			
+		})
+        }
 
 
 

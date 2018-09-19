@@ -25,7 +25,7 @@ import { ShContextMenuModule } from 'ng2-right-click-menu';
 import {TranslateService, TranslateLoader, TranslateStaticLoader} from 'ng2-translate';
 import { Http } from '@angular/http';
 export function httpFactory(http: Http) {
-  return new TranslateStaticLoader(http, '/html/dist/assets/i18n', '.json');
+  return new TranslateStaticLoader(http, '/assets/i18n', '.json');
 }
 @NgModule({
   imports: [

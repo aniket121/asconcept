@@ -13,7 +13,7 @@ import { ModalModule } from 'ng2-bootstrap/modal';
 import {TranslateModule} from 'ng2-translate';
 /*import { repindexService } from '../repindex.service';*/
 export function httpFactory(http: Http) {
-  return new TranslateStaticLoader(http, '/html/dist/assets/i18n', '.json');
+  return new TranslateStaticLoader(http, '/assets/i18n', '.json');
 }
 @NgModule({
   imports: [

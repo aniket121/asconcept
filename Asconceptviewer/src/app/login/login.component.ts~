@@ -73,7 +73,8 @@ authenticate(name,password)
            localStorage.setItem('counter',"0");
             localStorage.setItem('conceptStatus',data.concept_status);
             localStorage.setItem('stoplist_status',data.stoplist_status);
-             localStorage.setItem("backProjectCounter","0" ); 
+             localStorage.setItem("backProjectCounter","0" );
+              localStorage.setItem('usertype',data.user_type); 
           this.router.navigate(['/project']);
       }  
        else if(data.user_type=="superuser"){

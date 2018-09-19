@@ -182,7 +182,7 @@ p:hover {
 
 
 
-   <div *ngIf="project==='afterproject'">
+   <div *ngIf="username==='user'">
     
    <ul class="nav">
        <!--Project Name-->
@@ -382,9 +382,9 @@ p:hover {
         </ul>
    </div>
    
-    <div *ngIf="project==='addproject'">
+    <!--<div *ngIf="project==='addproject'">
     
-   </div>
+   </div>-->
    
 
 

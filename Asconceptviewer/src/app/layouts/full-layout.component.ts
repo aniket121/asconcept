@@ -5,6 +5,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
  import { ModalDirective } from 'ng2-bootstrap/modal/modal.component';
  import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http';
  import {TranslateService, TranslateLoader, TranslateStaticLoader} from 'ng2-translate';
+ import * as _ from 'lodash';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './full-layout.component.html',
@@ -44,7 +45,9 @@ export class FullLayoutComponent implements OnInit {
    public concept_status:any;
    public loaderFlag:any;
    public loading:boolean = false;
-   
+   public Nodes:{};
+   public reviewConceptName:any;
+   public nodefound:any;
 public loader: boolean = false;
    public uploaded: any = [];
    public getstop:any[];
@@ -85,6 +88,12 @@ public loader: boolean = false;
       console.log("master concept",data); 
 
   });  
+
+        this.UserService.getKnowledgeNode().subscribe(data => {
+          console.log(data);
+          this.Nodes=data.nodes;
+        
+      });
         if(localStorage.getItem("addproject")=="beforeproject")
          {
            this.hide();
@@ -707,6 +716,7 @@ allClose(){
       $("#masterlist").css("display","none");
       $("#mm9").css("display","none");
       $("#url_menu").css("display","none");
+      $("#gotoknowledge").css("display","none");
 
     
 }
@@ -1005,6 +1015,37 @@ MasterListMenuChild(event){
       (<HTMLInputElement>document.getElementById("textOfMasterList")).value=name;
     return false;
 }
+gotoKnowledge(){
+     var reviewConceptName=$("#hidenUmbrella").val();
+     
+     var nodefound=false;
+   _.filter(this.Nodes, function(Node) {
+    if(Node.class ==="Playbook" && Node.props._oid){
+         
+         console.log("props",Node.props.name.toUpperCase())
+        if(reviewConceptName==Node.props.name.toUpperCase())
+        {
+           nodefound=false;
+           
+           window.open("http://localhost:9000/#playbook_openOid="+Node.props._oid+"&filter_includeManual="+Node.props._oid+"&select="+Node.props._oid+"&v=1&path="+Node.props.attachment)
+           
+
+        }
+        else{
+           nodefound=true;
+        }
+        if(nodefound!=true){
+          this.ngOnInit()
+        }
+    }
+    
+});
+if(nodefound && true){
+ document.getElementById("cancelModalConcept").click();
+}
+
+}
+
 
 
 

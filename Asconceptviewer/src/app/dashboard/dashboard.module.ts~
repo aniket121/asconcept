@@ -13,7 +13,7 @@ import {TranslateService, TranslateLoader, TranslateStaticLoader} from 'ng2-tran
 import { Http } from '@angular/http';
 import { ModalModule } from 'ng2-bootstrap/modal';
 export function httpFactory(http: Http) {
-  return new TranslateStaticLoader(http, '/html/dist/assets/i18n', '.json');
+  return new TranslateStaticLoader(http, '/assets/i18n', '.json');
 }
 
 @NgModule({

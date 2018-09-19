@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  baseUrl: "http://93.93.135.31:9999/repindexapi/"
+  baseUrl: "https://asconceptreviewer.com:80/repindexapi/"
 };

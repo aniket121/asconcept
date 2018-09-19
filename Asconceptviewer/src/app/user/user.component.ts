@@ -5,7 +5,7 @@ import { repindexService } from '../repindex.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { saveAs } from 'file-saver';
 import {TranslateService, TranslateLoader, TranslateStaticLoader} from 'ng2-translate';
-
+ import * as _ from 'lodash';
 
 declare var $: any;
 @Component({
@@ -78,18 +78,31 @@ export class UserComponent implements OnInit{
    public textId:any;
   public conceptDefault:any;
   public loadingStatus:boolean=false;
+  public Nodes:{};
+  public reviewConceptName:any;
+  public nodefound:any;
 
 
  constructor(private Translate: TranslateService, private router: Router, private UserService: UserService,private activeRoute: ActivatedRoute) {
  this.router=router;
  Translate.setDefaultLang("en");
  var lang= localStorage.getItem("lang");
+
    Translate.use(lang);
    this.lang=lang
-   
+   localStorage.setItem("addproject","afterproject" );  
+   //localStorage.setItem("usertype","user");
 }
 
 ngOnInit(): void {
+        var userType=localStorage.getItem('usertype')
+       if(userType=="user"){
+        
+       }
+       else{
+         
+        window.location.href="/login"
+       }
            
             this.getlimit=localStorage.getItem("setlimit");
            this.UserService.getstoplist().subscribe(data => {
@@ -100,6 +113,12 @@ ngOnInit(): void {
           this.getstop=data;
          console.log("stoplist====>",this.getstop)
         });
+
+          this.UserService.getKnowledgeNode().subscribe(data => {
+          console.log(data);
+          this.Nodes=data.nodes;
+        
+         });
         this.text_folders = '';
         var pro_id=localStorage.getItem('projectId'); 
        this.UserService.getData(pro_id).subscribe(data => {
@@ -521,7 +540,7 @@ ngOnInit(): void {
        localStorage.setItem("right",leftv);
        localStorage.setItem("toi",toi);
        var strWindowFeatures = "location=yes,height=500,width=800,scrollbars=yes,status=yes";
-       window.open("http://repindex.com:4200/html/dist/#/editor?+fileid="+dd,"_blank",strWindowFeatures)
+       window.open("https://asconceptreviewer.com/#/editor?+fileid="+dd,"_blank",strWindowFeatures)
     // this.router.navigate(['/editor'],{ queryParams: { fileid: dd} });
      //setTimeout(function(){ window.location.reload() }, 300);
  }
@@ -546,7 +565,7 @@ ngOnInit(): void {
    var getfrequency=localStorage.getItem("frequency_data");
    console.log("=========getfrequency====",getfrequency)
    var strWindowFeatures = "location=yes,height=700,width=1000,scrollbars=yes,status=yes";
-    window.open("http://repindex.com:4200/html/dist/#/charts","_blank",strWindowFeatures)
+    window.open("https://asconceptreviewer.com/#/charts","_blank",strWindowFeatures)
 
  }
  openlimit()
@@ -838,7 +857,7 @@ selctedDocumentCmpId(id){
   {
    
     var strWindowFeatures = "location=yes,height=500,width=800,scrollbars=yes,status=yes";
-     window.open("http://repindex.com:4200/html/dist/#/editor?+fileid="+id,"_blank",strWindowFeatures)
+     window.open("https://www.asconceptreviewer.com/#/editor?+fileid="+id,"_blank",strWindowFeatures)
   }
   uncheckFolder()
   {
@@ -858,6 +877,39 @@ selctedDocumentCmpId(id){
    return res;
 
   }
+ showKnowledge(){
+    $("#gotoknowledge").css("display","block");
+     return false;
+  }
+  gotoKnowledge(){
+     var reviewConceptName=$("#hidenUmbrella").val();
+     
+     var nodefound=false;
+   _.filter(this.Nodes, function(Node) {
+    if(Node.class === "Playbook" && Node.props._oid){
+         
+         console.log("props",Node.props.name.toUpperCase())
+        if(reviewConceptName==Node.props.name.toUpperCase())
+        {
+           nodefound=false;
+            window.open("http://localhost:9000/#playbook_openOid="+Node.props._oid+"&filter_includeManual="+Node.props._oid+"&select="+Node.props._oid+"&v=1&path="+Node.props.attachment)
+           
+
+        }
+        else{
+           nodefound=true;
+        }
+        if(nodefound!=true){
+          this.ngOnInit()
+        }
+    }
+    
+});
+if(nodefound && true){
+ document.getElementById("cancelModalConcept").click();
+}
+
+}
   
  
 

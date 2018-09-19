@@ -64,7 +64,7 @@ p:hover {
   
   <ul class="nav navbar-nav hidden-md-down">
     <li class="nav-item">
-      <a  style="color:black;margin-left:-15px;" id="toglerbtn" class="nav-link navbar-toggler sidebar-toggler" href="#">&#9776;</a>
+      <a  style="color:white;position: absolute;margin-left: 200px;margin-top: -6px" id="toglerbtn" class="nav-link navbar-toggler sidebar-toggler" href="#">&#9776;</a>
     </li>
     <!--<b style="font-size:19px;color:black;"> RepindexApp</b>-->
      <img src="assets/img/LOG.png" style="width: 200px;
@@ -94,7 +94,7 @@ p:hover {
 
 <div class="app-body" (click)="allClose()"  >
   <div class="sidebar" >
-    <nav class="sidebar-nav">
+    <nav class="sidebar-nav" style="background-color:#003746">
 
     <div *ngIf="username==='admin'">
       <ul class="nav">
@@ -182,7 +182,7 @@ p:hover {
 
 
 
-   <div *ngIf="project==='afterproject'">
+   <div *ngIf="username==='user'">
     
    <ul class="nav">
        <!--Project Name-->
@@ -349,6 +349,7 @@ p:hover {
                         <p *ngIf="concept_status === 'true'" (click)="selectTerms()"style="cursor:pointer;"  class="context-menu-p">{{'select-terms'| translate }}</p>
                         <p (click)="insertIntosearch()"style="cursor:pointer;"  class="context-menu-p">{{'Insertsearch'| translate }}</p>
                         <p *ngIf="concept_status === 'true'" (click)="userComment(item.id)"style="cursor:pointer;"  class="context-menu-p">{{'addefination'| translate }}</p>
+                         <p *ngIf="concept_status === 'true'" style="cursor:pointer;" (click)="gotoKnowledge()" class="context-menu-p">Go to Knowledge</p>
                        <!--  <p *ngIf="concept_status === 'true'" (click)="insertintoand()" style="cursor:pointer;"  class="context-menu-p">{{'Insertand'| translate }}</p> -->
                         <p (click)="closeM5()" style="cursor:pointer;"  class="context-menu-p">{{'Quit'| translate }}</p>
                         <input type="hidden"  id="hidenTermsOfUmbrella">
@@ -382,9 +383,9 @@ p:hover {
         </ul>
    </div>
    
-    <div *ngIf="project==='addproject'">
+    <!--<div *ngIf="project==='addproject'">
     
-   </div>
+   </div>-->
    
 
 
@@ -1296,10 +1297,40 @@ deletestoplist
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal --> 
 
+<!--concept not present-->
+<button id="cancelModalConcept"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal1055.show()">
+            cancelModalConcept 
+</button>
+<div bsModal #myModal1055="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby = "myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" style=font-size:16px;>Alert</h4>
+        <button type="button" class="close" (click)="myModal1055.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> 
+      </div>  
+      <div class="modal-body">
+        Concept that you searching not present in Knowledge .
+        Please try with other concept.
+             <input type="hidden" id="delete-master-list-hidden-pop">
+           
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModal1055.hide()">Close</button>
+        
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal --> 
+<!--end-->
+
 
 <footer class="app-footer" style="font-size:12px;">
-  <a href="http://coreui.io"></a> Copyright © 2018 Repindex Ltd. All rights reserved.
-  <span class="float-right"> </span>
+  <a href="http://coreui.io"></a> © Mattersmith Limited 2018.
+   <span class="float-right">Powered By Repindex © <b style="color:orange">Repindex</b> Limited 2018</span>
 </footer>
 
 
