@@ -1027,7 +1027,7 @@ gotoKnowledge(){
         {
            nodefound=false;
            
-           window.open("http://localhost:9000/#playbook_openOid="+Node.props._oid+"&filter_includeManual="+Node.props._oid+"&select="+Node.props._oid+"&v=1&path="+Node.props.attachment)
+           window.open("http://repindex.com:4200/html/knowledge/#playbook_openOid="+Node.props._oid+"&filter_includeManual="+Node.props._oid+"&select="+Node.props._oid+"&v=1&path="+Node.props.attachment)
            
 
         }

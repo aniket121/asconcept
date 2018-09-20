@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map'
 import { environment } from '../../environments/environment';
-
+let headers = new Headers();
+headers.append('authorization', localStorage.getItem("auth_token"));
 
 @Injectable()
 export class ProjectService {  
@@ -14,7 +15,7 @@ export class ProjectService {
 add(id,project) { 
         
            
-             return this.http.post(environment.baseUrl+"addproject/"+id+"/", JSON.stringify(project))
+             return this.http.post(environment.baseUrl+"addproject/"+id+"/", JSON.stringify(project),{ headers: headers })
 			.map((response: Response) => {	
 				 						
 				return response.json();			
@@ -24,7 +25,7 @@ add(id,project) {
     rename(id,project) { 
         
            
-             return this.http.post(environment.baseUrl+"renameproject/", JSON.stringify(project))
+             return this.http.post(environment.baseUrl+"renameproject/", JSON.stringify(project),{ headers: headers })
 			.map((response: Response) => {	
 			 					
 				return response.json();			
@@ -34,7 +35,7 @@ add(id,project) {
       delete(project) { 
         
            
-             return this.http.post(environment.baseUrl+"deleteproject/", JSON.stringify(project))
+             return this.http.post(environment.baseUrl+"deleteproject/", JSON.stringify(project),{ headers: headers })
 			.map((response: Response) => {	
 		 						
 				return response.json();			

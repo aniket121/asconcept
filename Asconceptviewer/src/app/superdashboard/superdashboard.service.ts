@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map'
 import { environment } from '../../environments/environment';
+let headers = new Headers();
+headers.append('authorization', localStorage.getItem("auth_token"));
 
 
 @Injectable()
@@ -18,7 +20,7 @@ export class superDashboardService {
         
 		//let options = new RequestOptions({ headers: headers });
 
-             return this.http.post(environment.baseUrl+"adminregsiter/", JSON.stringify(user))
+             return this.http.post(environment.baseUrl+"adminregsiter/", JSON.stringify(user),{headers:headers})
 			.map((response: Response) => {								
 				return response.json();			
 			})
@@ -44,7 +46,7 @@ export class superDashboardService {
         
 		//let options = new RequestOptions({ headers: headers });
              console.log("id of delete user",user)
-             return this.http.post(environment.baseUrl+"deleteUser/", JSON.stringify(user))
+             return this.http.post(environment.baseUrl+"deleteUser/", JSON.stringify(user),{headers:headers})
 			.map((response: Response) => {	
 				console.log("in respobse");							
 				return response.json();			
@@ -52,13 +54,13 @@ export class superDashboardService {
 	}
 
 	  getAllCategories() { 
-        let headers = new Headers();
+             //let headers = new Headers();
 		//headers.append('Content-Type', 'application/json');
 		//headers.append('Access-Control-Allow-Origin', '*');
         
 		//let options = new RequestOptions({ headers: headers });
 
-             return this.http.get(environment.baseUrl+"getAlladmin/")
+             return this.http.get(environment.baseUrl+"getAlladmin/",{headers:headers})
 			.map((response: Response) => {								
 				return response.json();			
 			})

@@ -62,6 +62,7 @@ authenticate(name,password)
           localStorage.setItem('conceptStatus',data.concept_status);
           localStorage.setItem('stoplist_status',data.stoplist_status);
          localStorage.setItem('usertype',data.user_type);
+         localStorage.setItem('auth_token',data.auth_token);
          this.router.navigate(['/dashboard']);
          //setTimeout(function(){ window.location.reload() }, 300);
       }
@@ -74,7 +75,8 @@ authenticate(name,password)
             localStorage.setItem('conceptStatus',data.concept_status);
             localStorage.setItem('stoplist_status',data.stoplist_status);
              localStorage.setItem("backProjectCounter","0" );
-              localStorage.setItem('usertype',data.user_type); 
+              localStorage.setItem('usertype',data.user_type);
+            localStorage.setItem('auth_token',data.auth_token); 
           this.router.navigate(['/project']);
       }  
        else if(data.user_type=="superuser"){
@@ -83,7 +85,8 @@ authenticate(name,password)
          localStorage.setItem('userId',data.user_id);
          localStorage.setItem('usertype',data.user_type);
          localStorage.setItem('conceptStatus',data.concept_status);
-         localStorage.setItem('stoplist_status',data.stoplist_status);            
+         localStorage.setItem('stoplist_status',data.stoplist_status);
+         localStorage.setItem('auth_token',data.auth_token);            
           this.router.navigate(['/superdashboard']);
       }  
       else

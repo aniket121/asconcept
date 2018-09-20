@@ -398,7 +398,7 @@ export class InstanceView extends GraphView {
             }
 
             let q = this.visibilityService.getCytoQuery();
-
+            console.log("q============>",q)
             result = q.applyTo(this.cy);
 
             if(reload) {

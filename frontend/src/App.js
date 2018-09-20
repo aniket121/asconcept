@@ -296,6 +296,7 @@ export class App {
                     console.log("START onFirstLoad()");
 
                     this.urlService.handleUrlHash(window.location.hash, UrlService.PRE_LOADED, this.graphService, this.visibilityService);
+
                     Action.trigger(ActionTypes.LOADED_INSTANCE_GRAPH, { cy: cy, reload_data: data });
 
                     this.urlService.handleUrlHash(window.location.hash, UrlService.POST_LOADED, this.graphService, this.visibilityService);
@@ -316,6 +317,7 @@ export class App {
     }
 
     _loadInstanceData(data) {
+
         this._loadData(data);
     }
 

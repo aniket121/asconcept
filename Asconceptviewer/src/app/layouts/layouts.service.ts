@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map'
 import { environment } from '../../environments/environment';
-
+let headers = new Headers();
+headers.append('authorization', localStorage.getItem("auth_token"));
 
 @Injectable()
 export class LayoutService {  
@@ -14,7 +15,7 @@ export class LayoutService {
     getData(id) { 
         
            
-             return this.http.get(environment.baseUrl+"getprojectDetails/"+id)
+             return this.http.get(environment.baseUrl+"getprojectDetails/"+id,{headers:headers})
 			.map((response: Response) => {	
 				 						
 				return response.json();			
@@ -271,7 +272,7 @@ renameMasterList(obj){
 	})
 }
 getKnowledgeNode(){
-	  return this.http.get("http://localhost:8001/graph")
+	  return this.http.get("http://repindex.com:8001/graph")
 		.map((response: Response) => {	
 			return response.json();			
 		})

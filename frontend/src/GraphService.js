@@ -165,6 +165,7 @@ export class GraphService {
             if (this._instancegraph) {
                 this._instancegraph.destroy();
             }
+            
             this._instancegraph = instanceGraph(data);
 
             this._updateKeywordIndex();

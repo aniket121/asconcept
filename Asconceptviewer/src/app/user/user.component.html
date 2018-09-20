@@ -180,7 +180,7 @@ tr:nth-child(even){background-color: #f2f2f2}
     
     <div class="col-sm-6" id="font-size">
           {{'Query-Type'| translate }}
-          <p style="margin-top:38px;">{{'Result-Type'| translate }}</p>
+          <div style="margin-top:38px;">{{'Result-Type'| translate }}</div>
           <br>
           <input type="text" *ngIf="constatus" class="form-control" style="font-size:12px;" name="lst_toi1" id="lst_toi1" placeholder="{{'Search'| translate }}" >
     </div>
@@ -514,8 +514,8 @@ tr:nth-child(even){background-color: #f2f2f2}
  <!-- frquency count table -->
 
 <ul class="breadcrumb" *ngIf="frquecnycount && !self">
-   <button type="button" (click)="gotoCharts()" style="font-size:12px" class="col-sm-3 btn btn-primary pull-right">Visualise Results</button>
-    <a href="https://asconceptreviewer.com/FrequencyResult.csv" style="font-size:12px" role="button" class="col-sm-3 btn btn-primary pull-left">Export Result</a>  
+   <button type="button" (click)="gotoCharts()" style="font-size:12px;background-color:#00B4AF;" class="col-sm-3 btn btn-primary pull-right">Visualise Results</button>
+    <a href="https://asconceptreviewer.com/FrequencyResult.csv" style="font-size:12px;background-color:#00B4AF;" role="button" class="col-sm-3 btn btn-primary pull-left">Export Result</a>  
 </ul>
   <div class="card " *ngIf="frquecnycount && !self || document_count" >
       <div class="card-block" style="height: 400px;overflow: scroll;width:1044px;">

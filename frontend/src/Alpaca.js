@@ -40,13 +40,16 @@ const fieldType2Alpaca = {
         success: function(data) {
             
             //$("#editor1").css("display":"block");
-            CKEDITOR.replace('editor1', {
-            on: {
-               change: function() {
-              this.updateElement();    
-               }
+            //CKEDITOR.replace('editor1')
+
+            if (CKEDITOR.instances.editor1)
+               {
+                 CKEDITOR.instances.editor1.destroy();
+                 CKEDITOR.replace("editor1");
                 }
-              })
+            else{
+                CKEDITOR.replace("editor1");
+            }
             CKEDITOR.instances['editor1'].setData(data.FileContent);
         
         },
