@@ -15,6 +15,8 @@ export const DEFAULT_RULES = {
             "Binding",
              //"Topic",
             // "PlaybookRule",
+            "Aniket",
+            "Asset",
             "Action",
             "Role",
                 "ThirdPartyRole",

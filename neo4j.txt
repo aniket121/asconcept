@@ -1,0 +1,137 @@
+create Node with lable : CREATE (n:customName { name: 'Andy', title: 'Developer' })
+                         CREATE (n:customName1 { name: 'Aniket', title: 'Developer' })
+
+
+
+match  query 
+
+MATCH (n:customName),(n1:customName1)
+WHERE n1.name = 'Andy' AND n.name = 'Aniket'
+CREATE (n)-[r:RELTYPE]->(n1)
+RETURN type(r)
+
+
+return only name
+
+MATCH (n:customName1)
+RETURN n.name
+apt-get purge neo4j
+
+neo4j-admin load --from=/home/admin1/backups/graph.db/2016-110-02.dump --database=graph.db --force
+neo4j-admin dump --database=graph.db --to=/home/admin1/backups/graph.db/2016-110-02.dump
+
+
+https://stackoverflow.com/questions/41403465/flask-app-will-not-load-app-py-the-file-path-provided-app-does-not-appear-to
+
+flask db init
+flask db migrate
+flask db upgrade
+https://stackoverflow.com/questions/25567744/backup-neo4j-community-edition-offline-in-unix-mac-or-linux
+
+if(window.location.href.indexOf('filter_includeManual') > -1){
+       //console.log("===========windowlocation=======",window.location.href.split("&")[3].split("=")[1])
+       fileName=window.location.href.split("&")[3].split("=")[1].split("/")[1];
+       alert(fileName)
+        var path={
+          path: fileName,
+          
+        };
+
+       $.ajax({
+        url: "http://localhost:8002/FileContent",
+        type: "POST",
+        data: JSON.stringify(path),
+        dataType: 'json',
+        contentType: 'application/json',
+        async: false,
+        success: function(data) {
+            
+            $("#editor1").css("display":"block")
+            CKEDITOR.replace( 'editor1' );
+            CKEDITOR.instances['editor1'].setData(data.FileContent);
+        },
+        error: function(msg) {
+            
+            alert('error')
+            
+        }
+       });
+    }
+
+function Ckeditor(){
+
+       if(window.location.href.indexOf('filter_includeManual')){
+       //console.log("===========windowlocation=======",window.location.href.split("&")[3].split("=")[1])
+       fileName=window.location.href.split("&")[3].split("=")[1].split("/")[1];
+       alert(fileName)
+        var path={
+          path: fileName,
+          
+        };
+
+       $.ajax({
+        url: "http://localhost:8002/FileContent",
+        type: "POST",
+        data: JSON.stringify(path),
+        dataType: 'json',
+        contentType: 'application/json',
+        async: false,
+        success: function(data) {
+            
+            $("#editor1").css("display":"block")
+            CKEDITOR.replace( 'editor1' );
+            CKEDITOR.instances['editor1'].setData(data.FileContent);
+        },
+        error: function(msg) {
+            
+           console.log("error occured");
+            
+        }
+       });
+    }
+  
+}
+
+
+
+ testcls = Class(_oid='68ad0571-370c-40a5-9357-3a5d5691b5cd', name="testing", scope=['admin', 'editor'],
+                   supercls='Any', colour="#990099",
+                   desc='Represent.',
+                   fields={
+                       'name': {'label': 'Name', 'type': 'str', 'required': True, 'unique': True},
+                       'desc': {'label': 'Description', 'type': 'str-long', 'required': False, 'unique': False},
+                       'attachment': {'label': 'Attachment', 'type': 'file', 'required': False, 'unique': True},
+                   })
+
+    testcls.create(_global=True)
+
+   assestcls = Class(_oid='68ad0552-370c-40a5-9357-3a5d3691b5cd', name="Asset", scope=['admin', 'editor'],
+                   supercls='Any', colour="#990099",
+                   desc='Represents a asset.',
+                   fields={
+                       'name': {'label': 'Name', 'type': 'str', 'required': True, 'unique': True},
+                       'desc': {'label': 'Description', 'type': 'str-long', 'required': False, 'unique': False},
+                       'attachment': {'label': 'Attachment', 'type': 'file', 'required': False, 'unique': True},
+                   })
+
+    assestcls.create(_global=True)
+
+
+
+
+    IsRelatedTorel = RelationClass(_oid='19c9b973-cbf5-49b9-9abb-456b8bf667b5', name='IsSubjectTo', scope=['admin', 'editor'],
+                              desc='IsRelatedTo.',
+                              range='Document', domain='Asset', supercls='RelatedTo')
+    IsRelatedTorel.create(_global=True)
+
+
+    IsHigherRiskrel = RelationClass(_oid='19c9b975-cb65-49b9-9abb-456b8bf607b5', name='IsHigherRisk', scope=['admin', 'editor'],
+                              desc='IsRelatedTo.',
+                              range='Document', domain='Asset', supercls='RelatedTo')
+    IsHigherRiskrel.create(_global=True)
+
+    BeneficiaryOfrel = RelationClass(_oid='19c9b975-cb05-49b9-9abb-456b8b9667b5', name='BeneficiaryOf', scope=['admin', 'editor'],
+                              desc='IsRelatedTo.',
+                              range='actor', domain='Asset', supercls='RelatedTo')
+    BeneficiaryOfrel.create(_global=True)
+

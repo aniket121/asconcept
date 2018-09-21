@@ -14,11 +14,6 @@ export class superDashboardService {
   constructor( private http: Http) { }
 
    add(user) { 
-        let headers = new Headers();
-		//headers.append('Content-Type', 'application/json');
-		//headers.append('Access-Control-Allow-Origin', '*');
-        
-		//let options = new RequestOptions({ headers: headers });
 
              return this.http.post(environment.baseUrl+"adminregsiter/", JSON.stringify(user),{headers:headers})
 			.map((response: Response) => {								
@@ -27,11 +22,6 @@ export class superDashboardService {
 	}
 
 	EditClient(id,user) { 
-        let headers = new Headers();
-		//headers.append('Content-Type', 'application/json');
-		//headers.append('Access-Control-Allow-Origin', '*');
-        
-		//let options = new RequestOptions({ headers: headers });
 
              return this.http.post(environment.baseUrl+"updatesuperuser/"+id+"/", JSON.stringify(user))
 			.map((response: Response) => {								
@@ -40,11 +30,6 @@ export class superDashboardService {
 	}
 
 		DeleteClient(user) { 
-        //let headers = new Headers();
-		//headers.append('Content-Type', 'application/json');
-		//headers.append('Access-Control-Allow-Origin', '*');
-        
-		//let options = new RequestOptions({ headers: headers });
              console.log("id of delete user",user)
              return this.http.post(environment.baseUrl+"deleteUser/", JSON.stringify(user),{headers:headers})
 			.map((response: Response) => {	
@@ -53,13 +38,7 @@ export class superDashboardService {
 			})
 	}
 
-	  getAllCategories() { 
-             //let headers = new Headers();
-		//headers.append('Content-Type', 'application/json');
-		//headers.append('Access-Control-Allow-Origin', '*');
-        
-		//let options = new RequestOptions({ headers: headers });
-
+	  getAllCategories() { 	
              return this.http.get(environment.baseUrl+"getAlladmin/",{headers:headers})
 			.map((response: Response) => {								
 				return response.json();			
