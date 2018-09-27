@@ -5,12 +5,16 @@ import cycola from 'cytoscape-cola';
 import { Action, ActionTypes } from './Action';
 //import { applyFilterRules } from './FilterRules';
 import { CytoQuery } from './CytoFilter';
-
+import { PlaybookView } from './PlaybookView'
 cytoscape.use(cycola);
 
 function setsAreEqual(a, b) {
     return (a.size === b.size) && (Array.from(a).filter(x => !b.has(x)).length === 0);
 }
+// function generateLink(oid){
+//     return "http://localhost:9000/#playbook_openOid="+oid+"&filter_includeManual="+oid+"&select="+oid+"&v=1";
+
+// }
 
 export class InstanceView extends GraphView {
     constructor(container, graphService, visibilityService, urlService) {
@@ -172,7 +176,6 @@ export class InstanceView extends GraphView {
 
         // on SELECT_INSTANCE, show just that instance and it's neighborhood
         Action.on(ActionTypes.SELECT_INSTANCES, (e, data) => {
-            
             console.log("===================>,data",data)
             var cy = this.cy;
             var visibleNodesList = data.nodes.map( id => cy.$id(id) ).filter(o => o.length > 0);
@@ -198,20 +201,35 @@ export class InstanceView extends GraphView {
 
         // on SELECT_TOPIC, show all instances that have that topic
         Action.on(ActionTypes.SELECT_TOPIC, (e, data) => {
-            
+           console.log("in select topic api==============")
             this.previousSelection = new Set([]);
             var cy = this.cy;
             var topic_name = data.node.data().props.name;
             var topic_node = this.graphService.instance.$("node[cls='Topic'][prop_name='" + topic_name + "']");
             var hastopic_edges = topic_node.connectedEdges("edge[cls='HasTopic']");
             var nodes_in_topic = hastopic_edges.connectedNodes("[cls != 'Topic']");
+            console.log("nodes_in_topic",nodes_in_topic[0])
+
+            // if(nodes_in_topic.length > 0){
+            //     var nodes_in_topic_ids = nodes_in_topic.map(n => n.id());
+            //     console.log("playbook_node",nodes_in_topic_ids);
+            //     var oid=this.graphService.instance.$id(nodes_in_topic_ids[0]).data().oid.toString()
+            //     console.log("oid",generateLink(oid))
+            //     window.open(generateLink(oid))
+            // }
 
             if(nodes_in_topic.length > 0) {
                 // it is neccessary to convert via id's from graphService.instance to this.cy
+
                 var nodes_in_topic_ids = nodes_in_topic.map(n => n.id());
+                //this.generatePlaybookUrl(nodes_in_topic_ids[0])
+                console.log("nodes_in_topic_ids",nodes_in_topic_ids)
                 let toselect = nodes_in_topic_ids.filter(id => cy.$id(id).length > 0).map(id => cy.$id(id));
                 toselect.forEach(n => n.select());
+                console.log("called");
+
             }
+            
 
         });
 

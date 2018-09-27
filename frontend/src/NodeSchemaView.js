@@ -43,6 +43,8 @@ export class NodeSchemaView extends GraphView {
                 console.log(`Class ${node_name} <-[${relcls.data().name}]- ${relsrc.data().name}`);
             });
 
+            
+
             window.app.xx = cls_rels;
         });
 
@@ -96,9 +98,9 @@ export class NodeSchemaView extends GraphView {
         
         // only show node classes
         console.log("==========schemacy=======================",schemacy.$("node[class_kind = 'node']"));
-       cy.add( schemacy.$("node[class_kind = 'node']") );
-       cy.add( schemacy.$("edge[label = 'ISA']") );
-        cy.endBatch();
+         cy.add( schemacy.$("node[class_kind = 'node']") );
+         cy.add( schemacy.$("edge[label = 'ISA']") );
+         cy.endBatch();
 
         // recreate the layout when adding new elements
         this.onDisplay();

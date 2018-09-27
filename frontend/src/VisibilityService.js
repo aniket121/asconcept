@@ -15,6 +15,7 @@ export const DEFAULT_RULES = {
             "Binding",
              //"Topic",
             // "PlaybookRule",
+            
             "Aniket",
             "Asset",
             "Action",
@@ -46,7 +47,10 @@ export const DEFAULT_RULES = {
 
     includeManual: new Set(),
 };
+function generateLink(oid){
+    return "http://localhost:9000/#playbook_openOid="+oid+"&filter_includeManual="+oid+"&select="+oid+"&v=1";
 
+}
 export const DEFAULT_VIEWER_RULES = {
     includeClasses: new Set([]),
     includeTopics: new Set([]),
@@ -112,9 +116,20 @@ export class VisibilityService {
     }
 
     setIncludeTopics(topics) {
+         console.log("topics==>",topics)
         let rules = Object.assign({}, this.rules);
         rules.includeTopics = new Set(topics);
         this.setRules(rules);
+        var topic_node = this.graphService.instance.$("node[cls='Topic'][prop_name='" + topics + "']");
+        var hastopic_edges = topic_node.connectedEdges("edge[cls='HasTopic']");
+        var nodes_in_topic = hastopic_edges.connectedNodes("[cls != 'Topic']");
+        if(nodes_in_topic.length > 0){
+                var nodes_in_topic_ids = nodes_in_topic.map(n => n.id());
+                console.log("playbook_node",nodes_in_topic_ids);
+                var oid=this.graphService.instance.$id(nodes_in_topic_ids[0]).data().oid.toString()
+                console.log("oid",generateLink(oid))
+                window.open(generateLink(oid))
+        }
     }
 
     setIncludeKeywords(keywords) {

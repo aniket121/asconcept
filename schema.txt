@@ -1,0 +1,42 @@
+#term to term
+    IsSubjectTorel = RelationClass(_oid='19b9a973-cbf5-49b9-9abb-456b8bf667b5', name='IsSubjectTo', scope=['admin', 'editor'],
+                              desc='IsSubjectTo.',
+                              range='Term', domain='Term', supercls='RelatedTo')
+    IsSubjectTorel.create(_global=True)
+    
+    #assest to doc
+    IsRelatedTorel = RelationClass(_oid='19c9b973-cbf5-49b9-9abb-456b8bf667b5', name='IsRelatedTo', scope=['admin', 'editor'],
+                              desc='IsRelatedTo.',
+                              range='Document', domain='Asset', supercls='RelatedTo')
+    IsRelatedTorel.create(_global=True)
+    #doc to assest
+    IsRelatedTodoc = RelationClass(_oid='1969b9o3-cbf5-49b9-9abb-056b8bf667b5', name='IsRelatedTo', scope=['admin', 'editor'],
+                              desc='IsRelatedTo.',
+                              range='Asset', domain='Document', supercls='RelatedTo')
+    IsRelatedTodoc.create(_global=True)
+
+    IsHigherRiskrel = RelationClass(_oid='19c9b975-cb65-49b9-9abb-456b8bf607l5', name='IsHigherRisk', scope=['admin', 'editor'],
+                              desc='IsHigherRisk.',
+                              range='Term', domain='Term', supercls='RelatedTo')
+    IsHigherRiskrel.create(_global=True)
+    
+    # BeneficiaryOfrel = RelationClass(_oid='19c9b975-cb05-49b9-9abb-456b8b9667b5', name='BeneficiaryOf', scope=['admin', 'editor'],
+    #                           desc='IsRelatedTo.',
+    #                           range='Actor', domain='Asset', supercls='RelatedTo')
+    # BeneficiaryOfrel.create(_global=True)
+
+    # BeneficiaryOfroll = RelationClass(_oid='19c9k975-cb05-49b9-9abb-456b8g9667b5', name='BenefitsRole', scope=['admin', 'editor'],
+    #                           desc='IsRelatedTo.',
+    #                           range='Agreement', domain='Asset', supercls='RelatedTo')
+    # BeneficiaryOfroll.create(_global=True)
+
+assestcls = Class(_oid='68ad0552-370c-40a5-9357-3a5d3691b5cd', name="Asset", scope=['admin', 'editor'],
+                   supercls='Any', colour="#990099",
+                   desc='Represents a asset.',
+                   fields={
+                       'name': {'label': 'Name', 'type': 'str', 'required': True, 'unique': True},
+                       'desc': {'label': 'Description', 'type': 'str-long', 'required': False, 'unique': False},
+                       'attachment': {'label': 'Attachment', 'type': 'file', 'required': False, 'unique': True},
+                   })
+
+    assestcls.create(_global=True)

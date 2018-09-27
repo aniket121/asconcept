@@ -76,6 +76,7 @@ export class FilterTree {
                 (this_.treeview.getChecked().filter(el => el._myId === myId).length > 0)
                 : (data.state && data.state.checked);
             // this_.checked.includes(name); // TODO: this is a bit clunky.
+            console.log("myId",myId)
             let icon = checked ? 'fa-times-circle' : 'fa-check-circle';
             let hasChildren = data.nodes && data.nodes.length > 0;
 

@@ -399,6 +399,7 @@ function checkUser()
                $('.body').css("background-color","red !important")
               $('.body').attr("style", "background-color: #e4e5e6 !important");
               $('.header').css("display","block")
+              window.localStorage.clear();
               localStorage.setItem("token",tokenPresentCheck[tokenPresentCheck.length-1]);
               
                

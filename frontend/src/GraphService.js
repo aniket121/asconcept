@@ -6,7 +6,7 @@ import { SchemaUtils } from './GraphUtils';
 import { KeywordIndex } from './KeywordIndex';
 
 function schemaGraph(data) {
-
+   
     console.log("================>schemadata=========",data)
     var nodes = data.nodes.map(function(n) {
         return {
@@ -148,7 +148,7 @@ export class GraphService {
 
     // API methods
     loadSchemaGraph(cb) {
-        $.getJSON("http://0.0.0.0:8001"  + "/schema/graph", (schemadata) => {
+        $.getJSON(this.url_base  + "/schema/graph", (schemadata) => {
             if (this._schemagraph) {
                 this._schemagraph.destroy();
             }
@@ -161,7 +161,7 @@ export class GraphService {
     }
 
     loadInstanceGraph(cb) {
-        $.getJSON("http://0.0.0.0:8001" + "/graph", (data) => {
+        $.getJSON(this.url_base + "/graph", (data) => {
             if (this._instancegraph) {
                 this._instancegraph.destroy();
             }
@@ -181,7 +181,7 @@ export class GraphService {
         let data = Object.assign({}, props);
         data["class_name"] = className;
 
-        var ajaxReq = $.ajax("http://0.0.0.0:8001" + "/instances/", {
+        var ajaxReq = $.ajax(this.url_base + "/instances/", {
             "data": JSON.stringify(data),
             "type": "POST",
             "contentType": "application/json",
@@ -198,7 +198,7 @@ export class GraphService {
                 diffs[k] = newProps[k];
             }
         }
-        let updateUrl = "http://0.0.0.0:8001" + "/instances/" + nodeId + '/';
+        let updateUrl = this.url_base + "/instances/" + nodeId + '/';
         return $.ajax(updateUrl, {
             type: 'POST',
             data: JSON.stringify(diffs),
@@ -207,7 +207,7 @@ export class GraphService {
     }
 
     deleteNodeInstance(id, succ, fail, always) {
-        return $.ajax("http://0.0.0.0:8001" + "/instances/" + id.toString() + '/', {
+        return $.ajax(this.url_base + "/instances/" + id.toString() + '/', {
             "data": {},
             "type": "DELETE",
             "contentType": "application/json",
@@ -216,7 +216,7 @@ export class GraphService {
 
     createRelationInstance(className, fromId, toId, props) {
         return $.post({ 
-            url: "http://0.0.0.0:8001" + "/relations/", 
+            url: this.url_base + "/relations/", 
             data: JSON.stringify({
                 "relation_name": className,
                 "src_id": fromId,
@@ -236,7 +236,7 @@ export class GraphService {
                 diffs[k] = newProps[k];
             }
         }
-        let updateUrl = "http://0.0.0.0:8001" + "/relations/" + elementId + '/';
+        let updateUrl = this.url_base + "/relations/" + elementId + '/';
         return $.ajax(updateUrl, {
             type: 'POST',
             data: JSON.stringify(diffs),
@@ -245,7 +245,7 @@ export class GraphService {
     }
 
     deleteRelationInstance(id, succ, fail, always) {
-        var ajaxReq = $.ajax("http://0.0.0.0:8001" + "/relations/" + id.toString() + '/', {
+        var ajaxReq = $.ajax(this.url_base + "/relations/" + id.toString() + '/', {
             "type": "DELETE",
             "data": {},
             "contentType": "application/json",

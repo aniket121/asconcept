@@ -125,7 +125,7 @@ export class PlaybookView extends View {
         this.reRender();
     }
 
-    showPlaybook(playbookNode) {
+     showPlaybook(playbookNode) {
         let firstRule = playbookNode.outgoers('node[cls="PlaybookRule"]');
         //let firstRule = playbookNode.incomers('node[cls="PlaybookRule"]');
         if (firstRule.length == 0) {

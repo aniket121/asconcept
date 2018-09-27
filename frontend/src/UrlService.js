@@ -343,6 +343,7 @@ export class UrlService {
         };
         return this.getUrlBase() + this.generateUrlHashFromSettings(settings);
     }
+   
 
     updateUrl(actuallyUpdate, includeUserMode) {
         let hash = this.generateUrlHashFromSettings(this.settings, includeUserMode);
