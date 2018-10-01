@@ -101,7 +101,7 @@ ngOnInit(): void {
        }
        else{
          
-        window.location.href="/login"
+        window.location.href="/#/login"
        }
            
             this.getlimit=localStorage.getItem("setlimit");

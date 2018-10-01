@@ -34,6 +34,14 @@ export class ProjectComponent implements OnInit{
   ngOnInit(): void {
      
       window.history.forward()
+      var userType=localStorage.getItem('usertype')
+       if(userType=="user"){
+        
+       }
+       else{
+        
+        window.location.href="/#/login"
+       }
      var access=window.location.href.split("/");
 
      if (access.includes('access_token')){

@@ -15,7 +15,7 @@ export class LayoutService {
     getData(id) { 
         
            
-             return this.http.get(environment.baseUrl+"getprojectDetails/"+id,{headers:headers})
+             return this.http.get(environment.baseUrl+"getprojectDetails/"+id)
 			.map((response: Response) => {	
 				 						
 				return response.json();			
@@ -272,7 +272,7 @@ renameMasterList(obj){
 	})
 }
 getKnowledgeNode(){
-	  return this.http.get("http://repindex.com:8001/graph")
+	  return this.http.get("https://asconceptreviewer.com/assets/graph/graph.json")
 		.map((response: Response) => {	
 			return response.json();			
 		})

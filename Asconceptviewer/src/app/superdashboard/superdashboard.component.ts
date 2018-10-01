@@ -71,7 +71,7 @@ public updateData: any = {};
        }
        else{
          
-        window.location.href="/login"
+        window.location.href="/#/login"
        }
       $( "#datepicker" ).datepicker();  
       this.getAllCategories().then((data) => {
