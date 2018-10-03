@@ -16,6 +16,7 @@
     height:400px;
     overflow:scroll;
     font-family: "Arial";
+    overflow-x: hidden;
    
 
 }
@@ -66,6 +67,12 @@
 	width:95%;
 }
 
-@media (min-width: 1500px) {
-
+@media (max-width: 1366px) {
+.arrangeDiv{
+    margin-left:12%;
+    height:400px;
+    overflow:scroll;
+    font-family: "Arial";
+   
+}
 }

@@ -40,3 +40,7 @@ assestcls = Class(_oid='68ad0552-370c-40a5-9357-3a5d3691b5cd', name="Asset", sco
                    })
 
     assestcls.create(_global=True)
+
+
+
+all of above

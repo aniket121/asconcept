@@ -13,6 +13,13 @@
   display:inline !important;
   margin-top:2px !important;
 }
+.blankline{
+    background-color: #F0503C;
+    width: 9%;
+  float:left;
+  margin-top: -2%;
+  margin-bottom: 6px;
+}
 .knowledgealign{
   top:2px;
 }
@@ -69,7 +76,7 @@
    border:0px solid #FFFF94 !important;
   }
   #logo{
-    height: 325px;
+    height: 325px !important;
     width: 53%;
     margin-top: -14%;
     margin-left: 2%;
@@ -83,8 +90,106 @@
 .headertop{
   margin-top:-13%;
 }
+.blankline{
+    background-color: #F0503C;
+    width: 9%;
+  float:left;
+  margin-top: -2%;
+  margin-bottom: 6px;
+}
 
 }
+
+@media (min-width: 1400px) {
+  .active
+  {
+   border:0px solid #FFFF94 !important;
+  }
+  #logo{
+    height: 325px !important;
+    width: 53%;
+    margin-top: -14%;
+    margin-left: 2%;
+}
+.sublogo{
+  color:white;
+  margin-left:1%;
+  font-family: "Times New Roman";
+
+}
+.headertop{
+  margin-top:-14%;
+}
+.blankline{
+    background-color: #F0503C;
+    width: 9%;
+  float:left;
+  margin-top: -2%;
+  margin-bottom: 6px;
+}
+}
+
+
+@media (min-width: 1450px) {
+  .active
+  {
+   border:0px solid #FFFF94 !important;
+  }
+  #logo{
+    height: 325px !important;
+    width: 53%;
+    margin-top: -15%;
+    margin-left: 2%;
+}
+.sublogo{
+  color:white;
+  margin-left:0%;
+  font-family: "Times New Roman";
+
+}
+.headertop{
+  margin-top:-14%;
+}
+.blankline{
+    background-color: #F0503C;
+    width: 8%;
+  float:left;
+  margin-top: -2%;
+  margin-bottom: 6px;
+}
+
+}
+
+@media (min-width: 1470px) {
+  .active
+  {
+   border:0px solid #FFFF94 !important;
+  }
+  #logo{
+    height: 325px !important;
+    width: 53%;
+    margin-top: -14%;
+    margin-left: 2%;
+}
+.sublogo{
+  color:white;
+  margin-left:1%;
+  font-family: "Times New Roman";
+
+}
+.headertop{
+  margin-top:-12%;
+}
+.blankline{
+    background-color: #F0503C !important;
+    width: 8%;
+  float:left;
+  margin-top: -2%;
+  margin-bottom: 6px;
+}
+
+}
+
 
 @media (max-width: 1000px) {
 #logo{
@@ -127,6 +232,7 @@ margin-top:2%;
 }
 a:hover { 
     color: #F0503C;
+    text-decoration:none;
 }
 
 
@@ -159,13 +265,7 @@ a:hover {
   margin-left:-3%;
   color:black;
 }
-.blankline{
-    background-color: #F0503C;
-    width: 9%;
-  float:left;
-	margin-top: -2%;
-	margin-bottom: 6px;
-}
+
 
 // /home/admin1/project/mattersmith/smSite/MatterSmith/src/scss/core/_layout.scss
 
