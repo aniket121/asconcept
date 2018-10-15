@@ -1,4 +1,4 @@
-#term to term
+    #term to term
     IsSubjectTorel = RelationClass(_oid='19b9a973-cbf5-49b9-9abb-456b8bf667b5', name='IsSubjectTo', scope=['admin', 'editor'],
                               desc='IsSubjectTo.',
                               range='Term', domain='Term', supercls='RelatedTo')

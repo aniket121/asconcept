@@ -40,6 +40,7 @@ export class FilterTree {
         let onChangeFn = () => {
             let checkedData = this.treeview.getChecked();
             let checked  = checkedData.map( (n) => n._text );
+
             this.checked = checked;
             if(this.onChange) {
                 this.onChange(checked);
@@ -55,7 +56,9 @@ export class FilterTree {
                 if(node._myId === myId) {
                     return node;
                 } else if(node.nodes && node.nodes.length > 0) {
+
                     return findNode(node.nodes, myId);
+
                 }
             }
             return null;
@@ -64,6 +67,7 @@ export class FilterTree {
         let getChildIds = (nodeId) => {
             let node = this_.treeview.getNode(nodeId);
             if(node && node.nodes) {
+            
                 return [].concat.apply([], node.nodes.map( n => [n.nodeId].concat(getChildIds(n.nodeId)) ));
             }
             return [];

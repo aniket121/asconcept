@@ -5,6 +5,7 @@ import { API_URL_BASE } from './config';
 import { Alpaca } from './Alpaca';
 import Snackbar from 'node-snackbar';
 import { SchemaUtils } from './GraphUtils';
+import * as alertify from 'alertify.js';
 
 function cmpNodesByName(a, b) {
     let A = (a.data().display || a.data().props.name || a.data().cls || '').toUpperCase();
@@ -284,7 +285,11 @@ export class GraphEditorSidebarView extends View {
                 "value": "Delete this " + classData.props.name,
                 "styles": 'btn btn-ms-red',
                 "click": function(ev) {
-                    var val = this.getValue();
+                      var val = this.getValue();
+                    alertify.confirm("Are you sure want to delete?",
+                   function(){
+                       alertify.success('Ok');
+                        
                     let delReq = self.graphService.deleteNodeInstance(node.id());
                     delReq.done(function() {
                         console.log('form submit succeeded?');
@@ -294,6 +299,9 @@ export class GraphEditorSidebarView extends View {
                         console.warn('form submit fail?');
                         self.messageBar.error("Error: Failed to delete node #"+node.id());
                     });
+                   });
+                  
+                 
                 }
             },
             "editOrCancel": {
@@ -483,6 +491,11 @@ export class GraphEditorSidebarView extends View {
                     let ajaxReq = self.graphService.createNodeInstance(name, val);
                     ajaxReq.done(function(data) {
                         console.log('form submit succeeded? DATA:', data);
+                        alert(data.class)
+                        if(data.class=="Playbook"){
+                         //window.location.replace("http://localhost:4200/#/user");
+
+                        }
                         self.messageBar.info("Created " + name + " instance.");
                         Action.trigger(ActionTypes.RELOAD_DATA, { reselect_instance: data.id });
                     }).fail(function(xhr, code, reason) {

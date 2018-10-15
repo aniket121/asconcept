@@ -243,10 +243,13 @@ body {
                 Sidebar Search: Loading
             </div>
 
+            <button id="btn-relayout" class="btn btn-primary " data-toggle="modal" data-target="#importexport">Import from Sandbox  <i class="fa fa-spinner fa-spin spincls" style="font-size:36px;"></i></button>
+            <br><br> 
+            <!-- <i class="fa fa-spinner fa-spin spincls" style="font-size:33px;"></i> -->
             <div id="sidebar-filter-info" class="nothidden">
                 Filter Info: Loading
             </div>
-
+           
             <hr/>
 
             <div id="sidebar-info" class="nothidden">
@@ -254,13 +257,13 @@ body {
             </div>
 
             <hr/>
-
+          
             <div id="sidebar-form" class="hidden">
                 Sidebar Editor: Loading
                 <hr />
             </div>
-            <!-- <button id="btn-init-layout" class="btn btn-default">InitLayout</button>
-                 <button id="btn-relayout" class="btn btn-default">ReLayout</button> -->
+            <!-- <button id="btn-init-layout" class="btn btn-default">InitLayout</button>-->
+            
 <div id="testview"></div>
             
              <textarea name="editor1" style="display:none"></textarea>
@@ -374,6 +377,28 @@ body {
 
 
 
+<div id="importexport" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content" style="width:50%;margin-left:-58%;">
+      <div class="modal-header" style="background-color: rgb(0, 55, 70);">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" style="color:white" >Are you sure want to import from sandbox?</h4>
+      </div>
+
+     
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" style="background-color: #00B4AF"><b>Close</b></button>
+        <button type="button" class="btn btn-default" style="background-color: #00B4AF" onclick="importGraphData()"><b>Import</b></button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
 
  
         <div class="lhsoverlay" id="lhszoominfo" style="display:none"></div>
@@ -389,6 +414,7 @@ body {
 
 function checkUser()
 {   
+    $(".spincls").css("display","none");
     loggin=localStorage.getItem("mattersmith");
     console.log("storage",loggin)
    
@@ -401,7 +427,7 @@ function checkUser()
               $('.header').css("display","block")
               window.localStorage.clear();
               localStorage.setItem("token",tokenPresentCheck[tokenPresentCheck.length-1]);
-              
+             
                
             }
 
@@ -460,7 +486,7 @@ function checkUser()
       }
 
 
-    
+  getSandboxData()   
 
 }
 
@@ -559,6 +585,74 @@ function checkUser()
         }
     });
  }
+
+ function getSandboxData(){
+  
+    $.ajax({
+        url: "http://repindex.com:8001/export/_graph",
+        type: "GET",
+        dataType: 'json',
+        headers: {"Authorization": "Basic c2FuZGJveC1hZG1pbjpNb284ZVBoZQ==",
+        "Access-Control-Allow-Credentials": true},
+        contentType: 'application/json',
+        
+        async: false,
+        success: function(node) {
+           
+          window.node=node
+          console.log("window",window.node);
+         
+            
+        },
+        error: function(node) {
+            console.log("node in error ",node)
+           console.log("failed during get data form sandbox")
+            
+
+            
+        }
+    });
+    // const Http = new XMLHttpRequest();
+    // const url='https://sandbox.embeddedexperience.com/api/export/_graph';
+    // Http.open("GET", url);
+    // Http.setRequestHeader("Authorization","Basic c2FuZGJveC1hZG1pbjpNb284ZVBoZQ==");
+    // Http.setRequestHeader("Access-Control-Allow-Origin","*");
+
+    // Http.send();
+    // Http.onreadystatechange=(e)=>{
+    //   console.log(Http.responseText)
+       
+    // }
+ }
+
+ function importGraphData(){
+    $(".spincls").css("display","block");
+    $("#importexport").css("display","none");
+    $.ajax({
+        url: "http://localhost:8001/import/_graph",
+        type: "POST",
+        data: JSON.stringify(window.node),
+        dataType: 'json',
+        contentType: 'application/json',
+        async: true,
+        success: function(node) {
+           
+         $(".spincls").css("display","none");
+         window.location.reload()
+            
+        },
+        error: function() {
+            
+             $(".spincls").css("display","none")
+             window.location.reload()
+            
+        }
+    });
+  
+ }
+
+
+
  function resetPassword(){
    if($("#newpassword").val()==$("#cpassword").val())
    {

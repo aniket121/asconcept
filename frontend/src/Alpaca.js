@@ -28,7 +28,7 @@ const fieldType2Alpaca = {
     },
 };
  function getFileContent(fileName){
-   
+      
    var path={path: fileName.split("/")[1]};
    $.ajax({
         url: "http://localhost:8002/FileContent",
@@ -54,8 +54,11 @@ const fieldType2Alpaca = {
         
         },
         error: function(msg) {
-            
+            //alert('error')
            console.log("error occured");
+           //$("#editor1").css("display":"none");
+            CKEDITOR.instances.editor1.destroy();
+            //$("#editor1").css("display":"none");
             
         }
        });
@@ -81,9 +84,17 @@ function getPatchedAlpaca(uploadService) {
                 if(self.isDisplayOnly()) {
                     if(self.control && self.data && self.data !== '') {
                         //debugger;
-                        $(self.control).after( $('<a>').attr('href', "http://localhost:8002/"+self.data).attr('target', '_blank').text('Download File') );
+                      
                         $(self.control).after( $('<a>').attr('onclick', getFileContent(self.data)).attr('target', '_blank').text('') );
-
+                     
+                        if(self.data.split("/")[1]==""){
+                          
+                            $(self.control).after( $('<a>').attr('href',self.data).attr('target', '_blank').text('Download File') );
+                        }
+                        else{
+                              $(self.control).after( $('<a>').attr('href', "http://localhost:8002/"+self.data).attr('target', '_blank').addClass('download').text('Download File') );
+                        }
+                        
                         window.fileName=self.data;
                         $(self.control).hide();
                     }

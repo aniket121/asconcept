@@ -35,6 +35,7 @@ export class InstanceView extends GraphView {
             fit: false, // we want to happen at the end of the layout, not the start.
             handleDisconnected: true,
             infinite: false,
+
             ungrabifyWhileSimulating: true,
             nodeDimensionsIncludeLabels: true,
             animate: true,
@@ -63,7 +64,7 @@ export class InstanceView extends GraphView {
             infinite: false,
             ungrabifyWhileSimulating: false,
             nodeDimensionsIncludeLabels: true,
-            convergenceThreshold: 0.1,
+            convergenceThreshold: 0.5,
             ready: (ev) => {
                 console.log('cola layout ready ', ev.type);
                 //ev.target.cy().reset();
@@ -84,8 +85,8 @@ export class InstanceView extends GraphView {
                 if (this.isInitialLayout) {
                     this.isInitialLayout = false;
                     this.cy.animate({
-                        fit: { eles: this.cy.nodes(), padding: 20 }
-                    }, { duration: 300 });
+                        fit: { eles: this.cy.nodes(), padding: 5 }
+                    }, { duration: 100 });
 
                 }
             },
@@ -156,11 +157,13 @@ export class InstanceView extends GraphView {
             $z.text((this.cy.zoom() * 100).toFixed(2) + '%');
             fadeOutDeb.cancel();
             fadeOutDeb($z);
+
         }, 100);
 
         this.cy.on('zoom', (e) => {
             let $zinfo = $('#lhszoominfo');
             throtFade($zinfo);
+
         });
 
         Action.on(ActionTypes.SELECT_NONE, (e, data) => {
@@ -180,6 +183,15 @@ export class InstanceView extends GraphView {
             var cy = this.cy;
             var visibleNodesList = data.nodes.map( id => cy.$id(id) ).filter(o => o.length > 0);
             console.log("=======================>visibleNodesList",visibleNodesList)
+            // var randomNode_name = visibleNodesList[0].data().props.name;
+            // var randomNode = this.graphService.instance.$("node[cls='document'][prop_name='" + randomNode_name + "']");
+            // var nodes_in_topic = randomNode.connectedNodes();
+            // console.log("===========node in =======",nodes_in_topic)
+           //alert(visibleNodesList[0].data().cls)
+            if(window.location.href.indexOf("playbook_openOid") == -1 && visibleNodesList[0].data().cls =="Playbook")
+            {
+            Action.trigger(ActionTypes.SELECT_PLAYBOOK, { node: visibleNodesList[0].id() });
+            }
             var nodes = cy.collection(visibleNodesList);
            
             //cy.elements().unselect();
@@ -354,6 +366,7 @@ export class InstanceView extends GraphView {
     }
     onInitialLayout() {
         this.initialLayout();
+
     }
 
     initialLayout() {
@@ -368,13 +381,13 @@ export class InstanceView extends GraphView {
         console.log('relayout');
 
     }
-    onLayout(forceRefit=false) {
+    onLayout(forceRefit=true) {
         // let orphans = this.cy.nodes('[[degree = 0]]');
         // orphans.layout({name: 'grid'}).run();
         // orphans.lock();
 
         //this.cy.remove(this.cy.nodes().filter((n) => n.degree() == 0))
-
+       
         console.log('DOING A RELAYOUT ++++++++++');
 
         if (forceRefit) {
@@ -417,8 +430,9 @@ export class InstanceView extends GraphView {
 
             let q = this.visibilityService.getCytoQuery();
             console.log("q============>",q)
+           
             result = q.applyTo(this.cy);
-
+            console.log("nodes====>",this.cy)
             if(reload) {
                 Object.keys(this.nodePositions).forEach(id => {
                     let foundNode = this.cy.$id(id);
@@ -432,7 +446,7 @@ export class InstanceView extends GraphView {
 
         console.log('InstanceView.onVisibilityChange', 'reload=', reload, 'result=', result);
 
-        if(reload || result.numAddedNodes > 0) {
+        if(reload || result.numAddedNodes > 0 || result.numRemovedNodes >0) {
             this.onLayout();
         }
     }

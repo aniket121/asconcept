@@ -1,4 +1,5 @@
 import { CytoQuery } from './CytoFilter';
+import { Action, ActionTypes } from './Action';
 
 // Example:
 // filterRules = {
@@ -122,13 +123,18 @@ export class VisibilityService {
         this.setRules(rules);
         var topic_node = this.graphService.instance.$("node[cls='Topic'][prop_name='" + topics + "']");
         var hastopic_edges = topic_node.connectedEdges("edge[cls='HasTopic']");
-        var nodes_in_topic = hastopic_edges.connectedNodes("[cls != 'Topic']");
+        var nodes_in_topic = hastopic_edges.connectedNodes("node[cls='Playbook']");
         if(nodes_in_topic.length > 0){
-                var nodes_in_topic_ids = nodes_in_topic.map(n => n.id());
-                console.log("playbook_node",nodes_in_topic_ids);
-                var oid=this.graphService.instance.$id(nodes_in_topic_ids[0]).data().oid.toString()
-                console.log("oid",generateLink(oid))
-                window.open(generateLink(oid))
+                 //var nodes_in_topic_ids = nodes_in_topic.map(n => n.id());
+                // console.log("playbook_node",nodes_in_topic_ids);
+                // console.log("his.graphService.instance.$id(nodes_in_topic_ids[0]).data()",this.graphService.instance.$id(nodes_in_topic_ids[0]).data().cls)
+                // var isPlaybook=this.graphService.instance.$id(nodes_in_topic_ids[0]).data().cls;
+              
+                // var oid=this.graphService.instance.$id(nodes_in_topic_ids[0]).data().oid.toString()
+                // console.log("oid",generateLink(oid))
+                // window.open(generateLink(oid))
+                Action.trigger(ActionTypes.SELECT_PLAYBOOK, { node: nodes_in_topic[0].id() });
+            
         }
     }
 
