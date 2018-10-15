@@ -1,0 +1,143 @@
+
+     <div class="card" *ngIf="popupscreen">
+        <div class="card-header">
+          <strong>Set New Password</strong>
+        </div>
+        <div class="card-block">
+          <div class="alert alert-danger" *ngIf=passwordsame>
+           Password and confirm password must be same and cannot be empty
+          </div>
+           <div class="alert alert-success" *ngIf=updatepasswordmg>
+            Password updated succssfully please login and verify
+          </div>
+          <form action="" method="post">
+            <div class="form-group">
+              <label for="nf-email">New Password</label>
+              <input type="password" id="newpass" name="newpass" class="form-control" placeholder="New password" #newpass>
+            
+            </div>
+            <div class="form-group">
+              <label for="nf-password">Confirm Password</label>
+           <input type="password" id="confirmpass" name="confirmpass" class="form-control" placeholder="Confirm password" #confirmpass>
+         
+            </div>
+          </form>
+        </div>
+      <div class="modal-footer">
+        
+         <a href="http://46.235.224.150/review">
+          <button class="btn btn-primary">Login</button>
+          </a>
+        <button type="reset" value="Reset" class="btn btn-secondary">Reset</button>
+        <button type="button" class="btn btn-primary" (click)="setPassword(newpass.value,confirmpass.value)" >Submit</button>
+      </div>
+      </div>
+<div class="app flex-row align-items-center" (ngSubmit)="authenticate(username.value,password.value)" *ngIf="!popupscreen">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-5">
+        <div class="card-group mb-0">
+          <div class="card p-2">
+            <div class="card-block">
+              <img class="login-image container  d-flex justify-content-center" src="assets/img/LOG.png" style="height: 54px;margin-top: 0px; width: 70%;">
+              <div class="alert alert-danger" *ngIf="loginfail">
+                Please check your username and password
+                </div>
+              <p class="text-muted">Sign In to your Mattersmith Review account
+
+</p>
+              <div class="input-group mb-1">
+                <span class="input-group-addon"><i class="icon-user"></i></span>
+                <input type="text" (keyup)="validateUsername($event)" class="form-control" placeholder="Username" #username>
+
+              
+              </div>
+                <div *ngIf="usernameStatusError" class="alert alert-danger">
+                Username is required
+                </div>
+              <div class="input-group mb-2">
+                <span class="input-group-addon"><i class="icon-lock"></i></span>
+                <input type="password" (keyup)="validatePassword($event)" class="form-control" placeholder="Password" #password>
+                 
+              </div>
+               <div *ngIf="passwordStatusError"class="alert alert-danger">
+                Password is required
+                </div>
+              <div class="row">
+                <div class="col-6">
+                  <button style="background-color:#00B4AF	;color:black;font-weight: bold;" type="submit" (click)="authenticate(username.value,password.value)" [disabled]="!validationStatus"  class="btn btn-primary px-2">Login</button>
+                </div>
+                <div class="col-6 text-right">
+                  <button style="color:#808080	;" type="button" (click)="forgotPopUp()"class="btn btn-link px-0">Forgot password?</button>
+                </div>
+              </div>
+            </div>
+             <!-- <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top">
+    <input type="hidden" name="cmd" value="_s-xclick">
+    <input type="hidden" name="hosted_button_id" value="VKDLCU6ZG8Q6J">
+    <table>
+        <tr>
+            <td>
+                <input type="hidden" name="on0" value="">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <select name="os0">
+                    <option value="Repindex weekly Membership">Repindex weekly Membership : $10.00 USD - weekly</option>
+                    <option value="Repindex monthly Membership">Repindex monthly Membership : $20.00 USD - monthly</option>
+                    <option value="Repindex yearly Membership">Repindex yearly Membership : $30.00 USD - yearly</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" name="currency_code" value="USD">
+    <input type="image" src="https://www.sandbox.paypal.com/en_US/i/btn/btn_subscribeCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+    <img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+</form>  -->
+       
+          </div>
+        
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<button id="forgot"  hidden type="button" class="btn btn-secondary" data-toggle="modal"
+(click)="myModal.show()">
+            Launch demo modal
+          </button>
+<div bsModal #myModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" id=header>
+     
+          <h6 class="modal-title" id="exampleModalLabel" style=font-size:15px;>Forgot Password</h6>
+          
+        <button type="button" class="close" (click)="myModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+       <div class="alert alert-danger" *ngIf=errormsg>
+          Email with this user not associated
+          </div>
+          <div class="alert alert-success" *ngIf=succssmsg>
+          Email Send Sucssfully Please check your Email
+          </div>
+      <div class="modal-body" id="body">
+ <input type="text" name="email" id="email" placeholder="Enter your email" class="form-control" #email>
+     
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModal.hide()">close</button>
+        <button type="button" class="btn btn-primary" (click)="checkEmail(email.value)" >Submit</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+<footer class="app-footer" style="font-size:12px;margin-left:0px ">
+  <a href="http://coreui.io"></a>  © Mattersmith Limited 2018.
+  <span class="float-right">Powered By Repindex © <b style="color:orange">Repindex</b> Limited 2018</span>
+</footer>
+
+
