@@ -1,0 +1,114 @@
+.login-page-color{
+    background-color: #2e5480;
+}
+.alignheight{
+    margin-top:-3% ;
+    height:600px ;
+}
+
+.mendatory-color{
+    color: red;
+}
+.delete-popup{
+    background-color: cornflowerblue;
+}
+.alignbutton{
+    margin-left:83%;
+    display:inline;
+}
+.organisationn-button{
+    margin-left:80%;
+}
+.breadcrum{
+    font-size:15px;
+    color:cornflowerblue;
+}
+.align-yes{
+    margin-left:12%;
+}
+#adduser{
+	margin-left:1% !important;
+
+}
+.deleteicon{
+    width:15%;
+}
+.danger{
+    background-color:#f2dede;
+}
+#activeDropdwon
+{
+	margin-left:85%;
+}
+#font-size
+{
+	font-size:12px;
+	margin-left:1%;
+}
+.user-header{
+    font-size:12px;
+    margin-top: 0%;
+    color:white !important;
+    cursor:pointer;
+    background-color:#003746 !important;
+}
+.active-inactive{
+	width: 15%;
+    margin-left: 72%;
+}
+.ng-valid[required], .ng-valid.required  {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form)  {
+  border-left: 5px solid #a94442; /* red */
+}
+.align-left{
+    margin-left:4% !important;
+}
+
+.prime-ng-data-table {
+    font-weight: normal !important;
+    font-size: 12px !important;
+}
+
+@media (max-width: 500px) {
+  
+  .alignheight{
+    margin-top:-3% !important;
+}
+
+}
+@media (min-width: 1500px) {
+ 
+ .alignheight{
+    margin-top:-3% !important;
+}
+
+}
+
+@media (max-width: 1000px) {
+
+.alignheight{
+    margin-top:-3% !important;
+}
+}
+@media (max-width: 768px) {
+
+.alignheight{
+    margin-top:-3% !important;
+}
+
+
+}
+@-moz-document url-prefix() {
+ 
+.alignheight{
+    margin-top:1% !important;
+}
+
+
+
+}
+
+

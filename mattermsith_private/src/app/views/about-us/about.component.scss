@@ -1,0 +1,79 @@
+.card-color{
+    background-color: #f0503c;
+    border-color: #f0503c;
+    height :80px;
+}
+
+
+.text-muted{
+    justify-content: center;
+    display: flex;
+    color: white  !important;
+    font-size: 1.75rem !important;
+}
+.arrangeDiv{
+    margin-left:12%;
+    height:400px;
+    overflow:scroll;
+    font-family: "Arial";
+    overflow-x: hidden;
+   
+
+}
+.Andrew-image{
+    margin-left:-5%;
+}
+@font-face {
+    font-family: "lawMatters";
+    src: url("/assets/font/NoeDisplayMedium.woff") format('woff');
+    font-weight: normal;
+    font-style: arial;
+ }
+ .mydiv {
+    color:white;
+    font-size: 45px;
+    margin-top: -29px;
+    font-family: lawMatters
+ }
+
+#lawM{
+   font-family: "Baskerville Old Face"
+}
+
+.comapany_desc{
+	margin-left:6%;
+	width:85%;
+   font-family: "Arial";
+
+}
+.desc{
+	color:white;
+	font-family: "Times New Roman";
+	border:0px!important
+}
+.text-center{
+    justify-content: center;
+    display: flex;
+}
+
+.text-color {
+    color:white;
+    font-size:14px;
+    
+}
+.blankline{
+    margin-left:1%;
+	background-color:white;
+	width:95%;
+}
+
+@media (max-width: 1366px) {
+.arrangeDiv{
+    margin-left:12%;
+    height:400px;
+    overflow:scroll;
+    font-family: "Arial";
+    overflow-x: hidden;
+   
+}
+}

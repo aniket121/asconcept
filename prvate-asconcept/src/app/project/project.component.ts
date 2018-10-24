@@ -183,7 +183,7 @@ localStorage.setItem("projectId",pid );
  localStorage.setItem("addproject","afterproject" );  
 
 
- //window.location.href='http://46.235.224.150/review/#/user?projectId='+ pid +'&project='+ pname + '&uristatus=ok';
+ //window.location.href='https://46.235.224.150/review/#/user?projectId='+ pid +'&project='+ pname + '&uristatus=ok';
  this.router.navigate(['/user'],{ queryParams: { projectId:pid,project:pname,uristatus:"ok"}})
  
  localStorage.setItem("addproject","afterproject" );  

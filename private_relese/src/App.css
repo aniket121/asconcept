@@ -1,0 +1,180 @@
+@font-face{
+    font-family:'FontAwesome';
+    src: url('../node_modules/cytoscape-cxtmenu/font-awesome-4.0.3/fonts/fontawesome-webfont.eot');
+}
+
+body {
+  /* font: 14px helvetica neue, helvetica, arial, sans-serif; */
+  margin: 0;
+  padding: 0;
+  /* background-color: red; */
+
+  overflow: hidden;
+}
+
+.hidden {
+  display: none;
+}
+
+.lhsgraph {
+    position: absolute;
+    top: 0;
+    height: calc(100% - 20px);
+    width: calc(50% - 12em);
+
+    right: calc(50% - 12em);
+
+    border-right: 1px #003746 solid;
+}
+.lhsoverlay {
+    position: absolute;
+    top: calc(100% - 20px - 2em - 1em);
+    width: 6em;
+    height: 2em;
+    background-color: rgba(255,255,255,0.1);
+
+    left: calc(50% + 12em - 6em);
+    display: block;
+    z-index: 999;
+    pointer-events: none;
+}
+.rhsgraph {
+    position: absolute;
+    top: 0;
+    height: calc(100% - 20px);
+    width: calc(50% - 12em);
+
+    right: 0;
+}
+
+.sidebar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  box-sizing: border-box; /* Makes sure the padding doesn't make the box bigger */
+  padding: 1em;
+  width: 24em;
+  height: calc(100% - 20px);
+  max-width: 24em;
+  background: #003746;
+  color: #fff;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.sidebar > div {
+    margin-bottom: 1em;
+}
+
+.sidebar textarea {
+    /* width: 22em; */
+    max-width: 22em;
+    resize: vertical;
+}
+
+.sidebar .top {
+    margin-bottom: 1em;
+}
+
+.hoverbars {
+    white-space: nowrap;
+
+    height: 20px;
+
+    position: absolute;
+    bottom: 0;
+
+    background-color: #f0503c;
+    color: #fcf8e3;
+    padding-left: 20px;
+    padding-top: 2px;
+    box-sizing: border-box; /* Makes sure the padding doesn't make the box bigger */
+}
+
+#countbar {
+    width: 28em;
+    left: 0;
+}
+
+#hoverbar {
+    width: calc(100% - 28em);
+    left: 28em;
+}
+
+#playbookview {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+.form-horizontal div.alpaca-readonly.form-group >div.col-sm-9 {
+    /*background-color:  red; */
+    /* hack to make the 'bootstrap-display-horizontal' view put things in correct
+       position without requiring .form-control on the element since that styles it
+       weirdly in many other ways */
+    padding-top: 7px;
+}
+
+/* override the bootstrap default fixed height to allow the tokenfield to expand properly */
+div.searchbox .form-control {
+    height: auto !important;
+}
+
+.treeview  span.treeview-checked-icon {
+    color: green;
+    font-family: FontAwesome;
+    /* content: "\F00C"; */
+    width: 24px !important;
+    height: 24px !important;
+    padding: 3px;
+    border-radius: 20%;
+    border: 2px solid #222;
+    /* background-color: white; */
+
+    /* box-sizing: content-box; */
+    /* padding: 3px; */
+    /* border: .1em solid #555; */
+    /* border-radius: .2em; */
+    /* height: 14px; */
+    /* width: 14px !important; */
+    /* text-align: center; */
+    /* vertical-align: middle; */
+
+}
+.treeview  span.treeview-unchecked-icon {
+    color: red;
+    font-family: FontAwesome;
+    /* content: "\F00C"; */
+    width: 24px !important;
+    height: 24px !important;
+    padding: 3px;
+    border-radius: 20%;
+    border: 2px solid #222;
+
+    /* box-sizing: content-box; */
+    /* padding: 3px; */
+    /* border: .1em solid #555; */
+    /* border-radius: .2em; */
+    /* height: 14px; */
+    /* width: 14px !important; */
+    /* text-align: center; */
+    /* vertical-align: middle; */
+
+}
+/* .treeview span.treeview-unchecked-icon:hover { */
+/*     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; */
+
+/* } */
+
+#foop {
+    /* display: inline-block; */
+    font-family: FontAwesome;
+
+    width: 2em !important;
+    height: 2em !important;
+    padding: 4px;
+    border-radius: 20%;
+    border: 2px solid #222;
+    color: green;
+    background-color: white;
+}

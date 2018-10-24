@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  baseUrl: "http://46.235.224.150/repindexapi/"
+  baseUrl: "https://mattersmith1.embeddedexperience.com/repindexapi/"
 };

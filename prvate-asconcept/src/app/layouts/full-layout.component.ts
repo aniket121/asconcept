@@ -1028,7 +1028,7 @@ gotoKnowledge(){
         {
            nodefound=false;
            
-           window.open("http://46.235.224.150/#playbook_openOid="+Node.props._oid+"&filter_includeManual="+Node.props._oid+"&select="+Node.props._oid+"&v=1&path="+Node.props.attachment)
+           window.open("https://mattersmith1.embeddedexperience.com/#playbook_openOid="+Node.props._oid+"&filter_includeManual="+Node.props._oid+"&select="+Node.props._oid+"&v=1&path="+Node.props.attachment)
            
 
         }

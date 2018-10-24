@@ -1,0 +1,90 @@
+.main .container-fluid {
+     padding: 0 0px !important; 
+}
+#bk{
+	background-color:#F0503C;
+	border:0px !important;
+	height:228px !important;
+}
+.bgcolor{
+	color:white;
+	font-family: "Times New Roman"
+
+}
+#lawM{
+	margin-top:0% !important;
+	margin-left:6%;
+	font-size: 90px;
+}
+#techH{
+	margin-left:6%;
+	font-size: 90px;	
+	margin-top:-55px;
+}
+@media (max-width: 600px) {
+ #lawM{
+	margin-top:13% !important;
+	margin-left:12%;
+	font-size: 52px;
+	font-family: "Baskerville Old Face"
+
+}
+#techH{
+	margin-left:15%;
+	font-size: 52px;
+	font-family: "Baskerville Old Face"
+	
+}
+
+.app-dashboard{
+height:auto !important
+}
+  
+}
+.comapany_desc{
+	margin-left:6%;
+	width:85%;
+   font-family: "Arial";
+
+}
+.desc{
+	color:white;
+	font-family: "Times New Roman";
+	border:0px!important
+}
+.blankline{
+	background-color:white;
+	width:89%;
+	margin-top:4%;
+}
+.footer{
+	color:white;
+	margin-left:6%;
+}
+.Privacy{
+  margin-left:71%;
+  color:#F0503C;	
+}
+@font-face {
+    font-family: "lawMatters";
+    src: url("/assets/font/NoeDisplayMedium.woff") format('woff');
+    font-weight: normal;
+    font-style: arial;
+}
+.mydiv {
+    color:white;
+    font-family: lawMatters
+}
+@media (min-width: 1500px) {
+.Privacy{
+  margin-left:73%;	
+}
+}
+@media (max-width: 1024px) {
+.Privacy{
+  margin-left:58%;	
+}
+}
+
+
+

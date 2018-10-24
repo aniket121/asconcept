@@ -1,0 +1,65 @@
+
+<div class="app flex-row align-items-center col-12">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-5">
+        <div class="card-group">
+          <div class="card p-4">
+
+            <form [hidden]="login_state" class="card-body" (ngSubmit)="login()" #loginForm="ngForm">
+               <img class="login-image container h-100 d-flex justify-content-center"  src="assets/img/smithlogo1.png"/>
+               <div [hidden]="validationError" class="input-group mb-2 alert alert-danger">                
+                <div class="login-error"  >Invalid Credentials</div>                
+              </div>
+              <p class="text-muted"></p>
+
+              Username
+              <div class="input-group mb-2">                
+                <input type="text"  class="form-control" minlength="1"  id="username" name="username" [(ngModel)]="username" required #userInput="ngModel">
+                              
+              </div>
+               <div *ngIf="userInput.errors && (userInput.dirty || userInput.touched)" class="alert alert-danger" >
+                    <div [hidden]="!userInput.errors.required">
+                      Username is required!
+                    </div>
+                    <div [hidden]="!userInput.errors.minlength">
+                      Username is required .
+                    </div>
+                    <div [hidden]="!userInput.errors.maxlength">
+                      Username cannot be more than 30 characters long.
+                    </div>
+               </div> 
+              Password
+              <div class="input-group mb-2">             
+                <input type="password"  class="form-control" minlength="1"  id="password" name="password" [(ngModel)]="password" required #userPassword="ngModel">
+              </div>
+              <div *ngIf="userPassword.errors && (userPassword.dirty || userPassword.touched)" class="alert alert-danger" >
+                    <div [hidden]="!userPassword.errors.required">
+                      Password is required!
+                    </div>
+                    <div [hidden]="!userPassword.errors.minlength">
+                      Password is required.
+                    </div>
+                    <div [hidden]="!userPassword.errors.maxlength">
+                      Password cannot be more than 30 characters long.
+                    </div>
+               </div> 
+              <div class="form-group ">
+           
+              </div>
+              <div class="row">
+                <div class="col-6 container h-100 d-flex justify-content-center">
+                  <button type="submit" id="submiLogin" [disabled]="!loginForm.form.valid" class="btn btn-primary px-4 ">Login</button>
+                </div>
+                
+              </div>
+            </form>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

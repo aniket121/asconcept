@@ -1,0 +1,31 @@
+
+.login-image{
+    height: 54px !important;
+    
+    width: 70%;
+}
+
+.login-text-color{
+    color:#2e5480;
+}
+.login-error{
+   color:firebrick; 
+}
+.center
+{
+	margin-bottom: 4%;
+    top: 0;
+    left: 0;
+}
+
+#roleLogin{
+margin-left:77%;
+}
+
+.ng-valid[required], .ng-valid.required  {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form)  {
+  border-left: 5px solid #a94442; /* red */
+}

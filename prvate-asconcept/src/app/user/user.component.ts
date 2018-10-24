@@ -540,7 +540,7 @@ ngOnInit(): void {
        localStorage.setItem("right",leftv);
        localStorage.setItem("toi",toi);
        var strWindowFeatures = "location=yes,height=500,width=800,scrollbars=yes,status=yes";
-       window.open("http://46.235.224.150/review/#/editor?+fileid="+dd,"_blank",strWindowFeatures)
+       window.open("https://mattersmith1.embeddedexperience.com/review/#/editor?+fileid="+dd,"_blank",strWindowFeatures)
     // this.router.navigate(['/editor'],{ queryParams: { fileid: dd} });
      //setTimeout(function(){ window.location.reload() }, 300);
  }
@@ -565,7 +565,7 @@ ngOnInit(): void {
    var getfrequency=localStorage.getItem("frequency_data");
    console.log("=========getfrequency====",getfrequency)
    var strWindowFeatures = "location=yes,height=700,width=1000,scrollbars=yes,status=yes";
-    window.open("http://46.235.224.150/review/#/charts","_blank",strWindowFeatures)
+    window.open("https://mattersmith1.embeddedexperience.com/review/#/charts","_blank",strWindowFeatures)
 
  }
  openlimit()
@@ -857,7 +857,7 @@ selctedDocumentCmpId(id){
   {
    
     var strWindowFeatures = "location=yes,height=500,width=800,scrollbars=yes,status=yes";
-     window.open("http://46.235.224.150/review/#/editor?+fileid="+id,"_blank",strWindowFeatures)
+     window.open("https://mattersmith1.embeddedexperience.com/review/#/editor?+fileid="+id,"_blank",strWindowFeatures)
   }
   uncheckFolder()
   {
@@ -911,7 +911,7 @@ if(nodeInfo.length > 0){
   console.log('found',nodeInfo[0]['props']['_oid'])
   var attach=nodeInfo[0]['props']['attachment'];
   var oid=nodeInfo[0]['props']['_oid'];
-  window.open("http://46.235.224.150/#playbook_openOid="+oid+"&filter_includeManual="+oid+"&select="+oid+"&v=1&path="+attach,'_blank');
+  window.open("https://mattersmith1.embeddedexperience.com/#playbook_openOid="+oid+"&filter_includeManual="+oid+"&select="+oid+"&v=1&path="+attach,'_blank');
 }
 else{
  document.getElementById("cancelModalConcept").click();
