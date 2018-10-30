@@ -133,7 +133,7 @@ export class UserService {
 		})
 	}
         getKnowledgeNode(){
-	  return this.http.get("https://46.235.224.150/api/graph")
+	  return this.http.get("https://mattersmith1.embeddedexperience.com/api/graph")
 		.map((response: Response) => {	
 			return response.json();			
 		})

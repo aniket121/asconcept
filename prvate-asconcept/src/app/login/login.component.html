@@ -1,5 +1,7 @@
-
-     <div class="card" *ngIf="popupscreen">
+     <div class="app flex-row align-items-center" *ngIf="popupscreen">
+      <div class="container">
+    <div class="row justify-content-center">
+     <div class="card col-5" >
         <div class="card-header">
           <strong>Set New Password</strong>
         </div>
@@ -23,6 +25,7 @@
             </div>
           </form>
         </div>
+      
       <div class="modal-footer">
         
          <a href="https://mattersmith1.embeddedexperience.com/review">
@@ -30,6 +33,9 @@
           </a>
         <button type="reset" value="Reset" class="btn btn-secondary">Reset</button>
         <button type="button" class="btn btn-primary" (click)="setPassword(newpass.value,confirmpass.value)" >Submit</button>
+      </div>
+      </div>
+     </div>
       </div>
       </div>
 <div class="app flex-row align-items-center" (ngSubmit)="authenticate(username.value,password.value)" *ngIf="!popupscreen">

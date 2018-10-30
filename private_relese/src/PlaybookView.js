@@ -290,7 +290,12 @@ export class PlaybookView extends View {
         let downloadBtn;
         if (itemProps.attachment && itemProps.attachment !== '') {
             downloadBtn = $('<a target="_blank">').addClass('pull-right').css('padding-left', '2em').text('download');
+            if(itemProps.attachment.split("/")[1]==""){
             downloadBtn = downloadBtn.attr('href', itemProps.attachment); // .on('click', (e) => { window.open( UPLOAD_URL_BASE + '/' + $(e.currentTarget).data('href'), '_blank');  });
+            }
+            else{
+             downloadBtn = downloadBtn.attr('href', "https://mattersmith1.embeddedexperience.com/upload/" + itemProps.attachment);
+             }
             downloadBtn = downloadBtn.data({toggle: "tooltip", placement: "bottom", title:"Download attached file"}).tooltip({trigger: 'hover'});
         } else {
             downloadBtn = $('<span>').addClass('pull-right').css('padding-left', '2em').text('download');

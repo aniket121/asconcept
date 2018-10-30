@@ -32,7 +32,7 @@ const fieldType2Alpaca = {
    
    var path={path: fileName.split("/")[1]};
    $.ajax({
-        url: "https://46.235.224.150/upload/FileContent",
+        url: "https://mattersmith1.embeddedexperience.com/upload/FileContent",
         type: "POST",
         data: JSON.stringify(path),
         dataType: 'json',
