@@ -187,17 +187,26 @@ export class InstanceView extends GraphView {
             // var randomNode = this.graphService.instance.$("node[cls='document'][prop_name='" + randomNode_name + "']");
             // var nodes_in_topic = randomNode.connectedNodes();
             // console.log("===========node in =======",nodes_in_topic)
-           //alert(visibleNodesList[0].data().cls)
-            if(window.location.href.indexOf("playbook_openOid") == -1 && visibleNodesList[0].data().cls =="Playbook")
-            {
-            Action.trigger(ActionTypes.SELECT_PLAYBOOK, { node: visibleNodesList[0].id() });
-            }
+            //alert('')
+            //Action.trigger(ActionTypes.SELECT_PLAYBOOK, { node: visibleNodesList[0].id() });
+ 
+   
             var nodes = cy.collection(visibleNodesList);
+
+
            
             //cy.elements().unselect();
             //console.log('current sel=', cy.$('node:selected').map(node => node.id()));
             //cy.nodes().unselect();
             nodes.select();
+            if(window.location.href.indexOf("filter_includeManual") == -1)
+             if(window.location.href.indexOf("playbook_openOid") == -1 && visibleNodesList[0].data().cls =="Playbook")
+            
+            {
+
+              Action.trigger(ActionTypes.SELECT_PLAYBOOK, { node: visibleNodesList[0].id() });
+            }
+        
         });
 
         // on SELECT_CLASS, show all instances of that class
@@ -436,6 +445,7 @@ export class InstanceView extends GraphView {
             if(reload) {
                 Object.keys(this.nodePositions).forEach(id => {
                     let foundNode = this.cy.$id(id);
+                    //result.numRemovedNodes >0
                     if(foundNode.length > 0) {
                         foundNode.position(this.nodePositions[id]);
                     }
@@ -446,7 +456,7 @@ export class InstanceView extends GraphView {
 
         console.log('InstanceView.onVisibilityChange', 'reload=', reload, 'result=', result);
 
-        if(reload || result.numAddedNodes > 0 || result.numRemovedNodes >0) {
+        if(reload || result.numAddedNodes > 0 || result.numRemovedNodes >0 ) {
             this.onLayout();
         }
     }

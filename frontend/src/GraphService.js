@@ -128,6 +128,7 @@ export class GraphService {
     }
 
     onInstanceUpdate(cb) {
+
         this.onInstanceUpdateCallbacks.push(cb);
     }
 
@@ -161,6 +162,7 @@ export class GraphService {
     }
 
     loadInstanceGraph(cb) {
+        
         $.getJSON(this.url_base + "/graph", (data) => {
             if (this._instancegraph) {
                 this._instancegraph.destroy();
@@ -168,19 +170,35 @@ export class GraphService {
             
             this._instancegraph = instanceGraph(data);
 
+            console.log("this._instancegraph ",data )
+            if(data){
+              
+                
+                 $("body").css("opacity","2.2");
+                 $(".isloading").css("display","none");
+            }
+            
+
             this._updateKeywordIndex();
 
             cb( this._instancegraph );
-
+             
             this.onInstanceUpdateCallbacks.forEach( (cb) => cb(this) );
         });
 
     }
 
     createNodeInstance(className, props) {
-        let data = Object.assign({}, props);
-        data["class_name"] = className;
 
+       
+       
+        let data = Object.assign({}, props);
+         if(data.RegisteredOffice || data.Legalform){
+         data.RegisteredOffice=props.RegisteredOffice[0];
+         data.Legalform=props.Legalform[0];
+        }
+        data["class_name"] = className;
+       
         var ajaxReq = $.ajax(this.url_base + "/instances/", {
             "data": JSON.stringify(data),
             "type": "POST",
@@ -197,6 +215,10 @@ export class GraphService {
             if (newProps[k] !== undefined && newProps[k] !== origData[k]) {
                 diffs[k] = newProps[k];
             }
+        }
+        if(diffs.Legalform || diffs.RegisteredOffice){
+        diffs.Legalform=diffs.Legalform[0]
+        diffs.RegisteredOffice=diffs.RegisteredOffice[0]
         }
         let updateUrl = this.url_base + "/instances/" + nodeId + '/';
         return $.ajax(updateUrl, {
@@ -419,6 +441,7 @@ export class MockGraphService extends GraphService {
     }
     
     loadInstanceGraph(cb) {
+
         let dostuff = () => {
             this._instancegraph = cytoscape({ headless: true });
             this._instancegraph.batch(() => {

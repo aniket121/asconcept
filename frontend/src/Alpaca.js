@@ -26,6 +26,14 @@ const fieldType2Alpaca = {
         //"field": "text",
         //        "field": "token", // FIXME
     },
+     "list": {
+        "class":"list",
+        "schema": "select",
+        "field": "keyword",
+        
+        //"field": "text",
+        //        "field": "token", // FIXME
+    },
 };
  function getFileContent(fileName){
       
@@ -166,7 +174,7 @@ function getPatchedAlpaca(uploadService) {
             });
         },
     });
-
+  
 
     alpaca.Fields.SimpleKeywordField = alpaca.Fields.TextField.extend({
         getFieldType: function() { return "simplekeyword"; },
@@ -185,9 +193,31 @@ function getPatchedAlpaca(uploadService) {
             return val;
         }
     });
+    
+
+    alpaca.Fields.KeywordField = alpaca.Fields.SelectField.extend({
+        getFieldType: function() { return "keyword"; },
+        setValue: function(val) {
+            var strval = val;
+            if(val){
+            this.SelectFieldValue=strval;
+            }
+            //alert("setValue"+strval)
+            this.base(strval);
+        },
+        getValue: function() {
+           
+
+            // FIXME: this line is just a hack to make pre-migration broken keywords prop work, remove it later
+             console.log("window--ch",this.SelectFieldValue)
+            return this.SelectFieldValue;
+        }
+        
+    });
 
     alpaca.registerFieldClass("osfile", alpaca.Fields.OSFileField);
     alpaca.registerFieldClass("simplekeyword", alpaca.Fields.SimpleKeywordField);
+     alpaca.registerFieldClass("keyword", alpaca.Fields.KeywordField);
 
     window._Alpaca = alpaca;
     return window._Alpaca;
@@ -219,23 +249,39 @@ export class Alpaca {
     generateForm(fields, props, readOnly, buttons, view_type='bootstrap-edit-horizontal', isUpdate=false) {
         var schemaProperties = {};
         var optionsFields = {};
-
+        
         Object.keys(fields).forEach((k) => {
+
             const fieldTypes = fieldType2Alpaca[ fields[k].type ];
 
             if(isUpdate && fields[k].type === 'file') { return; } // don't show files when editing
-
+            
             schemaProperties[k] = {
                 "type": fieldTypes.schema,
                 "readonly": readOnly,
+
+                
+
             };
+            //alert(k)
+            if(k=="Legalform"){
+                
+               schemaProperties[k]["enum"]=["Company", "Partnership", "Limited Liability Partnership", "Individual", "Sole Trader","Unincorporated Association"] 
+            }
+             if(k=="RegisteredOffice"){
+               
+               schemaProperties[k]["enum"]=["yes","No"] 
+            }
+
+            
 
             optionsFields[k] = {
                 "type": fieldTypes.field,
                 "label": fields[k].label,
+
             };
         });
-
+        
         var options = {
             "fields": optionsFields,
             "focus": "",
@@ -243,7 +289,11 @@ export class Alpaca {
                 "buttons": buttons
             },
         };
-
+        
+       console.log(schemaProperties)
+      
+      
+        console.log("-------schema")
         var alpacaData = {
             "data": props,
             "schema": {
@@ -251,6 +301,8 @@ export class Alpaca {
                 "properties": schemaProperties,
             },
             "options": options,
+           
+             
             "postRender": function(control) {
                 if (control.form) {
                     control.form.registerSubmitHandler(function (e) {

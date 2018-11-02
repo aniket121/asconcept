@@ -455,7 +455,7 @@ export class GraphEditorSidebarView extends View {
         var fields = classNode.data().props.fields;
         var name = classNode.data().props.name;
         var scope = classNode.data().props.scope;
-
+        
         if(scope.length == 0) {
             return this.renderMessage("Creating instances of " + name + " not possible, please choose a subclass.");
         }
@@ -486,6 +486,7 @@ export class GraphEditorSidebarView extends View {
                     }
 
                     var val = this.getValue();
+                    console.log("----------val---------",val)
                     console.log('submit clicked, val=', JSON.stringify(val));
 
                     let ajaxReq = self.graphService.createNodeInstance(name, val);
@@ -493,8 +494,11 @@ export class GraphEditorSidebarView extends View {
                         console.log('form submit succeeded? DATA:', data);
                         alert(data.class)
                         if(data.class=="Playbook"){
-                         //window.location.replace("http://localhost:4200/#/user");
-
+                         console.log("window object====>",window)
+                         // var openUrl=localStorage.getItem("url");
+                         // alert(openUrl)
+                          //window.open(openUrl, '_parent'); 
+                          //location.reload(true)
                         }
                         self.messageBar.info("Created " + name + " instance.");
                         Action.trigger(ActionTypes.RELOAD_DATA, { reselect_instance: data.id });

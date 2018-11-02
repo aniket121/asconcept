@@ -9,6 +9,8 @@ body {
     background: #eee;    
 }
 
+
+
 .wrapper {  
     margin-top: 130px;
   margin-bottom: 80px;
@@ -212,7 +214,8 @@ body {
             <div>
                 <a href="/"><img src="/assets/logo-cropped-red.png" width="250" style="margin-top:-17%; "></a>
             </div>
-          
+           <i class="fa fa-spinner fa-spin isloading" style="font-size:36px;margin-left: 40%;"></i>
+            <br>
             <div id="mock-info" class="hidden"></div>
             <div id="sidebar-menu" class="top">
                 <button data-toggle="tooltip" data-placement="bottom" title="Reload node data from server" id="btn-reload" class="btn btn-ms-ora btn-sm"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
@@ -243,7 +246,7 @@ body {
                 Sidebar Search: Loading
             </div>
 
-            <button id="btn-relayout" class="btn btn-primary " data-toggle="modal" data-target="#importexport">Import from Sandbox  <i class="fa fa-spinner fa-spin spincls" style="font-size:36px;"></i></button>
+            <button id="btn-relayout" class="btn btn-primary importsandbox"  data-toggle="modal" data-target="#importexport">Import from Sandbox  <i class="fa fa-spinner fa-spin spincls" style="font-size:36px;"></i></button>
             <br><br> 
             <!-- <i class="fa fa-spinner fa-spin spincls" style="font-size:33px;"></i> -->
             <div id="sidebar-filter-info" class="nothidden">
@@ -265,7 +268,7 @@ body {
             <!-- <button id="btn-init-layout" class="btn btn-default">InitLayout</button>-->
             
 <div id="testview"></div>
-            
+             
              <textarea name="editor1" style="display:none"></textarea>
             <div style="display:inline;"><small>User <i id="usrname"></i>, in <em id="scopeinfo"></em> mode</small> </div>
             <div id="user-mode-switcher" style="display: none">Mode:
@@ -285,6 +288,7 @@ body {
         <button type="button" onClick="logout()" class="btn btn-default btn-sm pull-left">
           <span class="glyphicon glyphicon-log-out"></span> Log out
         </button>
+
       </p>
         </div>
           <div class=" header" style="display:none;background-color:#003746 "><img src="logo-cropped-red.png"  width="180" height="50"></div>
@@ -399,7 +403,7 @@ body {
 
 
 
-
+          
  
         <div class="lhsoverlay" id="lhszoominfo" style="display:none"></div>
 
@@ -433,7 +437,16 @@ function checkUser()
 
      
       else{
-       
+         window.isloading=true;
+         if(window.isloading==true){
+          
+           
+           $("body").fadeTo("opacity","0.5");
+           //$("body").css("background","#222222")
+           $("body").css("z-index","1000");
+
+         }
+         
         $('.footer').css("display","block")
         $('.leftfooter').css("display","block")
         $('.homepage').css("display","block")
@@ -486,7 +499,11 @@ function checkUser()
       }
 
 
-  getSandboxData()   
+  getSandboxData() 
+  if(localStorage.getItem("role")=="viewer"){
+                 
+    $('.importsandbox').css("display","none");
+  }  
 
 }
 
@@ -518,6 +535,8 @@ function checkUser()
                if(msg.username=="admin"){
                  localStorage.setItem("role","editor");
                }
+               
+               
                localStorage.setItem("username", msg.username);
                
                console.log("usernmae",localStorage.getItem("username"))
@@ -587,9 +606,9 @@ function checkUser()
  }
 
  function getSandboxData(){
-  
+  //http://repindex.com:8001/export/_graph
     $.ajax({
-        url: "http://repindex.com:8001/export/_graph",
+        url: "",
         type: "GET",
         dataType: 'json',
         headers: {"Authorization": "Basic c2FuZGJveC1hZG1pbjpNb284ZVBoZQ==",

@@ -124,6 +124,8 @@ export class VisibilityService {
         var topic_node = this.graphService.instance.$("node[cls='Topic'][prop_name='" + topics + "']");
         var hastopic_edges = topic_node.connectedEdges("edge[cls='HasTopic']");
         var nodes_in_topic = hastopic_edges.connectedNodes("node[cls='Playbook']");
+
+        
         if(nodes_in_topic.length > 0){
                  //var nodes_in_topic_ids = nodes_in_topic.map(n => n.id());
                 // console.log("playbook_node",nodes_in_topic_ids);
@@ -133,6 +135,7 @@ export class VisibilityService {
                 // var oid=this.graphService.instance.$id(nodes_in_topic_ids[0]).data().oid.toString()
                 // console.log("oid",generateLink(oid))
                 // window.open(generateLink(oid))
+                
                 Action.trigger(ActionTypes.SELECT_PLAYBOOK, { node: nodes_in_topic[0].id() });
             
         }
@@ -163,6 +166,18 @@ export class VisibilityService {
 
         if(this.rules.includeManualAndExpand.has(nodeId)) {
             this.rules.includeManualAndExpand.delete(nodeId);
+        } else {
+            this.rules.includeManualAndExpand.add(nodeId);
+        }
+        this.setRules(this.rules);
+    }
+    onlyExpandedNodeId(nodeId) {
+        if(!this.graphService.instance.$id(nodeId).isNode()) {
+            console.error('VisibilityService.toggleExpandedNodeId Trying to use non-existant nodeId=', nodeId);
+        }
+
+        if(this.rules.includeManualAndExpand.has(nodeId)) {
+           this.rules.includeManualAndExpand.add(nodeId);
         } else {
             this.rules.includeManualAndExpand.add(nodeId);
         }

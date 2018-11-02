@@ -16,7 +16,7 @@ export class NodeSchemaView extends GraphView {
             console.log("on node tab event",e)
             //var class_name="Agreement"
             var class_name = e.target.data().name;
-           
+        
             Action.triggerElement(this.getContainer(), ActionTypes.SELECT_CLASS, { class_name: class_name, class_node: e.target });
         });
 
@@ -74,6 +74,7 @@ export class NodeSchemaView extends GraphView {
         cy.elements().addClass('faded');
        hierarchy.removeClass('faded');
     }
+    
 
     onLayout() {
         // https://github.com/cytoscape/cytoscape.js-dagre#api
@@ -95,7 +96,7 @@ export class NodeSchemaView extends GraphView {
         const cy = this.cy;
         cy.startBatch();
         cy.elements().remove();
-        
+
         // only show node classes
         console.log("==========schemacy=======================",schemacy.$("node[class_kind = 'node']"));
          cy.add( schemacy.$("node[class_kind = 'node']") );

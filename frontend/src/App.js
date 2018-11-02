@@ -95,7 +95,7 @@ export class App {
             instanceGraph: new InstanceView( mkDiv('graph-instance'), this.graphService, this.visibilityService, this.urlService),
             nodeSchemaGraph: new NodeSchemaView( mkDiv('graph-nodeschema'), this.graphService ),
             topics: new TopicView( mkDiv('graph-topics'), this.graphService ),
-            playbook: new PlaybookView( mkDiv('playbookview'), this.graphService ),
+            playbook: new PlaybookView( mkDiv('playbookview'), this.graphService ,this.visibilityService),
 
             //testview
             testView:new TestView( mkDiv('testview') ),

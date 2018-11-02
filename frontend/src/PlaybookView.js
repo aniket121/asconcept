@@ -3,10 +3,12 @@ import { View } from './View';
 import { Action, ActionTypes } from './Action';
 import { UPLOAD_URL_BASE } from './config';
 import './App.less';
+//import  VisibilityService from './VisibilityService';
 
 class PlaybookRule {
-    constructor(ruleNode) {
+    constructor(ruleNode,visibilityService) {
         this.ruleNode = ruleNode;
+        this.visibilityService = visibilityService;
         this.chosenAnswer = null;
 
     }
@@ -48,6 +50,7 @@ class PlaybookRule {
     choose(answer) {
         if($.inArray(answer, this.getAnswers()) !== -1) {
             this.chosenAnswer = answer;
+          
             return new PlaybookRule( this._getNodeForAnswer(answer) );
         } else {
             console.error('PlaybookRule.choose(', answer, ')', 'No such answer!');
@@ -55,6 +58,7 @@ class PlaybookRule {
     }
 
     _getNodeForAnswer(answer) {
+
         return this.ruleNode.outgoers('edge[cls="IsAnswerFor"]')
             .filter( (edge) => edge.data().props.value === answer )
             .map( (edge) => edge.target() )[0];
@@ -62,11 +66,11 @@ class PlaybookRule {
 }
 
 export class PlaybookView extends View {
-    constructor(container, graphService) {
+    constructor(container, graphService,visibilityService) {
         super(container);
 
         this.graphService = graphService;
-
+         this.visibilityService = visibilityService;
         this.state = {
             currentRule: null,
             ruleHistory: [],
@@ -89,7 +93,9 @@ export class PlaybookView extends View {
             if (this.isPlaybookOpen()) {
                 this.closePlaybook();
             }
+
             this.showPlaybook(n);
+
         });
 
         Action.on(ActionTypes.PLAYBOOK_CLOSE, (e) => {
@@ -99,6 +105,9 @@ export class PlaybookView extends View {
 
     pushRule(rule) {
         this.state.ruleHistory.push(this.state.currentRule);
+        console.log('push rule',this.state.currentRule)
+        console.log("current rule",this.ruleNode)
+        this.visibilityService.onlyExpandedNodeId(this.state.playbookNode.id())
         this.setCurrentRule(rule);
     }
 
@@ -109,6 +118,7 @@ export class PlaybookView extends View {
             }
         }
         this.setCurrentRule(this.state.ruleHistory.pop());
+        this.visibilityService.onlyExpandedNodeId(this.state.playbookNode.id())
     }
 
     isPlaybookOpen() {
@@ -132,17 +142,20 @@ export class PlaybookView extends View {
             console.log('no rules found for playbook', playbookNode);
             return;
         }
-
+        
         console.log('showPlaybook', 'playbookNode=', playbookNode, 'firstRule=', firstRule);
 
         this.state.currentRule = new PlaybookRule(firstRule);
         this.state.ruleHistory = [];
         this.state.playbookNode = playbookNode;
+
         this.reRender();
     }
 
     canBack() {
         return (this.state.ruleHistory.length > 0);
+        this.visibilityService.onlyExpandedNodeId(this.state.playbookNode.id())
+
     }
 
     back(n) {
@@ -153,6 +166,8 @@ export class PlaybookView extends View {
 
     restart() {
         this.showPlaybook( this.state.playbookNode );
+        this.visibilityService.toggleExpandedNodeId(this.state.playbookNode.id())
+
     }
 
     choose(answer) {
@@ -282,22 +297,63 @@ export class PlaybookView extends View {
             "nodes": [ node.id() ]
         });
     }
+     getFileContent(fileName){
+       console.log("=========",fileName)
+   var path={path: fileName.split("/")[1]};
+   $.ajax({
+        url: "http://localhost:8002/FileContent",
+        type: "POST",
+        data: JSON.stringify(path),
+        dataType: 'json',
+        contentType: 'application/json',
+        async: false,
+        success: function(data) {
+            
+            //$("#editor1").css("display":"block");
+            //CKEDITOR.replace('editor1')
 
+            if (CKEDITOR.instances.editor1)
+               {
+                 CKEDITOR.instances.editor1.destroy();
+                 CKEDITOR.replace("editor1");
+                }
+            else{
+                CKEDITOR.replace("editor1");
+            }
+            CKEDITOR.instances['editor1'].setData(data.FileContent);
+        
+        },
+        error: function(msg) {
+            //alert('error')
+           console.log("error occured");
+           //$("#editor1").css("display":"none");
+            CKEDITOR.instances.editor1.destroy();
+            //$("#editor1").css("display":"none");
+            
+        }
+       });
+    }
     renderAttachmentItem(item) {
         let itemProps = item.data().props;
         let selectBtn = $('<a>').addClass('pull-right').css('padding-left', '2em').attr('href', '#').text('select').on('click', (e) => { e.preventDefault(); console.log('clicked ', e); this.selectAttachmentNode(item); });
         selectBtn = selectBtn.data({toggle: "tooltip", placement: "bottom", title:"Show attachment node in graph"}).tooltip({trigger: 'hover'});
-
+       let previewBtn = $('<a>').addClass('pull-right').css('padding-left', '2em').attr('href', '#').text('Preview').on('click', (e) => { this.getFileContent(itemProps.attachment); console.log('clicked ', e);});
         let downloadBtn;
         if (itemProps.attachment && itemProps.attachment !== '') {
             downloadBtn = $('<a target="_blank">').addClass('pull-right').css('padding-left', '2em').text('download');
-            downloadBtn = downloadBtn.attr('href', itemProps.attachment); // .on('click', (e) => { window.open( UPLOAD_URL_BASE + '/' + $(e.currentTarget).data('href'), '_blank');  });
+            if(itemProps.attachment.split("/")[1]==""){ 
+            downloadBtn = downloadBtn.attr('href', itemProps.attachment);}
+            else{
+              downloadBtn = downloadBtn.attr('href',itemProps.attachment);
+
+             // .on('click', (e) => { window.open( UPLOAD_URL_BASE + '/' + $(e.currentTarget).data('href'), '_blank');  });
+            }
             downloadBtn = downloadBtn.data({toggle: "tooltip", placement: "bottom", title:"Download attached file"}).tooltip({trigger: 'hover'});
         } else {
             downloadBtn = $('<span>').addClass('pull-right').css('padding-left', '2em').text('download');
         }
 
-        return $('<li>').addClass('list-group-item').append($('<span class="glyphicon glyphicon-paperclip" aria-hidden="true">'), ' ', itemProps.name, selectBtn, downloadBtn);
+        return $('<li>').addClass('list-group-item').append($('<span class="glyphicon glyphicon-paperclip" aria-hidden="true">'), ' ', itemProps.name, selectBtn, downloadBtn,previewBtn);
     }
     renderAttachments(attachments) {
         let container = $('<div>');
