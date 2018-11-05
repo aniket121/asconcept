@@ -13,7 +13,7 @@ export class UploadService {
         fd.append('file', file);
         return $.ajax({
             type: 'POST',
-            url: "http://46.235.224.150/upload" + '/files',
+            url: "https://mattersmith1.embeddedexperience.com/upload" + '/files',
             data: fd,
             processData: false,
             contentType: false,

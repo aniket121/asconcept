@@ -254,8 +254,8 @@ export class App {
         console.log('URL hashValues=', hashValues);
 
         if("mock" in hashValues || "mockInstanceGraph" in hashValues || "mockSchemaGraph" in hashValues) {
-            if(!("mockInstanceGraph" in hashValues)) { hashValues["mockInstanceGraph"] = "http://46.235.224.150/api"+"/graph"; }
-            if(!("mockSchemaGraph"   in hashValues)) { hashValues["mockSchemaGraph"]   = "http://46.235.224.150/api" + "/schema/graph"; }
+            if(!("mockInstanceGraph" in hashValues)) { hashValues["mockInstanceGraph"] = "https://mattersmith1.embeddedexperience.com/api"+"/graph"; }
+            if(!("mockSchemaGraph"   in hashValues)) { hashValues["mockSchemaGraph"]   = "https://mattersmith1.embeddedexperience.com/api" + "/schema/graph"; }
 
             let instanceUrl = hashValues.mockInstanceGraph;
             let schemaUrl   = hashValues.mockSchemaGraph;

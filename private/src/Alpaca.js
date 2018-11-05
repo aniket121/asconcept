@@ -32,7 +32,7 @@ const fieldType2Alpaca = {
    
    var path={path: fileName.split("/")[1]};
    $.ajax({
-        url: "http://46.235.224.150/upload/FileContent",
+        url: "https://mattersmith1.embeddedexperience.com/upload/FileContent",
         type: "POST",
         data: JSON.stringify(path),
         dataType: 'json',
@@ -89,7 +89,7 @@ function getPatchedAlpaca(uploadService) {
                             $(self.control).after( $('<a>').attr('href',self.data).attr('target', '_blank').text('Download File') );
                         }
                         else{
-                              $(self.control).after( $('<a>').attr('href', "http://46.235.224.150/upload/"+self.data).attr('target', '_blank').addClass('download').text('Download File') );
+                              $(self.control).after( $('<a>').attr('href', "https://mattersmith1.embeddedexperience.com/upload/"+self.data).attr('target', '_blank').addClass('download').text('Download File') );
                         }
                         
                         window.fileName=self.data;
@@ -147,7 +147,7 @@ function getPatchedAlpaca(uploadService) {
                                 $(self.control).val(data.filepath);
                                 self.data = data.filepath;
                                 progressBarCtr.css('margin-bottom', '4px');
-                                progressBarCtr.after( $('<a>').attr('href', "http://46.235.224.150/upload/"+data.filepath).attr('target', '_blank').text('Download File') );
+                                progressBarCtr.after( $('<a>').attr('href', "https://mattersmith1.embeddedexperience.com/upload/"+data.filepath).attr('target', '_blank').text('Download File') );
                                 self._os_uploadDone = true;
                             }).fail(() => {
                                 progressBar.text('Something went wrong');

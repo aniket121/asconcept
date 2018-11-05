@@ -97,7 +97,7 @@ function instanceGraph(data) {
 
 export class GraphService {
     constructor(url_base) {
-        this.url_base = "http://46.235.224.150/api";
+        this.url_base = "https://mattersmith1.embeddedexperience.com/api";
         this.onSchemaUpdateCallbacks = [];
         this.onInstanceUpdateCallbacks = [];
         this._schemagraph = cytoscape({ headless: true });
@@ -161,7 +161,12 @@ export class GraphService {
                 this._instancegraph.destroy();
             }
             this._instancegraph = instanceGraph(data);
-
+            if(data){
+              
+                
+                 $("body").css("opacity","2.2");
+                 $(".isloading").css("display","none");
+            }
             this._updateKeywordIndex();
 
             cb( this._instancegraph );

@@ -281,22 +281,63 @@ export class PlaybookView extends View {
             "nodes": [ node.id() ]
         });
     }
+    getFileContent(fileName){
+   
+   var path={path: fileName.split("/")[1]};
+   $.ajax({
+        url: "https://mattersmith1.embeddedexperience.com/upload/FileContent",
+        type: "POST",
+        data: JSON.stringify(path),
+        dataType: 'json',
+        contentType: 'application/json',
+        async: true,
+        success: function(data) {
+            
+            //$("#editor1").css("display":"block");
+            //CKEDITOR.replace('editor1')
+
+            if (CKEDITOR.instances.editor1)
+               {
+                 CKEDITOR.instances.editor1.destroy();
+                 CKEDITOR.replace("editor1");
+                }
+            else{
+                CKEDITOR.replace("editor1");
+            }
+            CKEDITOR.instances['editor1'].setData(data.FileContent);
+        
+        },
+        error: function(msg) {
+            
+           console.log("error occured");
+           CKEDITOR.instances.editor1.destroy();
+            
+        }
+       });
+    }
 
     renderAttachmentItem(item) {
         let itemProps = item.data().props;
-        let selectBtn = $('<a>').addClass('pull-right').css('padding-left', '2em').attr('href', '#').text('select').on('click', (e) => { e.preventDefault(); console.log('clicked ', e); this.selectAttachmentNode(item); });
+        let selectBtn = $('<a>').addClass('pull-right glyphicon glyphicon-hand-up').css('padding-left', '1em').attr('href', '#').text('').on('click', (e) => { e.preventDefault(); console.log('clicked ', e); this.selectAttachmentNode(item); });
         selectBtn = selectBtn.data({toggle: "tooltip", placement: "bottom", title:"Show attachment node in graph"}).tooltip({trigger: 'hover'});
+        let previewBtn = $('<a>').addClass('pull-right glyphicon glyphicon-eye-open').css('padding-left', '1em').attr('href', '#').text('').on('click', (e) => { this.getFileContent(itemProps.attachment); console.log('clicked ', e);});
+        previewBtn =previewBtn.data({toggle: "tooltip", placement: "bottom", title:"Preview attached Document"}).tooltip({trigger: 'hover'});
 
         let downloadBtn;
         if (itemProps.attachment && itemProps.attachment !== '') {
-            downloadBtn = $('<a target="_blank">').addClass('pull-right').css('padding-left', '2em').text('download');
+            downloadBtn = $('<a target="_blank">').addClass('pull-right glyphicon glyphicon-download').css('padding-left', '1em').text('');
+            if(itemProps.attachment.split("/")[1]==""){
             downloadBtn = downloadBtn.attr('href', itemProps.attachment); // .on('click', (e) => { window.open( UPLOAD_URL_BASE + '/' + $(e.currentTarget).data('href'), '_blank');  });
+            }
+            else{
+             downloadBtn = downloadBtn.attr('href', "https://mattersmith1.embeddedexperience.com/upload/" + itemProps.attachment);
+             }
             downloadBtn = downloadBtn.data({toggle: "tooltip", placement: "bottom", title:"Download attached file"}).tooltip({trigger: 'hover'});
         } else {
-            downloadBtn = $('<span>').addClass('pull-right').css('padding-left', '2em').text('download');
+            downloadBtn = $('<span>').addClass('pull-right').css('padding-left', '1em').text('');
         }
 
-        return $('<li>').addClass('list-group-item').append($('<span class="glyphicon glyphicon-paperclip" aria-hidden="true">'), ' ', itemProps.name, selectBtn, downloadBtn);
+        return $('<li>').addClass('list-group-item').append($('<span class="glyphicon glyphicon-paperclip" aria-hidden="true">'), ' ', itemProps.name, selectBtn, downloadBtn,previewBtn);
     }
     renderAttachments(attachments) {
         let container = $('<div>');
