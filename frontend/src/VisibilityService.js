@@ -118,6 +118,7 @@ export class VisibilityService {
 
     setIncludeTopics(topics) {
          console.log("topics==>",topics)
+         alert('click')
         let rules = Object.assign({}, this.rules);
         rules.includeTopics = new Set(topics);
         this.setRules(rules);
@@ -137,6 +138,8 @@ export class VisibilityService {
                 // window.open(generateLink(oid))
                 
                 Action.trigger(ActionTypes.SELECT_PLAYBOOK, { node: nodes_in_topic[0].id() });
+                this.resetExpandedNodes(nodes_in_topic[0].id())
+
             
         }
     }
