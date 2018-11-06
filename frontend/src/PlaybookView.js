@@ -105,9 +105,10 @@ export class PlaybookView extends View {
 
     pushRule(rule) {
         this.state.ruleHistory.push(this.state.currentRule);
-        console.log('push rule',this.state.currentRule)
-        console.log("current rule",this.ruleNode)
-        this.visibilityService.onlyExpandedNodeId(this.state.playbookNode.id())
+        console.log('push rule',this.state.currentRule.ruleNode.id())
+       
+        //this.visibilityService.onlyExpandedNodeId(this.state.playbookNode.id())
+        this.visibilityService.onlyExpandedNodeId(this.state.currentRule.ruleNode.id())
         this.setCurrentRule(rule);
     }
 
@@ -118,7 +119,8 @@ export class PlaybookView extends View {
             }
         }
         this.setCurrentRule(this.state.ruleHistory.pop());
-        this.visibilityService.onlyExpandedNodeId(this.state.playbookNode.id())
+        //this.visibilityService.onlyExpandedNodeId(this.state.playbookNode.id())
+        //this.visibilityService.toggleExpandedNodeId(this.state.currentRule.ruleNode.id())
     }
 
     isPlaybookOpen() {
@@ -153,20 +155,23 @@ export class PlaybookView extends View {
     }
 
     canBack() {
+        //alert("can back")
         return (this.state.ruleHistory.length > 0);
-        this.visibilityService.onlyExpandedNodeId(this.state.playbookNode.id())
+        //this.visibilityService.resetExpandedNodes(this.state.currentRule.ruleNode.id())
 
     }
 
     back(n) {
+        //alert("back")
         if(this.canBack()) {
             this.popRule(n);
         }
+        this.visibilityService.toggleExpandedNodeId(this.state.currentRule.ruleNode.id())
     }
 
     restart() {
         this.showPlaybook( this.state.playbookNode );
-        this.visibilityService.toggleExpandedNodeId(this.state.playbookNode.id())
+        this.visibilityService.resetExpandedNodes(this.state.playbookNode.id())
 
     }
 
@@ -335,22 +340,23 @@ export class PlaybookView extends View {
     }
     renderAttachmentItem(item) {
         let itemProps = item.data().props;
-        let selectBtn = $('<a>').addClass('pull-right').css('padding-left', '2em').attr('href', '#').text('select').on('click', (e) => { e.preventDefault(); console.log('clicked ', e); this.selectAttachmentNode(item); });
+        let selectBtn = $('<a>').addClass('pull-right glyphicon glyphicon-hand-up').css('padding-left', '1em').attr('href', '#').on('click', (e) => { e.preventDefault(); console.log('clicked ', e); this.selectAttachmentNode(item); });
         selectBtn = selectBtn.data({toggle: "tooltip", placement: "bottom", title:"Show attachment node in graph"}).tooltip({trigger: 'hover'});
-       let previewBtn = $('<a>').addClass('pull-right').css('padding-left', '2em').attr('href', '#').text('Preview').on('click', (e) => { this.getFileContent(itemProps.attachment); console.log('clicked ', e);});
+       let previewBtn = $('<a>').addClass('pull-right glyphicon glyphicon-eye-open').css('padding-left', '1em').attr('href', '#').text('').on('click', (e) => { this.getFileContent(itemProps.attachment); console.log('clicked ', e);});
+       previewBtn =previewBtn.data({toggle: "tooltip", placement: "bottom", title:"Preview attached Document"}).tooltip({trigger: 'hover'});
         let downloadBtn;
         if (itemProps.attachment && itemProps.attachment !== '') {
-            downloadBtn = $('<a target="_blank">').addClass('pull-right').css('padding-left', '2em').text('download');
+            downloadBtn = $('<a target="_blank">').addClass('pull-right glyphicon glyphicon-download').css('padding-left', '1em').text('');
             if(itemProps.attachment.split("/")[1]==""){ 
             downloadBtn = downloadBtn.attr('href', itemProps.attachment);}
             else{
-              downloadBtn = downloadBtn.attr('href',itemProps.attachment);
+              downloadBtn = downloadBtn.attr('href',"http://localhost:8002/"+itemProps.attachment);
 
              // .on('click', (e) => { window.open( UPLOAD_URL_BASE + '/' + $(e.currentTarget).data('href'), '_blank');  });
             }
             downloadBtn = downloadBtn.data({toggle: "tooltip", placement: "bottom", title:"Download attached file"}).tooltip({trigger: 'hover'});
         } else {
-            downloadBtn = $('<span>').addClass('pull-right').css('padding-left', '2em').text('download');
+            downloadBtn = $('<span>').addClass('glyphicon glyphicon-download').css('padding-left', '1em').text('download');
         }
 
         return $('<li>').addClass('list-group-item').append($('<span class="glyphicon glyphicon-paperclip" aria-hidden="true">'), ' ', itemProps.name, selectBtn, downloadBtn,previewBtn);

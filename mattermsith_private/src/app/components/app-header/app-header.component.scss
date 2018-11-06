@@ -73,14 +73,6 @@ margin-bottom:-16% !important;
 }
 }
 
-
-
-@media (min-width: 1920px) {
-#topHeader{
-margin-bottom:-8% !important;
-}
-}
-
 @media (max-width: 1400px) {
 #topHeader{
 margin-bottom:-12% !important;
@@ -89,7 +81,13 @@ margin-bottom:-12% !important;
 
 @media (max-width: 1500px) {
 #topHeader{
-margin-bottom:-12% !important;
+margin-bottom:-15% !important;
+}
+}
+
+@media (min-width: 1920px) {
+#topHeader{
+margin-bottom:-8% !important;
 }
 }
 
@@ -99,6 +97,25 @@ margin-bottom:-8% !important;
 }
 }
 }
+
+
+@media (min-width: 768px) {
+.tabpadding{
+  padding-left:8px !important;
+  padding-right:8px !important;	
+}
+
+ .blankline{
+margin-right: -10%;
+
+}
+
+ .myDiv{
+font-size: 110%;
+}
+}
+
+
 
 
 

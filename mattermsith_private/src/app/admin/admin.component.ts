@@ -60,6 +60,12 @@ export class AdminComponent implements OnInit {
     this.hidePasswordField=false;
     this.modal_title = "Edit User";
     this.user = data;
+    var username = this.user.username.split("-");
+    if(username[1] == 'viewer'){
+      this.user.rw_permission=0
+    }else{
+      this.user.rw_permission=1
+    }
     this.showDialog = true;    
   }  
 
@@ -126,10 +132,10 @@ export class AdminComponent implements OnInit {
     this.user.is_staff = 0;
     if(this.user.rw_permission === 1){
       var username = this.user.username.split("-");
-      this.user.username = username[0] + '-' + 'viewer'
+      this.user.username = username[0] + '-' + 'editor'
     }else{
       var username = this.user.username.split("-");
-      this.user.username = username[0] 
+      this.user.username = username[0] + '-' + 'viewer'
       this.user.rw_permission = 0
     }
     this.AdminService.updateUser(this.user).subscribe((res: any) => {
