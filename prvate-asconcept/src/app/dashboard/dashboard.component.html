@@ -168,7 +168,7 @@
           </div>
             
             <div *ngIf="!successStatus" class="input-group mb-1">
-          <input type="text"   (keyup)="validateMobile($event)" class="form-control" placeholder="{{'Contact-Number'| translate}}" id="mobile_no"  [(ngModel)]="model.mobile_no" name="mobile_no" #mobile="ngModel">
+          <input type="text"   (keyup)="validateMobile($event)" class="form-control" maxlength="15" placeholder="{{'Contact-Number'| translate}}" id="mobile_no"  [(ngModel)]="model.mobile_no" name="mobile_no" #mobile="ngModel">
         <div *ngIf="mobileStatusError" class="alert alert-danger">
                 Contact number is required
                 </div>

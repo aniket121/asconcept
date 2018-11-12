@@ -109,10 +109,14 @@ export class ProjectComponent implements OnInit{
     this.newproject.project_name= (<HTMLInputElement>document.getElementById("project-name")).value;
     this.successStatus = false;
     var id = localStorage.getItem('userId'); 
-    if(this.newproject.project_name.length>2){
+    if(this.newproject.project_name.length>=1){
       this.ProjectService.add(id,this.newproject).subscribe(data => {
+            if(data.error){
+              this.resultStatus = "Project name already exits"
+            }else{
             this.successStatus = true;
             this.resultStatus = "Project created successfully."
+            }
               location.reload();
       });
     }else{
@@ -145,10 +149,15 @@ export class ProjectComponent implements OnInit{
         var projectName = (<HTMLInputElement>document.getElementById("newname")).value;
        this.renameproject.project_id = projectId;
         this.renameproject.project_name = projectName;
+        this.renameproject.user_id = localStorage.getItem('userId');;
         if(this.renameproject.project_name.length >= 1){
               this.ProjectService.rename(projectId,this.renameproject).subscribe(data => {
+                if(data.error){
+                    this.resultStatus = "Project name already exits";
+                }else{
                 this.successStatus = true;
                 this.resultStatus = "Project edited successfully.";
+                }
                  location.reload();
               });
         }else{
