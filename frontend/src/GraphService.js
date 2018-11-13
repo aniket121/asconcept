@@ -157,11 +157,11 @@ export class GraphService {
             this._schemagraph = schemaGraph(schemadata);
             
             if(schemadata){
-              for(var i=0;i<schemadata.nodes.length;i++){
+              for(var i=0;i<schemadata.node_types.length;i++){
                
-                if(schemadata.nodes[i].class_kind=="node" && schemadata.nodes[i]["name"]!="Topic" ){
+                if(schemadata.node_types[i]!="Topic" && schemadata.node_types[i]!="PlaybookRule" ){
                  console.log("-------",schemadata.nodes[i])
-                 dumpClass.push(schemadata.nodes[i]["name"])
+                 dumpClass.push(schemadata.node_types[i])
                  
                 }
               }
