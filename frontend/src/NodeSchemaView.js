@@ -58,6 +58,51 @@ export class NodeSchemaView extends GraphView {
             }
         });
 
+        let mkCtxCommand = (command, name, icon, enabled) => {
+            return {
+            content: `<span class="fa ${icon}"></span> ${name}`,
+            select: command,
+            disabled: !enabled,
+            fillColor: 'rgba(0,0,0,' + (enabled?'0.8': '0.2') + ')'
+            };
+            };
+            this.cy.cxtmenu({ 
+            selector: 'node',
+            activePadding : 2,
+            commands: (nele) => {
+            let ndata = nele.data;
+            let selection = this.getSelectedNodes();
+            let mselect = selection.length > 0;
+            let cmds = [];
+            cmds.push(mkCtxCommand((ele) => {
+            let name=prompt("Child Name");
+            let desc=prompt("Enter Child's Description");
+            let _oid=this.oidGenerator();
+            let supercls=nele.data().name;
+            let fields=nele.data().props.fields;
+            let colour=nele.data().colour;
+            var childClass={}
+            var childClass = {_oid:_oid, name:name,supercls:supercls,colour:colour,fields:fields,desc:desc};
+
+            $.ajax("http://localhost:8001" + "/schema/graph", {
+            "data": JSON.stringify(childClass),
+            "type": "POST",
+            "contentType": "application/json",
+            });
+            window.location.reload()
+            console.log("Name",name,"Descriptions",desc,"ID",_oid,"COLOUR",colour,"SUPERclass",supercls);
+            }, 'Create Child', 'fa-thumb-tack', true));
+
+            cmds.push(mkCtxCommand((ele) => {
+            let name=prompt("Child Name");
+
+            }, 'Delete Child', 'fa-thumb-tack', true));
+
+            return cmds;
+
+      }
+});
+
     }
 
     highlightClass(class_name) {
@@ -75,7 +120,12 @@ export class NodeSchemaView extends GraphView {
        hierarchy.removeClass('faded');
     }
     
-
+   oidGenerator() {
+     var S4 = function() {
+     return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    };
+    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}
     onLayout() {
         // https://github.com/cytoscape/cytoscape.js-dagre#api
         this.layout = this.cy.layout({
@@ -96,7 +146,7 @@ export class NodeSchemaView extends GraphView {
         const cy = this.cy;
         cy.startBatch();
         cy.elements().remove();
-
+        
         // only show node classes
         console.log("==========schemacy=======================",schemacy.$("node[class_kind = 'node']"));
          cy.add( schemacy.$("node[class_kind = 'node']") );

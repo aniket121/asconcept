@@ -11,32 +11,7 @@ import { Action, ActionTypes } from './Action';
 
 
 export const DEFAULT_RULES = {
-    includeClasses: new Set([
-        "Any",
-            "Binding",
-             //"Topic",
-            // "PlaybookRule",
-            
-            "Aniket",
-            "Asset",
-            "Action",
-            "Role",
-                "ThirdPartyRole",
-                "FirstPartyRole",
-            "Document",
-                "Guidance",
-                "Agreement",
-                    "SalesContract",
-                    "NDA",
-                "Playbook",
-                "InfoPack",
-            "Term", 
-                "ConditionalTerm",
-                    "ConditionPrecedent",
-                    "ConditionSubsequent",
-                "Obligation",
-            "Actor"
-    ]),
+    includeClasses: new Set(JSON.parse(localStorage.getItem("schemaNodes"))),
 
     includeTopics: new Set([
 

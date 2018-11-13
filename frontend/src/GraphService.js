@@ -153,8 +153,24 @@ export class GraphService {
             if (this._schemagraph) {
                 this._schemagraph.destroy();
             }
+            var dumpClass=[]
             this._schemagraph = schemaGraph(schemadata);
+            
+            if(schemadata){
+              for(var i=0;i<schemadata.nodes.length;i++){
+               
+                if(schemadata.nodes[i].class_kind=="node"){
+                 console.log("-------",schemadata.nodes[i])
+                 dumpClass.push(schemadata.nodes[i]["name"])
+                 
+                }
+              }
+              
 
+            }
+            localStorage.setItem("schemaNodes",JSON.stringify(dumpClass))
+
+            console.log("=================>",localStorage.getItem("schemaNodes"))
             cb( this._schemagraph );
 
             this.onSchemaUpdateCallbacks.forEach( (cb) => cb(this) );
