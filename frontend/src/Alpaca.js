@@ -94,13 +94,23 @@ function getPatchedAlpaca(uploadService) {
                         //debugger;
                       
                         $(self.control).after( $('<a>').attr('onclick', getFileContent(self.data)).attr('target', '_blank').text('') );
-                     
+                         alert(self.data)
                         if(self.data.split("/")[1]==""){
                           
                             $(self.control).after( $('<a>').attr('href',self.data).attr('target', '_blank').text('Download File') );
                         }
                         else{
-                              $(self.control).after( $('<a>').attr('href', "http://localhost:8002/"+self.data).attr('target', '_blank').addClass('download').text('Download File') );
+                               var http = new XMLHttpRequest();
+                                http.open('HEAD', "http://localhost:8002/"+self.data , false);
+                                http.send();
+                                if (http.status != 404){
+                                  $(self.control).after( $('<a>').attr('href', "http://localhost:8002/"+self.data || self.data).attr('target', '_blank').addClass('download').text('Download File') );
+                                }
+                                    
+                                else{
+                                  $(self.control).after( $('<a>').attr('href', "http://repindex.com:8002/"+self.data || self.data).attr('target', '_blank').addClass('download').text('Download File') );
+                                }
+                              
                         }
                         
                         window.fileName=self.data;

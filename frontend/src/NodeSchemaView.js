@@ -93,10 +93,10 @@ export class NodeSchemaView extends GraphView {
             console.log("Name",name,"Descriptions",desc,"ID",_oid,"COLOUR",colour,"SUPERclass",supercls);
             }, 'Create Child', 'fa-thumb-tack', true));
 
-            cmds.push(mkCtxCommand((ele) => {
-            let name=prompt("Child Name");
+            // cmds.push(mkCtxCommand((ele) => {
+            // let name=prompt("Child Name");
 
-            }, 'Delete Child', 'fa-thumb-tack', true));
+            // }, 'Delete Child', 'fa-thumb-tack', true));
 
             return cmds;
 
@@ -125,7 +125,7 @@ export class NodeSchemaView extends GraphView {
      return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
     };
     return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
-}
+    }
     onLayout() {
         // https://github.com/cytoscape/cytoscape.js-dagre#api
         this.layout = this.cy.layout({

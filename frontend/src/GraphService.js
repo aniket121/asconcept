@@ -159,7 +159,7 @@ export class GraphService {
             if(schemadata){
               for(var i=0;i<schemadata.nodes.length;i++){
                
-                if(schemadata.nodes[i].class_kind=="node"){
+                if(schemadata.nodes[i].class_kind=="node" && schemadata.nodes[i]["name"]!="Topic" ){
                  console.log("-------",schemadata.nodes[i])
                  dumpClass.push(schemadata.nodes[i]["name"])
                  
