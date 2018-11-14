@@ -269,6 +269,8 @@ export class GraphEditorSidebarView extends View {
     }
 
     renderInstanceNodePropsInfo(node) {
+        var nodeObject=node;
+        console.log("===============node============",node)
         var nodeData = node.data();
         var className = nodeData.cls;
         var classNode = this.cyschema.$("node[class_kind='node'][name='" + className + "']");
@@ -276,6 +278,8 @@ export class GraphEditorSidebarView extends View {
         var data = node.data();
         var classData = classNode.data();
         var fields = classData.props.fields;
+        window.documetAttachment=data.props.attachment
+
         console.log('rendering display form, fields=', fields, 'classinfo=', classData, 'data=>', data);
         var editorViewThis = this;
 
@@ -310,7 +314,16 @@ export class GraphEditorSidebarView extends View {
                 "styles": 'btn btn-ms-red',
                 "click": (ev) => {
                     this.state.editing = !this.state.editing;
-                     data.props.attachment=''
+                    //var attachmentValue=data.props.attachment
+                    if(this.state.editing){
+                      data.props.attachment=''
+                    }
+                    else{
+                      //alert('cancel')
+                      window.location.reload()
+
+                      
+                    }
                     this.reRender();
                 }
             }
@@ -326,7 +339,7 @@ export class GraphEditorSidebarView extends View {
 
                     let newData = this.getValue();
                     console.log('SAVE! new=', newData);
-
+                    
                     self.graphService.updateNodeInstance(nodeId, newData).done(function(...args) {
                         console.log('edit success, ret=', args);
                         editorViewThis.state.editing = false;
