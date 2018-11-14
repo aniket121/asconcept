@@ -276,8 +276,9 @@ export class GraphEditorSidebarView extends View {
         var data = node.data();
         var classData = classNode.data();
         var fields = classData.props.fields;
-        console.log('rendering display form, fields=', fields, 'classinfo=', classData, 'data=', data);
+        console.log('rendering display form, fields=', fields, 'classinfo=', classData, 'data=>', data);
         var editorViewThis = this;
+
 
         let self = this;
         var buttons = (this.userScope === 'viewer') ? {} : {
@@ -309,6 +310,7 @@ export class GraphEditorSidebarView extends View {
                 "styles": 'btn btn-ms-red',
                 "click": (ev) => {
                     this.state.editing = !this.state.editing;
+                     data.props.attachment=''
                     this.reRender();
                 }
             }

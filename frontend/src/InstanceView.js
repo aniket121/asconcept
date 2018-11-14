@@ -360,6 +360,7 @@ export class InstanceView extends GraphView {
                     }, 'Highlight', 'fa-eye', true),
 
                     mkCtxCommand((ele) => {}, 'Cancel', 'fa-arrow-left', true),
+                    mkCtxCommand((ele) => { console.log("======ele",ele) }, 'Select Node', 'glyphicon glyphicon-hand-up', true),
 		    	      ];
 
                 return cmds;

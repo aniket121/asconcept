@@ -172,7 +172,12 @@ export class GraphService {
 
             console.log("=================>",localStorage.getItem("schemaNodes"))
             cb( this._schemagraph );
-
+            var nodes=[]
+            var edges=[]
+            nodes.push(schemadata.nodes)
+            edges.push(schemadata.edges)
+            console.log("====================sss nodes=============",nodes.concat(edges))
+            console.log("====================edges=============",{"nodes":nodes[0]},{"edges":nodes[1]})
             this.onSchemaUpdateCallbacks.forEach( (cb) => cb(this) );
         });
     }

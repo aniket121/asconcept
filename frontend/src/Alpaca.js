@@ -94,7 +94,7 @@ function getPatchedAlpaca(uploadService) {
                         //debugger;
                       
                         $(self.control).after( $('<a>').attr('onclick', getFileContent(self.data)).attr('target', '_blank').text('') );
-                         alert(self.data)
+                         //alert(self.data)
                         if(self.data.split("/")[1]==""){
                           
                             $(self.control).after( $('<a>').attr('href',self.data).attr('target', '_blank').text('Download File') );
@@ -263,8 +263,8 @@ export class Alpaca {
         Object.keys(fields).forEach((k) => {
 
             const fieldTypes = fieldType2Alpaca[ fields[k].type ];
-
-            if(isUpdate && fields[k].type === 'file') { return; } // don't show files when editing
+            //alert(fields[k].type)
+            if(isUpdate && fields[k].type === 'file') { } // don't show files when editing
             
             schemaProperties[k] = {
                 "type": fieldTypes.schema,
