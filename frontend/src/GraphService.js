@@ -6,8 +6,6 @@ import { SchemaUtils } from './GraphUtils';
 import { KeywordIndex } from './KeywordIndex';
 
 function schemaGraph(data) {
-   
-    console.log("================>schemadata=========",data)
     var nodes = data.nodes.map(function(n) {
         return {
             group: "nodes",
@@ -25,7 +23,6 @@ function schemaGraph(data) {
             }
         }
     });
-    console.log("noede-========",nodes);
 
     var edges = data.edges.map(function(e) { return {
         group: "edges",
@@ -40,9 +37,7 @@ function schemaGraph(data) {
             is_schema: true,
         }
     }});
-    console.log("edge=======-========",edges);
-     
-    
+
     return cytoscape({
         headless: true,
         elements: {
@@ -102,7 +97,7 @@ function instanceGraph(data) {
 
 export class GraphService {
     constructor(url_base) {
-        this.url_base = "http://0.0.0.0:8001";
+        this.url_base = "https://mattersmith1.embeddedexperience.com/api";
         this.onSchemaUpdateCallbacks = [];
         this.onInstanceUpdateCallbacks = [];
         this._schemagraph = cytoscape({ headless: true });
@@ -128,7 +123,6 @@ export class GraphService {
     }
 
     onInstanceUpdate(cb) {
-
         this.onInstanceUpdateCallbacks.push(cb);
     }
 
@@ -149,77 +143,43 @@ export class GraphService {
 
     // API methods
     loadSchemaGraph(cb) {
-        $.getJSON(this.url_base  + "/schema/graph", (schemadata) => {
+        $.getJSON(this.url_base + "/schema/graph", (schemadata) => {
             if (this._schemagraph) {
                 this._schemagraph.destroy();
             }
-            var dumpClass=[]
             this._schemagraph = schemaGraph(schemadata);
-            
-            if(schemadata){
-              for(var i=0;i<schemadata.node_types.length;i++){
-               
-                if(schemadata.node_types[i]!="Topic" && schemadata.node_types[i]!="PlaybookRule" ){
-                 console.log("-------",schemadata.nodes[i])
-                 dumpClass.push(schemadata.node_types[i])
-                 
-                }
-              }
-              
 
-            }
-            localStorage.setItem("schemaNodes",JSON.stringify(dumpClass))
-
-            console.log("=================>",localStorage.getItem("schemaNodes"))
             cb( this._schemagraph );
-            var nodes=[]
-            var edges=[]
-            nodes.push(schemadata.nodes)
-            edges.push(schemadata.edges)
-            console.log("====================sss nodes=============",nodes.concat(edges))
-            console.log("====================edges=============",{"nodes":nodes[0]},{"edges":nodes[1]})
+
             this.onSchemaUpdateCallbacks.forEach( (cb) => cb(this) );
         });
     }
 
     loadInstanceGraph(cb) {
-        
         $.getJSON(this.url_base + "/graph", (data) => {
             if (this._instancegraph) {
                 this._instancegraph.destroy();
             }
-            
             this._instancegraph = instanceGraph(data);
-
-            console.log("this._instancegraph ",data )
             if(data){
               
                 
                  $("body").css("opacity","2.2");
                  $(".isloading").css("display","none");
             }
-            
-
             this._updateKeywordIndex();
 
             cb( this._instancegraph );
-             
+
             this.onInstanceUpdateCallbacks.forEach( (cb) => cb(this) );
         });
 
     }
 
     createNodeInstance(className, props) {
-
-       
-       
         let data = Object.assign({}, props);
-         if(data.RegisteredOffice || data.Legalform){
-         data.RegisteredOffice=props.RegisteredOffice[0];
-         data.Legalform=props.Legalform[0];
-        }
         data["class_name"] = className;
-       
+
         var ajaxReq = $.ajax(this.url_base + "/instances/", {
             "data": JSON.stringify(data),
             "type": "POST",
@@ -236,10 +196,6 @@ export class GraphService {
             if (newProps[k] !== undefined && newProps[k] !== origData[k]) {
                 diffs[k] = newProps[k];
             }
-        }
-        if(diffs.Legalform || diffs.RegisteredOffice){
-        diffs.Legalform=diffs.Legalform[0]
-        diffs.RegisteredOffice=diffs.RegisteredOffice[0]
         }
         let updateUrl = this.url_base + "/instances/" + nodeId + '/';
         return $.ajax(updateUrl, {
@@ -314,6 +270,7 @@ export class GraphService {
     }   
 
     getTopicByName(name) {
+        console.log('---------name-------',this.instance,name,'----------------')
         return this.instance.$("[cls='Topic'][name='"+name+"']");
     }
 
@@ -462,7 +419,6 @@ export class MockGraphService extends GraphService {
     }
     
     loadInstanceGraph(cb) {
-
         let dostuff = () => {
             this._instancegraph = cytoscape({ headless: true });
             this._instancegraph.batch(() => {

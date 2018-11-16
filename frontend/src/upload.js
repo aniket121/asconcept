@@ -71,7 +71,6 @@ $(function () {
             });
     });
     $('#testform').on('submit', (e) => {
-        alert('in upload.js')
         e.preventDefault();
         console.log('form submitted?', e);
         let files = Array.from($ff.get(0).files);

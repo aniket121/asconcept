@@ -7,6 +7,7 @@ import Snackbar from 'node-snackbar';
 import { SchemaUtils } from './GraphUtils';
 import * as alertify from 'alertify.js';
 
+
 function cmpNodesByName(a, b) {
     let A = (a.data().display || a.data().props.name || a.data().cls || '').toUpperCase();
     let B = (b.data().display || a.data().props.name || a.data().cls || '').toUpperCase();
@@ -232,7 +233,6 @@ export class GraphEditorSidebarView extends View {
     }
 
     render() {
-       
         if(this.state.showing === "placeholder") {
             return this.renderPlaceholder();
 
@@ -269,8 +269,6 @@ export class GraphEditorSidebarView extends View {
     }
 
     renderInstanceNodePropsInfo(node) {
-        var nodeObject=node;
-        console.log("===============node============",node)
         var nodeData = node.data();
         var className = nodeData.cls;
         var classNode = this.cyschema.$("node[class_kind='node'][name='" + className + "']");
@@ -278,11 +276,8 @@ export class GraphEditorSidebarView extends View {
         var data = node.data();
         var classData = classNode.data();
         var fields = classData.props.fields;
-        window.documetAttachment=data.props.attachment
-
-        console.log('rendering display form, fields=', fields, 'classinfo=', classData, 'data=>', data);
+        console.log('rendering display form, fields=', fields, 'classinfo=', classData, 'data=', data);
         var editorViewThis = this;
-
 
         let self = this;
         var buttons = (this.userScope === 'viewer') ? {} : {
@@ -290,10 +285,10 @@ export class GraphEditorSidebarView extends View {
                 "value": "Delete this " + classData.props.name,
                 "styles": 'btn btn-ms-red',
                 "click": function(ev) {
-                      var val = this.getValue();
+                    var val = this.getValue();
                     alertify.confirm("Are you sure want to delete?",
                    function(){
-                       alertify.success('Ok');
+                       alertify.success('Successfully deleted');
                         
                     let delReq = self.graphService.deleteNodeInstance(node.id());
                     delReq.done(function() {
@@ -305,8 +300,6 @@ export class GraphEditorSidebarView extends View {
                         self.messageBar.error("Error: Failed to delete node #"+node.id());
                     });
                    });
-                  
-                 
                 }
             },
             "editOrCancel": {
@@ -314,16 +307,6 @@ export class GraphEditorSidebarView extends View {
                 "styles": 'btn btn-ms-red',
                 "click": (ev) => {
                     this.state.editing = !this.state.editing;
-                    //var attachmentValue=data.props.attachment
-                    if(this.state.editing){
-                      data.props.attachment=''
-                    }
-                    else{
-                      //alert('cancel')
-                      window.location.reload()
-
-                      
-                    }
                     this.reRender();
                 }
             }
@@ -339,7 +322,7 @@ export class GraphEditorSidebarView extends View {
 
                     let newData = this.getValue();
                     console.log('SAVE! new=', newData);
-                    
+
                     self.graphService.updateNodeInstance(nodeId, newData).done(function(...args) {
                         console.log('edit success, ret=', args);
                         editorViewThis.state.editing = false;
@@ -470,7 +453,7 @@ export class GraphEditorSidebarView extends View {
         var fields = classNode.data().props.fields;
         var name = classNode.data().props.name;
         var scope = classNode.data().props.scope;
-        
+
         if(scope.length == 0) {
             return this.renderMessage("Creating instances of " + name + " not possible, please choose a subclass.");
         }
@@ -501,20 +484,11 @@ export class GraphEditorSidebarView extends View {
                     }
 
                     var val = this.getValue();
-                    console.log("----------val---------",val)
                     console.log('submit clicked, val=', JSON.stringify(val));
 
                     let ajaxReq = self.graphService.createNodeInstance(name, val);
                     ajaxReq.done(function(data) {
                         console.log('form submit succeeded? DATA:', data);
-                        alert(data.class)
-                        if(data.class=="Playbook"){
-                         console.log("window object====>",window)
-                         // var openUrl=localStorage.getItem("url");
-                         // alert(openUrl)
-                          //window.open(openUrl, '_parent'); 
-                          //location.reload(true)
-                        }
                         self.messageBar.info("Created " + name + " instance.");
                         Action.trigger(ActionTypes.RELOAD_DATA, { reselect_instance: data.id });
                     }).fail(function(xhr, code, reason) {

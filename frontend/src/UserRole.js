@@ -1,6 +1,6 @@
 export class UserRole {
 
-    constructor(authEndpoint='/api/auth', fallbackRole='admin') {
+    constructor(authEndpoint='/api/auth', fallbackRole='viewer') {
         var role=localStorage.getItem("role");
         if(role=="editor"){
             this.currentROle="admin"
@@ -24,8 +24,8 @@ export class UserRole {
             })
             .then((creds) => {
                 this.username = creds.username;
-                this.defaultGroup = creds.defaultGroup || this.currentROle;
-                this.permittedGroups = creds.permittedGroups || [this.currentROle];
+                this.defaultGroup =  this.currentROle;
+                this.permittedGroups = [this.currentROle];
 
                 return this;
             })

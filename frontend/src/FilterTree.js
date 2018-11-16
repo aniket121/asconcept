@@ -25,14 +25,12 @@ export class FilterTree {
     // }
 
     uncheckAll() {
-       
         if(this.treeview) {
             this.treeview.uncheckAll({silent: true});
             this.treeview.checkNode(0, {silent: true});
             this.treeview.uncheckNode(0);
         }
     }
-    
 
     render() {
         let this_ = this;
@@ -40,7 +38,6 @@ export class FilterTree {
         let onChangeFn = () => {
             let checkedData = this.treeview.getChecked();
             let checked  = checkedData.map( (n) => n._text );
-
             this.checked = checked;
             if(this.onChange) {
                 this.onChange(checked);
@@ -56,9 +53,7 @@ export class FilterTree {
                 if(node._myId === myId) {
                     return node;
                 } else if(node.nodes && node.nodes.length > 0) {
-
                     return findNode(node.nodes, myId);
-
                 }
             }
             return null;
@@ -67,7 +62,6 @@ export class FilterTree {
         let getChildIds = (nodeId) => {
             let node = this_.treeview.getNode(nodeId);
             if(node && node.nodes) {
-            
                 return [].concat.apply([], node.nodes.map( n => [n.nodeId].concat(getChildIds(n.nodeId)) ));
             }
             return [];
@@ -80,7 +74,6 @@ export class FilterTree {
                 (this_.treeview.getChecked().filter(el => el._myId === myId).length > 0)
                 : (data.state && data.state.checked);
             // this_.checked.includes(name); // TODO: this is a bit clunky.
-            console.log("myId",myId)
             let icon = checked ? 'fa-times-circle' : 'fa-check-circle';
             let hasChildren = data.nodes && data.nodes.length > 0;
 
@@ -131,36 +124,27 @@ export class FilterTree {
         this.treeview = treeview$(div).treeview(true);
 
         div.on('click', 'div.tree-label, a.tree-child-toggle', (ev) => {
-            console.log("ev===========>",ev)
-            alert('----on click----');
-
+            console.log('clicked thing', ev);
             let $target = $(ev.currentTarget);
             let parentId = parseInt($target.closest('li[data-nodeid]').attr('data-nodeid'));
             let myId = parseInt($target.closest('div[data-myid]').attr('data-myid'));
             console.log('parent ID=', parentId, ' myid=', myId);
-            
+
             if ($target.hasClass('tree-child-toggle')) {
                 console.log('tryiing to toggle things');
                 let myNode = findNode( [this.treeview.getNode(parentId)], myId );
                 let myNodeId = myNode.nodeId;
                 let childIds = getChildIds(myNodeId);
-    
                 if(myNode.state.checked) {
                     // uncheck this and all children
-                    alert('chaked')
                     this_.treeview.uncheckNode(childIds, { silent: true });
                     this_.treeview.uncheckNode(myNodeId);
-
                 } else {
                     // check this and all children
-                    alert('unchaked')
                     this_.treeview.checkNode(childIds, { silent: true });
                     this_.treeview.checkNode(myNodeId);
-                    //this_.treeview.uncheckNode(childIds, { silent: true });
-                    //this_.treeview.uncheckNode(myNodeId);
                 }
             } else if ($target.hasClass('tree-label')) {
-
                 let nodeData = this.treeview.getNode(parentId);
                 console.log('going to select ', nodeData);
                 if (this.itemAction) {
@@ -175,5 +159,4 @@ export class FilterTree {
 
         return div;
     }
-   
 };

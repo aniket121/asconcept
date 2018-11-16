@@ -26,25 +26,18 @@ const fieldType2Alpaca = {
         //"field": "text",
         //        "field": "token", // FIXME
     },
-     "list": {
-        "class":"list",
-        "schema": "select",
-        "field": "keyword",
-        
-        //"field": "text",
-        //        "field": "token", // FIXME
-    },
 };
+
  function getFileContent(fileName){
-      
+   
    var path={path: fileName.split("/")[1]};
    $.ajax({
-        url: "http://localhost:8002/FileContent",
+        url: "https://mattersmith1.embeddedexperience.com/upload/FileContent",
         type: "POST",
         data: JSON.stringify(path),
         dataType: 'json',
         contentType: 'application/json',
-        async: false,
+        async: true,
         success: function(data) {
             
             //$("#editor1").css("display":"block");
@@ -62,11 +55,9 @@ const fieldType2Alpaca = {
         
         },
         error: function(msg) {
-            //alert('error')
+            
            console.log("error occured");
-           //$("#editor1").css("display":"none");
-            CKEDITOR.instances.editor1.destroy();
-            //$("#editor1").css("display":"none");
+           CKEDITOR.instances.editor1.destroy();
             
         }
        });
@@ -92,25 +83,13 @@ function getPatchedAlpaca(uploadService) {
                 if(self.isDisplayOnly()) {
                     if(self.control && self.data && self.data !== '') {
                         //debugger;
-                      
                         $(self.control).after( $('<a>').attr('onclick', getFileContent(self.data)).attr('target', '_blank').text('') );
-                         //alert(self.data)
                         if(self.data.split("/")[1]==""){
                           
                             $(self.control).after( $('<a>').attr('href',self.data).attr('target', '_blank').text('Download File') );
                         }
                         else{
-                               var http = new XMLHttpRequest();
-                                http.open('HEAD', "http://localhost:8002/"+self.data , false);
-                                http.send();
-                                if (http.status != 404){
-                                  $(self.control).after( $('<a>').attr('href', "http://localhost:8002/"+self.data || self.data).attr('target', '_blank').addClass('download').text('Download File') );
-                                }
-                                    
-                                else{
-                                  $(self.control).after( $('<a>').attr('href', "http://repindex.com:8002/"+self.data || self.data).attr('target', '_blank').addClass('download').text('Download File') );
-                                }
-                              
+                              $(self.control).after( $('<a>').attr('href', "https://mattersmith1.embeddedexperience.com/upload/"+self.data).attr('target', '_blank').addClass('download').text('Download File') );
                         }
                         
                         window.fileName=self.data;
@@ -167,9 +146,8 @@ function getPatchedAlpaca(uploadService) {
                                 console.log('file upload result', data);
                                 $(self.control).val(data.filepath);
                                 self.data = data.filepath;
-
                                 progressBarCtr.css('margin-bottom', '4px');
-                                progressBarCtr.after( $('<a>').attr('href', "http://127.0.0.1:8002/"+data.filepath).attr('target', '_blank').text('Download File') );
+                                progressBarCtr.after( $('<a>').attr('href', "https://mattersmith1.embeddedexperience.com/upload/"+data.filepath).attr('target', '_blank').text('Download File') );
                                 self._os_uploadDone = true;
                             }).fail(() => {
                                 progressBar.text('Something went wrong');
@@ -184,7 +162,7 @@ function getPatchedAlpaca(uploadService) {
             });
         },
     });
-  
+
 
     alpaca.Fields.SimpleKeywordField = alpaca.Fields.TextField.extend({
         getFieldType: function() { return "simplekeyword"; },
@@ -203,31 +181,9 @@ function getPatchedAlpaca(uploadService) {
             return val;
         }
     });
-    
-
-    alpaca.Fields.KeywordField = alpaca.Fields.SelectField.extend({
-        getFieldType: function() { return "keyword"; },
-        setValue: function(val) {
-            var strval = val;
-            if(val){
-            this.SelectFieldValue=strval;
-            }
-            //alert("setValue"+strval)
-            this.base(strval);
-        },
-        getValue: function() {
-           
-
-            // FIXME: this line is just a hack to make pre-migration broken keywords prop work, remove it later
-             console.log("window--ch",this.SelectFieldValue)
-            return this.SelectFieldValue;
-        }
-        
-    });
 
     alpaca.registerFieldClass("osfile", alpaca.Fields.OSFileField);
     alpaca.registerFieldClass("simplekeyword", alpaca.Fields.SimpleKeywordField);
-     alpaca.registerFieldClass("keyword", alpaca.Fields.KeywordField);
 
     window._Alpaca = alpaca;
     return window._Alpaca;
@@ -235,12 +191,11 @@ function getPatchedAlpaca(uploadService) {
 }
 
 export class Alpaca {
-     
     constructor(uploadService) {
         this.uploadService = uploadService;
         this.patchedAlpaca = getPatchedAlpaca(uploadService);
     }
- 
+
     getControl(ele) {
         return this.patchedAlpaca(ele, "get");
     }
@@ -259,39 +214,23 @@ export class Alpaca {
     generateForm(fields, props, readOnly, buttons, view_type='bootstrap-edit-horizontal', isUpdate=false) {
         var schemaProperties = {};
         var optionsFields = {};
-        
-        Object.keys(fields).forEach((k) => {
 
+        Object.keys(fields).forEach((k) => {
             const fieldTypes = fieldType2Alpaca[ fields[k].type ];
-            //alert(fields[k].type)
-            if(isUpdate && fields[k].type === 'file') { } // don't show files when editing
-            
+
+            if(isUpdate && fields[k].type === 'file') { return; } // don't show files when editing
+
             schemaProperties[k] = {
                 "type": fieldTypes.schema,
                 "readonly": readOnly,
-
-                
-
             };
-            //alert(k)
-            if(k=="Legalform"){
-                
-               schemaProperties[k]["enum"]=["Company", "Partnership", "Limited Liability Partnership", "Individual", "Sole Trader","Unincorporated Association"] 
-            }
-             if(k=="RegisteredOffice"){
-               
-               schemaProperties[k]["enum"]=["yes","No"] 
-            }
-
-            
 
             optionsFields[k] = {
                 "type": fieldTypes.field,
                 "label": fields[k].label,
-
             };
         });
-        
+
         var options = {
             "fields": optionsFields,
             "focus": "",
@@ -299,11 +238,7 @@ export class Alpaca {
                 "buttons": buttons
             },
         };
-        
-       console.log(schemaProperties)
-      
-      
-        console.log("-------schema")
+
         var alpacaData = {
             "data": props,
             "schema": {
@@ -311,8 +246,6 @@ export class Alpaca {
                 "properties": schemaProperties,
             },
             "options": options,
-           
-             
             "postRender": function(control) {
                 if (control.form) {
                     control.form.registerSubmitHandler(function (e) {
@@ -327,5 +260,4 @@ export class Alpaca {
 
         return alpacaData;
     }
-
 }

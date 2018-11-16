@@ -9,8 +9,6 @@ body {
     background: #eee;    
 }
 
-
-
 .wrapper {  
     margin-top: 130px;
   margin-bottom: 80px;
@@ -214,8 +212,7 @@ body {
             <div>
                 <a href="/"><img src="/assets/logo-cropped-red.png" width="250" style="margin-top:-17%; "></a>
             </div>
-           <i class="fa fa-spinner fa-spin isloading" style="font-size:36px;margin-left: 40%;"></i>
-            <br>
+          
             <div id="mock-info" class="hidden"></div>
             <div id="sidebar-menu" class="top">
                 <button data-toggle="tooltip" data-placement="bottom" title="Reload node data from server" id="btn-reload" class="btn btn-ms-ora btn-sm"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
@@ -246,13 +243,10 @@ body {
                 Sidebar Search: Loading
             </div>
 
-            <button id="btn-relayout" class="btn btn-primary importsandbox"  data-toggle="modal" data-target="#importexport">Import from Sandbox  <i class="fa fa-spinner fa-spin spincls" style="font-size:36px;"></i></button>
-            <br><br> 
-            <!-- <i class="fa fa-spinner fa-spin spincls" style="font-size:33px;"></i> -->
             <div id="sidebar-filter-info" class="nothidden">
                 Filter Info: Loading
             </div>
-           
+
             <hr/>
 
             <div id="sidebar-info" class="nothidden">
@@ -260,15 +254,15 @@ body {
             </div>
 
             <hr/>
-          
+
             <div id="sidebar-form" class="hidden">
                 Sidebar Editor: Loading
                 <hr />
             </div>
-            <!-- <button id="btn-init-layout" class="btn btn-default">InitLayout</button>-->
-            
+            <!-- <button id="btn-init-layout" class="btn btn-default">InitLayout</button>
+                 <button id="btn-relayout" class="btn btn-default">ReLayout</button> -->
 <div id="testview"></div>
-             
+            
              <textarea name="editor1" style="display:none"></textarea>
             <div style="display:inline;"><small>User <i id="usrname"></i>, in <em id="scopeinfo"></em> mode</small> </div>
             <div id="user-mode-switcher" style="display: none">Mode:
@@ -288,7 +282,6 @@ body {
         <button type="button" onClick="logout()" class="btn btn-default btn-sm pull-left">
           <span class="glyphicon glyphicon-log-out"></span> Log out
         </button>
-
       </p>
         </div>
           <div class=" header" style="display:none;background-color:#003746 "><img src="logo-cropped-red.png"  width="180" height="50"></div>
@@ -378,32 +371,6 @@ body {
 
   </div>
 </div>
-
-
-
-<div id="importexport" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content" style="width:50%;margin-left:-58%;">
-      <div class="modal-header" style="background-color: rgb(0, 55, 70);">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title" style="color:white" >Are you sure want to import from sandbox?</h4>
-      </div>
-
-     
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" style="background-color: #00B4AF"><b>Close</b></button>
-        <button type="button" class="btn btn-default" style="background-color: #00B4AF" onclick="importGraphData()"><b>Import</b></button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-
-
-          
  
         <div class="lhsoverlay" id="lhszoominfo" style="display:none"></div>
 
@@ -418,7 +385,6 @@ body {
 
 function checkUser()
 {   
-    $(".spincls").css("display","none");
     loggin=localStorage.getItem("mattersmith");
     console.log("storage",loggin)
    
@@ -429,24 +395,13 @@ function checkUser()
                $('.body').css("background-color","red !important")
               $('.body').attr("style", "background-color: #e4e5e6 !important");
               $('.header').css("display","block")
-              window.localStorage.clear();
               localStorage.setItem("token",tokenPresentCheck[tokenPresentCheck.length-1]);
-             
+              
                
             }
-
      
       else{
-         window.isloading=true;
-         if(window.isloading==true){
-          
-           
-           $("body").fadeTo("opacity","0.5");
-           //$("body").css("background","#222222")
-           $("body").css("z-index","1000");
-
-         }
-         
+       
         $('.footer').css("display","block")
         $('.leftfooter').css("display","block")
         $('.homepage').css("display","block")
@@ -472,19 +427,18 @@ function checkUser()
               
                
             }
-
-      //     else if(window.location.href.indexOf('filter_includeManual') > -1){
+          else if(window.location.href.indexOf('filter_includeManual') > -1){
         
-      //         // $('.footer').css("display","block")
-      //         // $('.leftfooter').css("display","block")
-      //         // $('.homepage').css("display","block")
-      //         // $('.login').css("display","none")
-      //         // $('#countbar').css("display","block")
-      //         // $('#countbar').css("width","29em")
-      //         // $('#lhszoominfo').css("display","block")
-      //         // $('#user-mode-switcher').css('display','block')
+              $('.footer').css("display","block")
+              $('.leftfooter').css("display","block")
+              $('.homepage').css("display","block")
+              $('.login').css("display","none")
+              $('#countbar').css("display","block")
+              $('#countbar').css("width","29em")
+              $('#lhszoominfo').css("display","block")
+              $('#user-mode-switcher').css('display','block')
 
-      // }
+      }
          else{
                $('.login').css("display","block")
                $('.body').css("background-color","red !important")
@@ -496,17 +450,12 @@ function checkUser()
 
 
          console.log("user out")
-      }
+    }
 
-
-  getSandboxData() 
-  if(localStorage.getItem("role")=="viewer"){
-                 
-    $('.importsandbox').css("display","none");
-  }  
+    
+    
 
 }
-
 
      function login(){
     var credential={
@@ -530,13 +479,7 @@ function checkUser()
                if(role=="admin"){
                 localStorage.removeItem("mattersmith");
                }
-
                localStorage.setItem("role", role);
-               if(msg.username=="admin"){
-                 localStorage.setItem("role","editor");
-               }
-               
-               
                localStorage.setItem("username", msg.username);
                
                console.log("usernmae",localStorage.getItem("username"))
@@ -604,74 +547,6 @@ function checkUser()
         }
     });
  }
-
- function getSandboxData(){
-  //http://repindex.com:8001/export/_graph
-    $.ajax({
-        url: "http://repindex.com:8001/export/_graph",
-        type: "GET",
-        dataType: 'json',
-        headers: {"Authorization": "Basic c2FuZGJveC1hZG1pbjpNb284ZVBoZQ==",
-        "Access-Control-Allow-Credentials": true},
-        contentType: 'application/json',
-        
-        async: false,
-        success: function(node) {
-           
-          window.node=node
-          console.log("window",window.node);
-         
-            
-        },
-        error: function(node) {
-            console.log("node in error ",node)
-           console.log("failed during get data form sandbox")
-            
-
-            
-        }
-    });
-    // const Http = new XMLHttpRequest();
-    // const url='https://sandbox.embeddedexperience.com/api/export/_graph';
-    // Http.open("GET", url);
-    // Http.setRequestHeader("Authorization","Basic c2FuZGJveC1hZG1pbjpNb284ZVBoZQ==");
-    // Http.setRequestHeader("Access-Control-Allow-Origin","*");
-
-    // Http.send();
-    // Http.onreadystatechange=(e)=>{
-    //   console.log(Http.responseText)
-       
-    // }
- }
-
- function importGraphData(){
-    $(".spincls").css("display","block");
-    $("#importexport").css("display","none");
-    $.ajax({
-        url: "http://localhost:8001/import/_graph",
-        type: "POST",
-        data: JSON.stringify(window.node),
-        dataType: 'json',
-        contentType: 'application/json',
-        async: true,
-        success: function(node) {
-           
-         $(".spincls").css("display","none");
-         window.location.reload()
-            
-        },
-        error: function() {
-            
-             $(".spincls").css("display","none")
-             window.location.reload()
-            
-        }
-    });
-  
- }
-
-
-
  function resetPassword(){
    if($("#newpassword").val()==$("#cpassword").val())
    {
@@ -746,7 +621,7 @@ function checkUser()
         $("#upload").css("display","block")
       }
        
-      setTimeout(function(){ $("#upload").css("display","none");window.location.reload()}, 3000);         
+      setTimeout(function(){ $("#upload").css("display","none");}, 3000);         
 
     }
   };

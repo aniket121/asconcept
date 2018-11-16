@@ -106,7 +106,6 @@ let loadapp = () => {
         // }
 
         $(function () {
-           
             $('[data-toggle="popover"]').popover();
             $('[data-toggle="tooltip"]').tooltip({ trigger: 'hover', container: 'body' });
             $(document).on('visibilitychange', ev => {
@@ -118,8 +117,8 @@ let loadapp = () => {
             });
         });
     } catch (err) {
-        // console.log("caught a thing!", err);
-       // Source mapping doesn't work unless actually thrown
+        //console.log("caught a thing!", err);
+        // Source mapping doesn't work unless actually thrown
         throw err;
     }
 

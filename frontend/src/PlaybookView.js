@@ -3,14 +3,11 @@ import { View } from './View';
 import { Action, ActionTypes } from './Action';
 import { UPLOAD_URL_BASE } from './config';
 import './App.less';
-//import  VisibilityService from './VisibilityService';
 
 class PlaybookRule {
-    constructor(ruleNode,visibilityService) {
+    constructor(ruleNode) {
         this.ruleNode = ruleNode;
-        this.visibilityService = visibilityService;
         this.chosenAnswer = null;
-
     }
 
     getName() {
@@ -50,7 +47,6 @@ class PlaybookRule {
     choose(answer) {
         if($.inArray(answer, this.getAnswers()) !== -1) {
             this.chosenAnswer = answer;
-          
             return new PlaybookRule( this._getNodeForAnswer(answer) );
         } else {
             console.error('PlaybookRule.choose(', answer, ')', 'No such answer!');
@@ -58,7 +54,6 @@ class PlaybookRule {
     }
 
     _getNodeForAnswer(answer) {
-
         return this.ruleNode.outgoers('edge[cls="IsAnswerFor"]')
             .filter( (edge) => edge.data().props.value === answer )
             .map( (edge) => edge.target() )[0];
@@ -77,25 +72,23 @@ export class PlaybookView extends View {
             playbookNode: null
         };
 
-        
-        // Action.on(ActionTypes.SELECT_INSTANCES, (e, data) => {
-        //     if(data.nodes.length === 1) {
-        //         let n = graphService.instance.$id(data.nodes[0]);
-        //         if(n.data().cls === 'Playbook') {
-        //             Action.trigger(ActionTypes.SELECT_PLAYBOOK, { node: n.id() });
-        //         }
-        //     }
-        // });
-        
+        /*
+        Action.on(ActionTypes.SELECT_INSTANCES, (e, data) => {
+            if(data.nodes.length === 1) {
+                let n = graphService.instance.$id(data.nodes[0]);
+                if(n.data().cls === 'Playbook') {
+                    Action.trigger(ActionTypes.SELECT_PLAYBOOK, { node: n.id() });
+                }
+            }
+        });
+        */
 
         Action.on(ActionTypes.SELECT_PLAYBOOK, (e, data) => {
             let n = graphService.instance.$id(data.node);
             if (this.isPlaybookOpen()) {
                 this.closePlaybook();
             }
-
             this.showPlaybook(n);
-
         });
 
         Action.on(ActionTypes.PLAYBOOK_CLOSE, (e) => {
@@ -105,10 +98,7 @@ export class PlaybookView extends View {
 
     pushRule(rule) {
         this.state.ruleHistory.push(this.state.currentRule);
-        console.log('push rule',this.state.currentRule.ruleNode.id())
-       
-        //this.visibilityService.onlyExpandedNodeId(this.state.playbookNode.id())
-        this.visibilityService.onlyExpandedNodeId(this.state.currentRule.ruleNode.id())
+        //this.visibilityService.onlyExpandedNodeId(this.state.currentRule.ruleNode.id())
         this.setCurrentRule(rule);
     }
 
@@ -119,8 +109,6 @@ export class PlaybookView extends View {
             }
         }
         this.setCurrentRule(this.state.ruleHistory.pop());
-        //this.visibilityService.onlyExpandedNodeId(this.state.playbookNode.id())
-        //this.visibilityService.toggleExpandedNodeId(this.state.currentRule.ruleNode.id())
     }
 
     isPlaybookOpen() {
@@ -137,42 +125,36 @@ export class PlaybookView extends View {
         this.reRender();
     }
 
-     showPlaybook(playbookNode) {
+    showPlaybook(playbookNode) {
         let firstRule = playbookNode.outgoers('node[cls="PlaybookRule"]');
         //let firstRule = playbookNode.incomers('node[cls="PlaybookRule"]');
         if (firstRule.length == 0) {
             console.log('no rules found for playbook', playbookNode);
             return;
         }
-        
+
         console.log('showPlaybook', 'playbookNode=', playbookNode, 'firstRule=', firstRule);
 
         this.state.currentRule = new PlaybookRule(firstRule);
         this.state.ruleHistory = [];
         this.state.playbookNode = playbookNode;
-
         this.reRender();
     }
 
     canBack() {
-        //alert("can back")
         return (this.state.ruleHistory.length > 0);
-        //this.visibilityService.resetExpandedNodes(this.state.currentRule.ruleNode.id())
-
     }
 
     back(n) {
-        //alert("back")
         if(this.canBack()) {
             this.popRule(n);
         }
-        this.visibilityService.toggleExpandedNodeId(this.state.currentRule.ruleNode.id())
+        //this.visibilityService.toggleExpandedNodeId(this.state.currentRule.ruleNode.id())
     }
 
     restart() {
         this.showPlaybook( this.state.playbookNode );
-        this.visibilityService.resetExpandedNodes(this.state.playbookNode.id())
-
+        //this.visibilityService.resetExpandedNodes(this.state.playbookNode.id())
     }
 
     choose(answer) {
@@ -302,16 +284,16 @@ export class PlaybookView extends View {
             "nodes": [ node.id() ]
         });
     }
-     getFileContent(fileName){
-       console.log("=========",fileName)
+    getFileContent(fileName){
+   
    var path={path: fileName.split("/")[1]};
    $.ajax({
-        url: "http://localhost:8002/FileContent",
+        url: "https://mattersmith1.embeddedexperience.com/upload/FileContent",
         type: "POST",
         data: JSON.stringify(path),
         dataType: 'json',
         contentType: 'application/json',
-        async: false,
+        async: true,
         success: function(data) {
             
             //$("#editor1").css("display":"block");
@@ -329,34 +311,33 @@ export class PlaybookView extends View {
         
         },
         error: function(msg) {
-            //alert('error')
+            
            console.log("error occured");
-           //$("#editor1").css("display":"none");
-            CKEDITOR.instances.editor1.destroy();
-            //$("#editor1").css("display":"none");
+           CKEDITOR.instances.editor1.destroy();
             
         }
        });
     }
+
     renderAttachmentItem(item) {
         let itemProps = item.data().props;
-        let selectBtn = $('<a>').addClass('pull-right glyphicon glyphicon-hand-up').css('padding-left', '1em').attr('href', '#').on('click', (e) => { e.preventDefault(); console.log('clicked ', e); this.selectAttachmentNode(item); });
+        let selectBtn = $('<a>').addClass('pull-right glyphicon glyphicon-hand-up').css('padding-left', '1em').attr('href', '#').text('').on('click', (e) => { e.preventDefault(); console.log('clicked ', e); this.selectAttachmentNode(item); });
         selectBtn = selectBtn.data({toggle: "tooltip", placement: "bottom", title:"Show attachment node in graph"}).tooltip({trigger: 'hover'});
-       let previewBtn = $('<a>').addClass('pull-right glyphicon glyphicon-eye-open').css('padding-left', '1em').attr('href', '#').text('').on('click', (e) => { this.getFileContent(itemProps.attachment); console.log('clicked ', e);});
-       previewBtn =previewBtn.data({toggle: "tooltip", placement: "bottom", title:"Preview attached Document"}).tooltip({trigger: 'hover'});
+        let previewBtn = $('<a>').addClass('pull-right glyphicon glyphicon-eye-open').css('padding-left', '1em').attr('href', '#').text('').on('click', (e) => { this.getFileContent(itemProps.attachment); console.log('clicked ', e);});
+        previewBtn =previewBtn.data({toggle: "tooltip", placement: "bottom", title:"Preview attached Document"}).tooltip({trigger: 'hover'});
+
         let downloadBtn;
         if (itemProps.attachment && itemProps.attachment !== '') {
             downloadBtn = $('<a target="_blank">').addClass('pull-right glyphicon glyphicon-download').css('padding-left', '1em').text('');
-            if(itemProps.attachment.split("/")[1]==""){ 
-            downloadBtn = downloadBtn.attr('href', itemProps.attachment);}
-            else{
-              downloadBtn = downloadBtn.attr('href',"http://localhost:8002/"+itemProps.attachment);
-
-             // .on('click', (e) => { window.open( UPLOAD_URL_BASE + '/' + $(e.currentTarget).data('href'), '_blank');  });
+            if(itemProps.attachment.split("/")[1]==""){
+            downloadBtn = downloadBtn.attr('href', itemProps.attachment); // .on('click', (e) => { window.open( UPLOAD_URL_BASE + '/' + $(e.currentTarget).data('href'), '_blank');  });
             }
+            else{
+             downloadBtn = downloadBtn.attr('href', "https://mattersmith1.embeddedexperience.com/upload/" + itemProps.attachment);
+             }
             downloadBtn = downloadBtn.data({toggle: "tooltip", placement: "bottom", title:"Download attached file"}).tooltip({trigger: 'hover'});
         } else {
-            downloadBtn = $('<span>').addClass('glyphicon glyphicon-download').css('padding-left', '1em').text('download');
+            downloadBtn = $('<span>').addClass('pull-right').css('padding-left', '1em').text('');
         }
 
         return $('<li>').addClass('list-group-item').append($('<span class="glyphicon glyphicon-paperclip" aria-hidden="true">'), ' ', itemProps.name, selectBtn, downloadBtn,previewBtn);

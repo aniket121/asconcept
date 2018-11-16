@@ -1,6 +1,5 @@
 import { CytoQuery } from './CytoFilter';
 import { Action, ActionTypes } from './Action';
-
 // Example:
 // filterRules = {
 //     includeClasses: ["Document", "Role", ...],
@@ -11,7 +10,30 @@ import { Action, ActionTypes } from './Action';
 
 
 export const DEFAULT_RULES = {
-    includeClasses: new Set( JSON.parse(localStorage.getItem("schemaNodes"))),
+    includeClasses: new Set([
+        "Any",
+            "Binding",
+            // "Topic",
+            // "PlaybookRule",
+            "Asset",
+            "Action",
+            "Role",
+                "ThirdPartyRole",
+                "FirstPartyRole",
+            "Document",
+                "Guidance",
+                "Agreement",
+                    "SalesContract",
+                    "NDA",
+                "Playbook",
+                "InfoPack",
+            "Term", 
+                "ConditionalTerm",
+                    "ConditionPrecedent",
+                    "ConditionSubsequent",
+                "Obligation",
+            "Actor"
+    ]),
 
     includeTopics: new Set([
 
@@ -24,9 +46,10 @@ export const DEFAULT_RULES = {
     includeManual: new Set(),
 };
 function generateLink(oid){
-    return "http://localhost:9000/#playbook_openOid="+oid+"&filter_includeManual="+oid+"&select="+oid+"&v=1";
+    return "http://repindex.com:4200/html/knowledge/#playbook_openOid="+oid+"&filter_includeManual="+oid+"&select="+oid+"&v=1";
 
 }
+
 export const DEFAULT_VIEWER_RULES = {
     includeClasses: new Set([]),
     includeTopics: new Set([]),
@@ -92,16 +115,13 @@ export class VisibilityService {
     }
 
     setIncludeTopics(topics) {
-         console.log("topics==>",topics)
-         alert('click')
+        console.log("topics==>",topics)
         let rules = Object.assign({}, this.rules);
         rules.includeTopics = new Set(topics);
         this.setRules(rules);
         var topic_node = this.graphService.instance.$("node[cls='Topic'][prop_name='" + topics + "']");
         var hastopic_edges = topic_node.connectedEdges("edge[cls='HasTopic']");
         var nodes_in_topic = hastopic_edges.connectedNodes("node[cls='Playbook']");
-
-        
         if(nodes_in_topic.length > 0){
                  //var nodes_in_topic_ids = nodes_in_topic.map(n => n.id());
                 // console.log("playbook_node",nodes_in_topic_ids);
@@ -111,10 +131,8 @@ export class VisibilityService {
                 // var oid=this.graphService.instance.$id(nodes_in_topic_ids[0]).data().oid.toString()
                 // console.log("oid",generateLink(oid))
                 // window.open(generateLink(oid))
-                
                 Action.trigger(ActionTypes.SELECT_PLAYBOOK, { node: nodes_in_topic[0].id() });
-                this.resetExpandedNodes(nodes_in_topic[0].id())
-
+                //this.resetExpandedNodes(nodes_in_topic[0].id())
             
         }
     }
@@ -149,7 +167,7 @@ export class VisibilityService {
         }
         this.setRules(this.rules);
     }
-    onlyExpandedNodeId(nodeId) {
+     onlyExpandedNodeId(nodeId) {
         if(!this.graphService.instance.$id(nodeId).isNode()) {
             console.error('VisibilityService.toggleExpandedNodeId Trying to use non-existant nodeId=', nodeId);
         }

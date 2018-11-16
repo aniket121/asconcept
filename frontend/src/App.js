@@ -21,7 +21,7 @@ import { VisibilityService, DEFAULT_VIEWER_RULES, DEFAULT_RULES } from './Visibi
 import { UrlService } from './UrlService';
 import { API_URL_BASE, UPLOAD_URL_BASE } from './config';
 import { GraphView } from './GraphView';
-import { TestView } from './testView';
+
 import mousetrap from 'mousetrap';
 
 import Snackbar from 'node-snackbar';
@@ -33,14 +33,12 @@ import 'bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css';
 import {tools} from './GraphTools';
 //import querystring from 'querystring';
 const querystring = require('expose-loader?querystring!querystring');
-
 window.$ = $;
 global.jq = $;
 global.Action = Action;
 //global.console = window.cons;
 
 //window.$ = $;
-
 window.SB = Snackbar;
 window.$tokenfield =  Tokenfield;
 
@@ -53,7 +51,6 @@ function mkDiv(id) {
 
 export class App {
     constructor(userAuth) {
-        console.log(userAuth)
         // if (module.hot) {
         //     module.hot.accept('./GraphInfoSidebarView', () => {
         //         let GraphInfoSidebarView = require('./GraphInfoSidebarView');
@@ -65,13 +62,14 @@ export class App {
         //
 
         this.userAuth = userAuth;
-
+        console.log("===========================>>>",this.userAuth)
+        
         this.urlService = new UrlService({'userAuth': this.userAuth});
         this.urlService.handleUrlHash(window.location.hash, UrlService.PRE_SETUP, undefined, undefined);
         console.log('App this.urlService.getSettings():', this.urlService.getSettings());
 
+        //this.userScope = this.urlService.getSettings().userMode;
         this.userScope = this.urlService.getSettings().userMode;
-
         console.error('user scope =', this.userScope);
         this.messageBar = new MessageBar(this);
 
@@ -91,15 +89,11 @@ export class App {
 
         this.views = {
             // graphs
-           
             instanceGraph: new InstanceView( mkDiv('graph-instance'), this.graphService, this.visibilityService, this.urlService),
             nodeSchemaGraph: new NodeSchemaView( mkDiv('graph-nodeschema'), this.graphService ),
             topics: new TopicView( mkDiv('graph-topics'), this.graphService ),
-            playbook: new PlaybookView( mkDiv('playbookview'), this.graphService ,this.visibilityService),
+            playbook: new PlaybookView( mkDiv('playbookview'), this.graphService,this.visibilityService ),
 
-            //testview
-            testView:new TestView( mkDiv('testview') ),
-            
             // sidebar
             sidebarFilter: new GraphFilterSidebarView( document.getElementById('sidebar-filter'), this.graphService, this.visibilityService ),
             sidebarTopicFilter: new TopicFilterSidebarView( document.getElementById('sidebar-topic-filter'), this.graphService, this.visibilityService ),
@@ -144,15 +138,12 @@ export class App {
         $('#rhs-view-controls').on('click', 'label, input', (ev) => {
             let $l = $(ev.target);
             let newRHSView = $l.data('rhs-view');
-            
             switch (newRHSView) {
-
             case "schema":
                 this.rhsViewSwitcher.showView( this.views.nodeSchemaGraph );
                 Action.trigger(ActionTypes.SHOW_SCHEMA, {});
                 break;
             case "topics":
-
                 this.rhsViewSwitcher.showView( this.views.topics );
                 Action.trigger(ActionTypes.SHOW_SCHEMA, {});
                 break;
@@ -185,7 +176,7 @@ export class App {
         // $('#btn-re-layout').click((ev) => {
         //     window.app.views.instanceGraph.onRelayout();
         // });
-        
+
         let preserveSettingsFn = () => {
             return $('#chk-su-preserve-state').prop('checked');
         };
@@ -195,7 +186,7 @@ export class App {
         suAdminButton.click(() => this.urlService.setUserMode('admin', preserveSettingsFn()));
         // $('#btn-switchuser-editor').click(() => this.urlService.setUserMode('editor', preserveSettingsFn()));
         suViewerButton.click(() => this.urlService.setUserMode('viewer', preserveSettingsFn()));
-        
+
         switch (this.userScope) {
         case 'viewer':
             suViewerButton.attr('disabled', true);
@@ -263,9 +254,8 @@ export class App {
         console.log('URL hashValues=', hashValues);
 
         if("mock" in hashValues || "mockInstanceGraph" in hashValues || "mockSchemaGraph" in hashValues) {
-           
-            if(!("mockInstanceGraph" in hashValues)) { hashValues["mockInstanceGraph"] = API_URL_BASE+"/graph"; }
-            if(!("mockSchemaGraph"   in hashValues)) { hashValues["mockSchemaGraph"]   = API_URL_BASE+"/schema/graph"; }
+            if(!("mockInstanceGraph" in hashValues)) { hashValues["mockInstanceGraph"] = "https://mattersmith1.embeddedexperience.com/api"+"/graph"; }
+            if(!("mockSchemaGraph"   in hashValues)) { hashValues["mockSchemaGraph"]   = "https://mattersmith1.embeddedexperience.com/api" + "/schema/graph"; }
 
             let instanceUrl = hashValues.mockInstanceGraph;
             let schemaUrl   = hashValues.mockSchemaGraph;
@@ -274,42 +264,33 @@ export class App {
             this.uploadService = new MockUploadService("");
             $('#mock-info').html($('<a>').attr('href', instanceUrl).text('Using Mocked Instance')).removeClass('hidden').show();
         } else {
-            
-            this.graphService = new GraphService();
-            this.uploadService = new UploadService();
+            this.graphService = new GraphService(API_URL_BASE);
+            this.uploadService = new UploadService(UPLOAD_URL_BASE);
             $('#mock-info').hide();
         }
 
         Action.on(ActionTypes.RELOAD_DATA, (e, data) => {
-
             this._loadData(data);
         });
     }
 
     _loadData(data) {
-       
         this.graphService.loadSchemaGraph((cy) => {
             Action.trigger(ActionTypes.LOADED_SCHEMA_GRAPH, { cy: cy });
             this.graphService.loadInstanceGraph((cy) => {
-                
                 if(!this.doneFirstLoad) {
                     console.log("START onFirstLoad()");
-
                     this.urlService.handleUrlHash(window.location.hash, UrlService.PRE_LOADED, this.graphService, this.visibilityService);
-
                     Action.trigger(ActionTypes.LOADED_INSTANCE_GRAPH, { cy: cy, reload_data: data });
-
                     this.urlService.handleUrlHash(window.location.hash, UrlService.POST_LOADED, this.graphService, this.visibilityService);
                     this.doneFirstLoad = true;
                     console.log("END onFirstLoad");
                 } else {
                     Action.trigger(ActionTypes.LOADED_INSTANCE_GRAPH, { cy: cy, reload_data: data });
-                   
                 }
             });
 
         });
-
     }
 
     _loadSchemaData() {
@@ -317,18 +298,15 @@ export class App {
     }
 
     _loadInstanceData(data) {
-
         this._loadData(data);
     }
 
     _setupViewSwitcher() {
-        
-
-         if(localStorage.getItem("mattersmith")){
+       if(localStorage.getItem("mattersmith")){
         this.lhsViewSwitcher = new ViewSwitcher('hidden', 'lhsgraph');
         this.rhsViewSwitcher = new ViewSwitcher('hidden', 'rhsgraph');
         this.sidebarViewSwitcher = new ViewSwitcher('hidden', null);
-        }
+    }
     }
 
     _resetDisplays() {
