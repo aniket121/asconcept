@@ -32,6 +32,7 @@ export class GraphFilterSidebarView extends View {
     }
 
     getData() {
+
         if(!this.graphService.schema) {
             console.error('GraphFilterSidebarView.render: Cannot render, no schema.');
             return [];

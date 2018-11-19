@@ -7,6 +7,7 @@ cytoscape.use(cydagre);
 
 export class TopicView extends GraphView {
     constructor(container, graphService) {
+    
         super(container);
 
         this.graphService = graphService;

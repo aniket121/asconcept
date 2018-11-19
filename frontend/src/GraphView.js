@@ -49,8 +49,10 @@ export class GraphView extends View {
     }
 
     getSelectedNodes() {
+        
         let nodes = this.cy.nodes().filter(n => n.selected());
         return nodes;
+
     }
 
     highlightSelected() {
@@ -81,6 +83,7 @@ export class GraphView extends View {
     }
 
     onDisplay() {
+
         this.cy.resize();
         //this.cy.fit();
         let container = this.getContainer();

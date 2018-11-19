@@ -2,6 +2,7 @@ import { Action, ActionTypes } from './Action';
 
 // Thanks https://stackoverflow.com/questions/2090551/parse-query-string-in-javascript
 function parseQuery(queryString) {
+    
     var query = {};
     var pairs = (queryString[0] === '#' ? queryString.substr(1) : queryString).split('&');
     for (var i = 0; i < pairs.length; i++) {
@@ -66,7 +67,7 @@ export class UrlService {
     handleUrlHash(urlHash, cause, graphService, visibilityService) {
         if(this.ignoreNextChange) {
             console.log('UrlService.handleUrlHash IGNORING urlHash=', urlHash);
-            this.ignoreNextChange = false;
+            this.ignoreNextChange = true;
             return;
         }
 
@@ -77,6 +78,7 @@ export class UrlService {
 
 
         let data = parseQuery(urlHash);
+        
         console.log('UrlService.handleUrlHash cause=', cause, 'urlHash=', urlHash, 'data=', data);
 
         if(cause === undefined || cause === null) {
@@ -341,6 +343,7 @@ export class UrlService {
         };
         return this.getUrlBase() + this.generateUrlHashFromSettings(settings);
     }
+   
 
     updateUrl(actuallyUpdate, includeUserMode) {
         let hash = this.generateUrlHashFromSettings(this.settings, includeUserMode);

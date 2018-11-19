@@ -46,6 +46,7 @@ export class TopicFilterSidebarView extends View {
     }
 
     onFilterItemClick(x) {
+        
         console.log('topic clicked, ', x);
         let topicNode = window.app.views.topics.cy.$(`node[prop_name="${x._text}"]`);
         Action.triggerElement(this.getContainer(), ActionTypes.SELECT_TOPIC, {

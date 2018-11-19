@@ -126,6 +126,7 @@ export class GraphSearchSidebarView extends View {
         this._buildKeywordCache();
 
         let keywordSourceFn = (req, resp) => {
+          
             console.log('autocomplete, search=%O, currnetTokens=%O', req.term, this.kwSet);
 
             let candidates = this.keywordCache.filter(kw => !this.kwSet.has(kw));
@@ -144,6 +145,7 @@ export class GraphSearchSidebarView extends View {
             // console.log('candidates (post-sort)=', candidates);
             //let candobjs = candidates.map(cand => ({label: cand.toUpperCase(), value: cand}));
             //resp(candobjs);
+            
             resp(candidates);
             //return candidates;
         };
@@ -189,6 +191,7 @@ export class GraphSearchSidebarView extends View {
         });
 
         let onChangeFn = (e) => {
+
             let searchKeywords = $(searchfield).tokenfield('getTokens').map(t => t.value);
             console.log('GraphSearchSidebarView new search keywords:', searchKeywords);
             this.kwSet = new Set(searchKeywords);
