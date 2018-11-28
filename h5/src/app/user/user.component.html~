@@ -1,0 +1,597 @@
+
+<div class="container" style="    width: 99%;margin-top:15px;">
+<style>
+  ul.breadcrumb {
+    padding: 8px 16px;
+    list-style: none;
+    background-color: #fff;
+}
+.tooltipcustom {
+    position: relative;
+    display: inline-block;
+    
+}
+.textmenu{
+    display:none;
+  background-color:#a0938f;
+  border-radius: 6px;
+  color:white;
+  position: fixed;
+  text-align: left;
+      z-index: 37;
+    margin-left:150px;
+    position: fixed;
+    width:auto;
+    padding-left:15px;
+    padding-right:15px;
+    padding-top:10px;
+    padding-bottom:10px;
+        top: 29%;
+}
+
+.textmenu1{
+  display:none;
+  background-color:#a0938f;
+  border-radius: 6px;
+  /*color:white;*/
+  text-align: left;
+      z-index: 37;
+    margin-left:85px;
+    position: fixed;
+    width:auto;
+    padding-left:15px;
+    padding-right:15px;
+    padding-top:10px;
+    padding-bottom:10px;
+        top: 29%;
+}
+
+p{
+    
+    word-wrap: break-word;
+    width: 184px;
+}
+#table1 {
+     border-collapse: separate;
+   }
+.tooltipcustom .tooltiptext {
+    visibility: hidden;
+    width: 600px;
+    background-color: gray;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltipcustom:hover .tooltiptext {
+    visibility: visible;
+}
+.tooltipcustom .tooltiptext1 {
+    visibility: hidden;
+    width: 300px;
+    background-color: gray;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltipcustom:hover .tooltiptext1 {
+    visibility: visible;
+}
+
+ul.breadcrumb li {display: inline;}
+ul.breadcrumb li+li:before {
+    padding: 8px;
+    color: black;
+    content: "/\00a0";
+}
+ul.breadcrumb li a {color:#0000EE;}
+.floating-box {
+    float: left;
+  
+    margin: 10px;
+    border: 1px solid #73AD21;  
+}
+
+div.scroll {
+    background-color: #f1f1f1;
+    width: 400px;
+    height: 200px;
+    overflow: scroll;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+    font-size:12px;
+}
+#font-size
+{
+  font-size:12px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+#thid {
+    background-color:#808080;
+    color:black;
+}
+</style>
+
+</div>
+<ul class="breadcrumb">
+  <li><a  id="font-size" style="cursor:pointer" (click)="projectgo()">{{'Home'| translate }}</a></li>
+  <li><a id="font-size" style="cursor:pointer" (click)="newquery()">{{'New-Query'| translate }}</a></li>
+  <li ><a id="font-size" target="_blank" href="http://pdf2docx.com/" style="cursor:pointer" (click)="newquery()">PDF to DOCX</a>
+</li>
+<li ><a id="font-size" target="_blank" href="https://www.wecompress.com/" style="cursor:pointer" (click)="newquery()">Compress Files</a>
+</li>
+    
+   <li><a class="pull-right"  (click)="openlimit()"><i data-toggle="tooltip" title="{{'setHorizontal'| translate }}" class="fa fa-gear" style="font-size:23px;color:#808080;cursor:pointer; "></i> </a></li>
+    <a (click)="delteMultiple()"><i data-toggle="tooltip" title="Delete Text files" class="fa fa-trash-o pull-right" style="font-size:23px;margin-right: 7px;cursor:pointer"></i> </a>
+<a href="https://asconceptreviewer.com/RepindexUserGuide.pdf"><i data-toggle="tooltip" title="Download User Manual" class="fa fa-question-circle pull-right" style="font-size:23px;margin-right: 0px;cursor:pointer"></i> </a>
+
+    <!--<select class="form-control col-sm-3 pull-right" id="lang" [(ngModel)]="lang" (ngModelChange)="setlang($event)" >
+        <option  value="en">English</option>
+        <option  value="fr">French</option>
+        <option value="de">German</option>
+      </select>&nbsp;&nbsp;&nbsp; -->
+</ul>  
+  
+<div class="row" style="margin-top:-10px;">
+    <div class="col-sm-6 col-md-6">
+      <div class="card" >
+        
+        <div class="card-block" style="margin-bottom:12px;">
+        <div class="row">
+    
+    <div class="col-sm-6" id="font-size">
+          {{'Query-Type'| translate }}
+          <p style="margin-top:38px;">{{'Result-Type'| translate }}</p>
+          <br>
+          <input type="text" *ngIf="constatus" class="form-control" style="font-size:12px;" name="lst_toi1" id="lst_toi1" placeholder="{{'Search'| translate }}" >
+    </div>
+    <div class="col-sm-6">
+     <select class="form-control" style="font-size:12px" id="sel1" [(ngModel)]="querytype">
+        <option id="font-size" value="test">{{'Remote'| translate }}</option>
+        <option id="font-size" value="local">{{'local'| translate }}</option>
+        </select>
+      <br>
+        <select class="form-control" style="font-size:12px" id="sel1"  [(ngModel)]="selectedCity" (ngModelChange)="onChange($event)" >
+       
+        <option id="font-size" value="Concordance">{{'concept'| translate }}</option>
+        <option id="font-size" value="self">{{'concept-self-combination'| translate }} </option>
+       <option id="font-size" value="document_comparison" >Document Comparison</option>
+      <!--   <option value="cluster">{{'cluster'| translate }}</option> -->
+        <option id="font-size" value="Frequency">{{'Frequency'| translate }}</option>
+      </select>
+      <br>
+     <!--  <input type="text"  *ngIf="constatus"  class="form-control" id="and" placeholder="{{'And'| translate }}"> -->
+    </div>
+     <br><br>
+
+
+
+   <div class="form-group" *ngIf="constatus "  id="consearch" style="margin-left:3%;padding-top: 3%;">          
+            <input type="hidden" class="form-control" name="lst_toi" id="lst_toi" placeholder="search" >
+           <!-- <input type="text" class="form-control" name="lst_toi1" id="lst_toi1" placeholder="Search" >-->
+   </div>&nbsp;
+          <div class="form-group" *ngIf="constatus">
+            
+           <!-- <input type="text"   style="margin-top: 7%;margin-left: 25%;width:106%;" class="form-control" id="and" placeholder="And">-->
+              
+          </div>
+   <div class="form-group row" style="margin-left:49%;" *ngIf="cluster">
+               <p id="cluster" style="margin-left:-85%;">{{'Cluster-pair'| translate }}</p>
+              <label class="col-md-7 form-control-label" for="textarea-input"></label>
+              <div class="col-md-11">
+                <textarea id="textarea-input"  name="txtarea_cluster_pairs" id="txtarea_cluster_pairs" rows="5" cols="20" class="form-control" placeholder="Content.."></textarea>
+              </div>
+            </div>
+      <br>
+      <label for="sel1" style="margin-left:2%;margin-top:-1%" *ngIf="self || freq || document_comparison" id="font-size">Concept List</label>&nbsp;
+      <select class="form-control " id="sel1" *ngIf="self || freq || document_comparison" style="margin-left:36%;width:44%;margin-top:-1%;font-size:12px;"  [(ngModel)]="conceptDefault" (ngModelChange)="conceptlist($event)" >
+        <option Value="undefined" selected>select</option>
+        <option id="font-size" *ngFor="let t of getconcept" value={{t.pk}}>{{t.fields.name}}</option>
+      </select>
+
+    <div class="row col-12" style="margin-top: 15px;" *ngIf="document_comparison">
+        <label for="sel1" class="col-5 pull-left" style="margin-left: -3px;" id="font-size">Select Reference Text</label> 
+       
+            <div  class="scroll col-12" style="margin-left: 11px; height: 115px;">
+                <ul class="nav-dropdown-items">
+                    <div  *ngFor="let folder  of text_folders" class="nav-item nav-dropdown">
+                        <a *ngIf="folder.fields.parent_folder_id == null"   class="nav-link nav-dropdown-toggle" >
+                            <input  type="hidden" name="id[]" style="color:orange;margin-left: -64px;">
+                                <i  class="fa fa-folder fa-lg mt-4"    style="font-size:15px;cursor:pointer;margin-left:-66px;color:orange">
+                                    
+                                </i>
+                                <i style="font-size:12px;cursor:pointer;" (click)="navigateData(folder.pk)">{{folder.fields.name}}</i> 
+
+                            <div *ngFor="let url  of urlsData" class="nav-item nav-dropdown">
+                                <a id="font-size" *ngIf="currentState && url.parent_id == folder.pk && url.checked"  class="nav-link nav-dropdown-toggle">                                      
+                                    <input type="checkbox" name="id[]"  style="margin-left: -68px;" (click)="selctedUrlsId(url.pk)" checked>
+                                        {{url.fields.name}}.url        
+                                </a>
+                            </div> 
+
+                            <div *ngFor="let url  of urlsData" class="nav-item nav-dropdown">
+                                <a id="font-size" *ngIf="currentState && url.parent_id == folder.pk && !url.checked"  class="nav-link nav-dropdown-toggle">                                      
+                                    <input type="checkbox" name="id[]"  style="margin-left: -68px;" (click)="selctedUrlsId(url.pk)">
+                                        {{url.fields.name}}.url        
+                                </a>
+                            </div>
+
+                            <div *ngFor="let rec  of folderRefRecords" class="nav-item nav-dropdown">
+                                <a id="font-size" *ngIf="currentState && rec.parent_id == folder.pk && rec.checked"  class="nav-link nav-dropdown-toggle">                                      
+                                    <input type="checkbox" name="id[]"  style="margin-left: -68px;" (click)="selctedDocumentId(rec.pk)" checked>
+                                        {{rec.fields.name}}        
+                                </a>
+                            </div> 
+
+                            <div *ngFor="let rec  of folderRefRecords" class="nav-item nav-dropdown">
+                                <a id="font-size" *ngIf="currentState && rec.parent_id == folder.pk && !rec.checked"  class="nav-link nav-dropdown-toggle">                                      
+                                    <input type="checkbox" name="id[]"  style="margin-left: -68px;" (click)="selctedDocumentId(rec.pk)">
+                                        {{rec.fields.name}}        
+                                </a>
+                            </div>                          
+                        </a>
+                    </div>
+                </ul>
+            </div>
+             <label for="sel1" class="col-5" style="margin-left: -1px;" id="font-size">Select Comparison Text</label>
+            <div  class="scroll col-12" style="margin-left: 10px; height: 115px;" >
+                <ul class="nav-dropdown-items">
+                    <div  *ngFor="let folder  of text_folders" class="nav-item nav-dropdown">
+                        <a *ngIf="folder.fields.parent_folder_id == null"   class="nav-link nav-dropdown-toggle" >
+                            <input  type="hidden" name="id[]" style="margin-left: -64px;">
+                                <i class="fa fa-folder fa-lg mt-4"    style="font-size:15px;cursor:pointer;margin-left: -66px;color:orange">
+                                    
+                                </i>
+                                <i (click)="navigateCmpData(folder.pk)" style="font-size:12px;cursor:pointer;"> {{folder.fields.name}} </i>
+                            <div *ngFor="let url  of urlsCmpData" class="nav-item nav-dropdown">
+                                <a id="font-size" *ngIf="currentCmpState && url.parent_id == folder.pk && url.checked"  class="nav-link nav-dropdown-toggle">                                      
+                                    <input type="checkbox" name="id[]"  style="margin-left: -68px;" (click)="selctedUrlsCmpId(url.pk)" checked>
+                                        {{url.fields.name}}.url        
+                                </a>
+                            </div> 
+
+                            <div *ngFor="let url  of urlsCmpData" class="nav-item nav-dropdown">
+                                <a id="font-size" *ngIf="currentCmpState && url.parent_id == folder.pk && !url.checked"  class="nav-link nav-dropdown-toggle">                                      
+                                    <input type="checkbox" name="id[]"  style="margin-left: -68px;" (click)="selctedUrlsCmpId(url.pk)">
+                                        {{url.fields.name}}.url        
+                                </a>
+                            </div>
+
+                            <div *ngFor="let rec  of folderCmpRecords" class="nav-item nav-dropdown">
+                                <a id="font-size" *ngIf="currentCmpState && rec.parent_id == folder.pk && rec.checked"  class="nav-link nav-dropdown-toggle">                                      
+                                    <input type="checkbox" name="id[]"  style="margin-left: -68px;" (click)="selctedDocumentCmpId(rec.pk)" checked>
+                                        {{rec.fields.name}}        
+                                </a>
+                            </div> 
+
+                            <div *ngFor="let rec  of folderCmpRecords" class="nav-item nav-dropdown">
+                                <a id="font-size" *ngIf="currentCmpState && rec.parent_id == folder.pk && !rec.checked"  class="nav-link nav-dropdown-toggle">                                      
+                                    <input type="checkbox" name="id[]"  style="margin-left: -68px;" (click)="selctedDocumentCmpId(rec.pk)">
+                                        {{rec.fields.name}}        
+                                </a>
+                            </div>                          
+                        </a>
+                  </div>
+                </ul>
+            </div>
+    </div>
+
+
+      <label  for="sel1" style="margin-left:3%;margin-top:3%;font-size:12px;" *ngIf="freq">Stop List</label>&nbsp;
+      <select class="form-control " id="sel1" *ngIf="freq && stoplist_status ==='true'" style="margin-left:39%;width:44%;margin-top:3%;font-size:12px;"  [(ngModel)]="stoplistv" (ngModelChange)="stoplist($event)" >
+          <option [ngValue]="undefined" selected>select</option>
+          <option  id="font-size" *ngFor="let t of getstop" value={{t.pk}}>{{t.fields.name}}</option>        
+      </select>
+      <label  for="sel1"  *ngIf="freq && stoplist_status ==='false'" style="margin-left:39%;width:44%;margin-top:3%;font-size:12px;">Stoplist disabled </label>&nbsp;
+<br>
+    <div id="but" style="display:inline;margin-top:5%;margin-left:0%">
+    
+    <button   (click)="concordanceapi()" id="font-size" style="color:white;background-color:#808080;cursor:pointer;"type="button" class="btn btn-primary" >
+    <b>{{'Run'| translate }}</b></button>&nbsp;&nbsp;
+   
+     
+   <!--<button  id="font-size" style="color:white;background-color:#808080;cursor:pointer;" type="button" class="btn btn-primary"  >
+     <b>{{'Save'| translate }}</b></button>-->
+     
+     </div>
+       </div>
+        </div>
+      </div>
+    </div><!--/.col-->
+
+    <div class="col-sm-6 col-md-6">
+      <div class="card" style="height: 262px !important;">       
+        <div class="card-block row" >
+            <div  class="scroll col-7" style="width:65%;height:220px;flex: 2 0 58.33333% !important;max-width: 75.33333%!important;font-size:12px;" >
+                  <div *ngFor="let data  of textdata">
+                     <div *ngIf="data.selected">
+                        <input type="checkbox" (click)="selectedtextlist(data.pk,data.fields.name)" checked> {{data.fields.name}}
+                     </div>
+                  </div>
+
+                  <div *ngFor="let data  of textdata">
+                    <div *ngIf="!data.selected">
+                        <input type="checkbox" (click)="selectedtextlist(data.pk,data.fields.name)" > {{data.fields.name}}
+                    </div>
+                  </div>
+                   
+            </div>
+         <div  style="width:1%;"  ></div>
+            <div  class="scroll col-4" style="width:65%;height:220px;flex: 1 0 33.33333% !important;max-width: 37.33333% !important;font-size: 12px" >
+             <input type="radio" name="id[]" (click)="uncheckFolder()" style="margin-left:-13px;">
+                                  <i class="fa fa-folder fa-lg mt-4" style="font-size:12px;cursor:pointer;color:orange"></i>
+                                  Uncheck Folders
+                                   <ul class="nav-dropdown-items">
+                        <div  *ngFor="let folder  of text_folders" class="nav-item nav-dropdown">
+                            <a *ngIf="folder.fields.parent_folder_id == null"   class="nav-link nav-dropdown-toggle" >
+                              <input type="radio" name="id[]" (click)="selectFolder(folder.pk)" style="margin-left: -65px;">
+                                  <i class="fa fa-folder fa-lg mt-4" style="font-size:12px;cursor:pointer;color:orange"></i>
+                                  {{folder.fields.name}} 
+                          
+                                <div  *ngFor="let fold  of text_folders" class="nav-item nav-dropdown">
+                                    <a *ngIf="fold.fields.parent_folder_id == folder.pk"  class="nav-link nav-dropdown-toggle">                                      
+                                        <input type="radio" name="id[]"  (click)="selectFolder(fold.pk)" style="margin-left: -61px;">
+                                        <i class="fa fa-folder fa-lg mt-4" style="font-size:12px;color:cornflowerblue;cursor:pointer;"></i>
+                                            {{fold.fields.name}}        
+                                    </a>
+                                </div>                                      
+                            </a>
+                      </div>
+                    </ul> 
+                   
+            </div>
+
+
+        </div>      
+      </div>
+    </div><!--/.col-->
+  
+  </div>
+  <br>
+  <div class="card" id="font-size" *ngIf="!showTable && !frquecnycount && !document_count" style="margin-top:-10px; height:50px; text-align:CENTER;">
+  <div class="card-block">
+  {{'No-data-Available'| translate }}
+
+  </div>
+<i *ngIf="loadingStatus"> <i class='fa fa-spinner fa-spin' style="font-size:50px;"></i></i>
+  </div>
+  <div class="textmenu" *ngIf="rangeStatus" id="value" style="display:none;overflow:scroll;height:402px;border-style: solid;border-color: #263238;">
+       <h2> Value Range</h2>
+    <table  id="table1">
+    <tr>
+      <th>Document Name</th>
+      <th>Value Range</th>
+    </tr>
+  
+ <tbody>
+   <tr *ngFor="let rageName of valueList let i=index">
+    
+    <td style="color:blue;background-color:white">{{fileNme[i]}}</td>
+    <td style="color:blue;background-color:white"><p>{{rageName}}</p></td>
+    
+  </tr>
+  </tbody>
+  <br>
+  <div class="alert alert-danger" *ngIf="NotFound">
+     <strong>No values found !</strong> select a suitable concept and text.
+  </div>
+  <br>
+ <a href="https://asconceptreviewer.com/range.csv"  class="btn btn-primary" role="button">Download to CSV </a>
+
+  &nbsp;<a (click)="closeAll()"  class="btn btn-primary" role="button">Close </a>
+</table>
+</div> 
+
+
+<div >
+        <div *ngIf="checkDataAvailable" id="selectedUrlData" class="textmenu1" style="display:none;overflow: scroll;height: 300px;">
+
+                <button type="button" (click)="closeDocumentData()" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                <table  >
+                    <thead >
+                        <tr class="table-design" id="thid">
+                            <th>  Id     </th>
+                            <th> Left   </th>
+                            <th> Search </th>
+                            <th> Right  </th>
+                            <th>View Result</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <tr *ngFor="let data of selectedTermsData;let i = index">
+                            <td > {{ i+1 }}  </td>
+                            <td > {{ left(data.leftword) }}  </td>
+                            <td style="margin-left:5%;"  class="tooltipcustom" ><span style="background-color:yellow">{{ data.middleword }}</span> <span class="tooltiptext1">{{data.leftword}}  {{ data.middleword }} {{data.rightword}}</span></td>
+                            <td > {{ right(data.rightword) }} </td>
+                             <td><a *ngIf="viewResultStatus" (click)="navigateToEditor(documentId, data.rightword, data.leftword, data.middleword)" style="color:#0000EE;cursor:pointer;">View Result</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+        </div>
+
+        <div>
+                <table id="selectedUrlData" class="textmenu1" *ngIf="!checkDataAvailable" style="margin-left:331px !important;">
+
+                <button type="button" (click)="closeDocumentData()" class="close" aria-label="Close">
+                    <span aria-hidden="true">  &times;</span>
+                </button>
+                    <p>No data found</p>
+                </table>
+        </div>
+
+
+</div>
+
+
+
+  <div class="card" *ngIf="showTable" style="
+    height: 400px;
+    overflow: scroll;width:1044px;">
+        <i *ngIf="loadingStatus"> <i class='fa fa-spinner fa-spin' style="font-size:50px;    margin-left: 515px"></i></i>
+        <div class="card-block">
+         <!--<a *ngIf="self" href="https://asconceptreviewer.com/exportResult.csv"  style="margin-bottom:1%;" class="btn btn-primary" role="button">Export Result</a> 
+  <!--<a *ngIf="constatus" href="https://asconceptreviewer.com/ConcordanceResult.csv"  style="margin-bottom:1%;" class="btn btn-primary" role="button">Export Result</a> -->
+ 
+<table id="tableshow" style="width:100%" (click)="closeAll()">
+
+    <thead *ngIf="showTable">
+      <tr class="table-design" id="thid">
+        <th class="">{{'Index'| translate }}</th>
+        <th class="">{{'text-list'| translate }}</th>
+        <th class="" style="margin-left:3%">{{'Left'| translate }}</th>
+        <th class="" style="margin-left:3%">{{'Search'| translate }}</th>
+        <th class="" >{{'Right'| translate }}</th>
+        <th class="" *ngIf="!cluster">{{'Head'| translate }}</th>
+        <th class="" *ngIf="!cluster">{{'Combination'| translate }}</th>
+        <th class="">{{'View-Result'| translate }}</th>
+     
+    </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let conobj of concordanceObject;let i = index ">
+          <td> {{i+1}}</td>
+          <td data-toggle="tooltip" data-placement="left" title={{conobj.text_list}}>{{test(conobj.text_list)}}</td>
+          <td  style="margin-left:3%;" (contextmenu)="valueRage(conobj.text_list,conobj.file_id,conobj.toi +'' +conobj.right)">{{left(conobj.left)}}</td>
+          <td style="margin-left:5%;"  class="tooltipcustom" ><span style="background-color:yellow" (contextmenu)="valueRage(conobj.text_list,conobj.file_id,conobj.toi +'' +conobj.right)">{{conobj.toi}}</span> <span class="tooltiptext">{{conobj.left}}{{conobj.toi}}{{conobj.right}}</span></td>
+          <td (contextmenu)="valueRage(conobj.text_list,conobj.file_id,conobj.toi +'' +conobj.right)">{{right(conobj.right)}}</td>
+           <td *ngIf="!cluster">{{conobj.head}}</td>
+           <td *ngIf="!cluster">{{conobj.combination_concept}}</td>
+           <td><a (click)="navigateToEditor(conobj.file_id,conobj.right,conobj.left,conobj.toi)" style="color:#0000EE;cursor:pointer;">View Result</a></td>
+
+    </tr>
+    </tbody>
+    </table>
+  
+</div></div>
+
+ <!-- frquency count table -->
+
+<ul class="breadcrumb" *ngIf="frquecnycount && !self">
+   <button type="button" (click)="gotoCharts()" style="font-size:12px" class="col-sm-3 btn btn-primary pull-right">Visualise Results</button>
+    <a href="https://asconceptreviewer.com/FrequencyResult.csv" style="font-size:12px" role="button" class="col-sm-3 btn btn-primary pull-left">Export Result</a>  
+</ul>
+  <div class="card " *ngIf="frquecnycount && !self || document_count" >
+      <div class="card-block" style="height: 400px;overflow: scroll;width:1044px;">
+        <table  id="tableshow" *ngIf="frquecnycount || document_count" style="width:100%">
+            <thead *ngIf="frquecnycount">
+                <tr class="table-design" id="thid">
+                    <th class="">ID</th>
+                    <th class="" (click)="sort()">Terms & Concepts <i class="fa fa-sort" aria-hidden="true"></i></th>
+                    <th class="" >Count</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="frquecnycount">
+                <tr *ngFor="let conobj of concordanceObject;let i = index ">
+                    <td> {{i+1}}</td>
+                    <td >{{conobj.term}}</td>
+                    <td >{{conobj.count}}</td>
+                </tr>
+            </tbody>
+           
+           <thead *ngIf="document_count" >
+                <tr class="table-design" >
+                    <th>Concept List</th>
+                    <th *ngFor="let keys of documentKeys['RefereceUrls'];let i = index">ReferenceURL{{i+1}}</th>
+                    <th *ngFor="let keys of documentKeys['ComparisionUrls'];let i = index">ComparisonUrl {{i+1}}</th>
+                    <th *ngFor="let keys of documentKeys['RefereceData'];let i = index">ReferenceDoc {{i+1}}</th>
+                    <th *ngFor="let keys of documentKeys['ComparisionData'];let i = index">ComparisonDoc {{i+1}}</th>
+                </tr>
+            </thead>
+            <thead *ngIf="document_count" >
+                <tr class="table-design" >
+                    <th>{{documentComparision.Umbrella_name}}</th>
+                    <th  *ngFor="let keys of documentKeys['RefereceUrls'];let i = index">{{keys}}</th>
+                    <th  *ngFor="let keys of documentKeys['ComparisionUrls'];let i = index">{{keys}}</th>
+                    <th  *ngFor="let keys of documentKeys['RefereceData'];let i = index">{{keys}}</th>
+                    <th  *ngFor="let keys of documentKeys['ComparisionData'];let i = index">{{keys}}</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="document_count">
+                <tr>                
+                    <td><tr data-toggle="tooltip" data-placement="left" title={{umbrella}}  *ngFor="let umbrella of documentComparision.Umbrella"> {{umbrellaRange(umbrella)}} </tr></td> 
+                    
+                    <td *ngFor="let keys of documentKeys['RefereceUrls']">
+                        <tr *ngFor="let value of documentComparision['RefereceUrls'][keys];let i = index" 
+                            (click)="selectedUrls(documentComparision['RefereceUrls'][keys][0], i )">
+                            {{documentComparision['RefereceUrls'][keys][i+1]}}
+                        </tr>
+                    </td>
+                    <td *ngFor="let keys of documentKeys['ComparisionUrls']">
+                        <tr *ngFor="let value of documentComparision['ComparisionUrls'][keys];let i = index" 
+                            (click)="selectedUrls(documentComparision['ComparisionUrls'][keys][0], i)">
+                             {{documentComparision['ComparisionUrls'][keys][i+1]}}
+                        </tr>
+                    </td>
+                    <td *ngFor="let keys of documentKeys['RefereceData']">
+                        <tr *ngFor="let value of documentComparision['RefereceData'][keys];let i = index" 
+                            (click)="selectedConcept(documentComparision['RefereceData'][keys][0], i)">
+                             {{documentComparision['RefereceData'][keys][i+1]}}
+                        </tr>
+                    </td>
+                    <td *ngFor="let keys of documentKeys['ComparisionData']">
+                        <tr *ngFor="let value of documentComparision['ComparisionData'][keys];let i = index" 
+                            (click)="selectedConcept(documentComparision['ComparisionData'][keys][0], i)">
+                            {{documentComparision['ComparisionData'][keys][i+1]}}
+                        </tr>
+                    </td> 
+                </tr>              
+            </tbody>
+        </table>
+    </div>
+ </div>
+
+<button id="limit"  hidden type="button" class="btn btn-secondary" data-toggle="modal" (click)="myModal15.show()">
+            Launch demo modal
+</button>
+<div bsModal #myModal15="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h6 class="modal-title" id="exampleModalLabel" style=font-size:15px;>{{'setHorizontal'| translate }}</h6>
+        <button type="button" class="close" (click)="myModal15.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+     
+   
+    <input type="text" id="limit" value={{getlimit}} name="limit" #limit>
+     
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModal15.hide()">{{'close'| translate }}</button>
+        <button type="button" class="btn btn-primary" (click)="setlimit(limit.value)" style=background-color:#808080;color:white;>{{'ok'| translate }}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!--DELETE PROJECT CONFIRM-->
+
+
+<!-- Modal -->
