@@ -178,6 +178,10 @@ export class GraphService {
 
     createNodeInstance(className, props) {
         let data = Object.assign({}, props);
+        if(data.RegisteredOffice || data.Legalform){
+         data.RegisteredOffice=props.RegisteredOffice;
+         data.Legalform=props.Legalform;
+        }
         data["class_name"] = className;
 
         var ajaxReq = $.ajax(this.url_base + "/instances/", {
@@ -196,6 +200,10 @@ export class GraphService {
             if (newProps[k] !== undefined && newProps[k] !== origData[k]) {
                 diffs[k] = newProps[k];
             }
+        }
+        if(diffs.Legalform || diffs.RegisteredOffice){
+          //diffs.Legalform=diffs.Legalform[0]
+          //diffs.RegisteredOffice=diffs.RegisteredOffice[0]
         }
         let updateUrl = this.url_base + "/instances/" + nodeId + '/';
         return $.ajax(updateUrl, {

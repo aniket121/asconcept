@@ -32,7 +32,11 @@ class PlaybookRule {
             // if it's just yes/no, place yes first, because no/yes just feels wrong
             answers.reverse();
         }
-        return answers;
+        var set = new Set(answers);
+        var arr = Array.from(set)
+        console.log("this is actula ans",set)
+
+        return arr;
     }
 
     getAttachments() {
@@ -103,7 +107,7 @@ export class PlaybookView extends View {
         this.state.ruleHistory.push(this.state.currentRule);
         this.visibilityService.toggleIncludeManualNodeId(this.state.currentRule.ruleNode[0].id())
         //this.visibilityService.onlyExpandedNodeId(this.state.currentRule.ruleNode.id())
-        this.setCurrentRule(rule);
+        this.setCurrentRule(this.state.currentRule);
     }
 
     popRule(n) {
@@ -112,7 +116,9 @@ export class PlaybookView extends View {
                 this.state.ruleHistory.pop();
             }
         }
-        this.setCurrentRule(this.state.ruleHistory.pop());
+        //this.setCurrentRule(this.state.ruleHistory.pop());
+        this.visibilityService.toggleIncludeManualNodeId(this.state.ruleHistory.pop().ruleNode.id())
+        this.setCurrentRule(this.state.ruleHistory[this.state.ruleHistory.length-1])
     }
 
     isPlaybookOpen() {
@@ -142,6 +148,7 @@ export class PlaybookView extends View {
         this.state.currentRule = new PlaybookRule(firstRule);
         this.state.ruleHistory = [];
         this.state.playbookNode = playbookNode;
+        this.state.ruleHistory.push(this.state.currentRule) 
         this.reRender();
     }
 
@@ -154,7 +161,7 @@ export class PlaybookView extends View {
             this.popRule(n);
         }
         //this.visibilityService.toggleExpandedNodeId(this.state.currentRule.ruleNode.id())
-        this.visibilityService.toggleIncludeManualNodeId(this.state.currentRule.ruleNode.id())
+        //this.visibilityService.toggleIncludeManualNodeId(this.state.currentRule.ruleNode.id())
     }
 
     restart() {
@@ -175,6 +182,7 @@ export class PlaybookView extends View {
             container.append( this.renderCurrentRule(this.state.currentRule) );
 
             this.state.ruleHistory.slice().reverse().forEach((rule, idx) => {
+                if(rule.getName()!=this.state.currentRule.ruleNode.data().props.name)
                 container.append( this.renderChosenRule(rule) );
             });
 
@@ -223,8 +231,8 @@ export class PlaybookView extends View {
             this.restart();
         });
 
-        let path = this.state.ruleHistory.concat([this.state.currentRule]);
-
+        //let path = this.state.ruleHistory.concat([this.state.currentRule]);
+        let path = this.state.ruleHistory;
         let listItems = [playbookItem].concat(path.map(
             (rule, idx) => $('<li><a href="#">'+rule.getName()+'</a></li>').click((e) => {
                 let numBack = path.length - idx - 1;
@@ -339,7 +347,19 @@ export class PlaybookView extends View {
             downloadBtn = downloadBtn.attr('href', itemProps.attachment); // .on('click', (e) => { window.open( UPLOAD_URL_BASE + '/' + $(e.currentTarget).data('href'), '_blank');  });
             }
             else{
-             downloadBtn = downloadBtn.attr('href', "https://mattersmith4.embeddedexperience.com/upload/" + itemProps.attachment);
+
+                               var http = new XMLHttpRequest();
+                                http.open('HEAD', "https://mattersmith4.embeddedexperience.com/upload/"+self.data , false);
+                                http.send();
+                                if (http.status != 404){
+                                 downloadBtn = downloadBtn.attr('href', "https://mattersmith4.embeddedexperience.com/upload/" + itemProps.attachment);
+                                }
+                                    
+                                else{
+                                  downloadBtn = downloadBtn.attr('href', "https://mattersmith3.embeddedexperience.com/upload/" + itemProps.attachment);
+                                }
+
+
              }
             downloadBtn = downloadBtn.data({toggle: "tooltip", placement: "bottom", title:"Download attached file"}).tooltip({trigger: 'hover'});
         } else {

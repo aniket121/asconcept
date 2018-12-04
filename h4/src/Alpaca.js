@@ -26,6 +26,14 @@ const fieldType2Alpaca = {
         //"field": "text",
         //        "field": "token", // FIXME
     },
+    "list": {
+        "class":"list",
+        "schema": "select",
+        "field": "keyword",
+        
+        //"field": "text",
+        //        "field": "token", // FIXME
+    },
 };
 
  function getFileContent(fileName){
@@ -89,7 +97,22 @@ function getPatchedAlpaca(uploadService) {
                             $(self.control).after( $('<a>').attr('href',self.data).attr('target', '_blank').text('Download File') );
                         }
                         else{
-                              $(self.control).after( $('<a>').attr('href', "https://mattersmith4.embeddedexperience.com/upload/"+self.data).attr('target', '_blank').addClass('download').text('Download File') );
+
+                             
+                              var http = new XMLHttpRequest();
+                                http.open('HEAD', "https://mattersmith4.embeddedexperience.com/upload/"+self.data , false);
+                                http.send();
+                                if (http.status != 404){
+                                 $(self.control).after( $('<a>').attr('href', "https://mattersmith4.embeddedexperience.com/upload/"+self.data).attr('target', '_blank').addClass('download').text('Download File') );
+                                }
+                                    
+                                else{
+                                  $(self.control).after( $('<a>').attr('href', "https://mattersmith3.embeddedexperience.com/upload/"+self.data || self.data).attr('target', '_blank').addClass('download').text('Download File') );
+                                }
+
+
+                            
+                              
                         }
                         
                         window.fileName=self.data;
@@ -147,7 +170,7 @@ function getPatchedAlpaca(uploadService) {
                                 $(self.control).val(data.filepath);
                                 self.data = data.filepath;
                                 progressBarCtr.css('margin-bottom', '4px');
-                                progressBarCtr.after( $('<a>').attr('href', "https://mattersmith4.embeddedexperience.com/upload/"+data.filepath).attr('target', '_blank').text('Download File') );
+                                progressBarCtr.after( $('<a>').attr('href', "https://mattersmith3.embeddedexperience.com/upload/"+data.filepath).attr('target', '_blank').text('Download File') );
                                 self._os_uploadDone = true;
                             }).fail(() => {
                                 progressBar.text('Something went wrong');
@@ -167,7 +190,7 @@ function getPatchedAlpaca(uploadService) {
     alpaca.Fields.SimpleKeywordField = alpaca.Fields.TextField.extend({
         getFieldType: function() { return "simplekeyword"; },
         setValue: function(val) {
-            let strval = val.join(', ');
+            let strval = val
             this.base(strval);
         },
         getValue: function() {
@@ -182,8 +205,29 @@ function getPatchedAlpaca(uploadService) {
         }
     });
 
+     alpaca.Fields.KeywordField = alpaca.Fields.SelectField.extend({
+        getFieldType: function() { return "keyword"; },
+        setValue: function(val) {
+            var strval = val;
+            if(val){
+            this.SelectFieldValue=strval;
+            }
+            //alert("setValue"+strval)
+            this.base(strval);
+        },
+        getValue: function() {
+           
+
+            // FIXME: this line is just a hack to make pre-migration broken keywords prop work, remove it later
+             console.log("window--ch",this.SelectFieldValue)
+            return this.SelectFieldValue;
+        }
+        
+    });
+
     alpaca.registerFieldClass("osfile", alpaca.Fields.OSFileField);
     alpaca.registerFieldClass("simplekeyword", alpaca.Fields.SimpleKeywordField);
+    alpaca.registerFieldClass("keyword", alpaca.Fields.KeywordField);
 
     window._Alpaca = alpaca;
     return window._Alpaca;
@@ -224,6 +268,16 @@ export class Alpaca {
                 "type": fieldTypes.schema,
                 "readonly": readOnly,
             };
+
+             if(k=="Legalform"){
+                
+               schemaProperties[k]["enum"]=["Company", "Partnership", "Limited Liability Partnership", "Individual", "Sole Trader","Unincorporated Association","Others"]
+                
+            }
+             if(k=="RegisteredOffice"){
+               
+               schemaProperties[k]["enum"]=["yes","No"] 
+            }
 
             optionsFields[k] = {
                 "type": fieldTypes.field,

@@ -171,6 +171,7 @@ export class InstanceView extends GraphView {
             var cy = this.cy;
             var visibleNodesList = data.nodes.map( id => cy.$id(id) ).filter(o => o.length > 0);
             if(window.location.href.indexOf("filter_includeManual") == -1)
+            if(visibleNodesList[0])
             if(window.location.href.indexOf("playbook_openOid") == -1 && visibleNodesList[0].data().cls =="Playbook"){
             Action.trigger(ActionTypes.SELECT_PLAYBOOK, { node: visibleNodesList[0].id() });
             }
