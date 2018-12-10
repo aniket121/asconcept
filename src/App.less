@@ -1,0 +1,67 @@
+@import '~bootstrap/less/bootstrap';
+@link-color: rgb(240,80,60);
+
+@btn-ms-red-color:              #ffe;
+@btn-ms-red-bg:                 rgb(240,80,60);
+@btn-ms-red-border:             lighten(@btn-ms-red-bg, 5%);
+
+@btn-ms-turq-color:              #ffe;
+@btn-ms-turq-bg:                 rgb(0,180,175);
+@btn-ms-turq-border:             lighten(@btn-ms-turq-bg, 5%);
+
+@btn-ms-ora-color:              #ffe;
+@btn-ms-ora-bg:                 rgb(245,140,30);
+@btn-ms-ora-border:             lighten(@btn-ms-ora-bg, 5%);
+
+@btn-ms-blue-color:              #ffe;
+@btn-ms-blue-bg:                 rgb(0, 115, 190);
+@btn-ms-blue-border:             lighten(@btn-ms-blue-bg, 5%);
+
+@btn-ms-grn-color:              #ffe;
+@btn-ms-grn-bg:                 rgb(140, 200, 65);
+@btn-ms-grn-border:             lighten(@btn-ms-grn-bg, 5%);
+
+@alert-pb-action-bg: rgb(0,180,175);
+@alert-pb-action-border: #ccc;
+@alert-pb-action-text: #ffe;
+
+@alert-pb-question-bg: rgb(0,115,190);
+@alert-pb-question-border: #ccc;
+@alert-pb-question-text: #ffe;
+
+@ms-dark-bgcolor: rgb(0, 55, 70);
+@ms-pastel-bgcolor: lighten(@ms-dark-bgcolor, 100%);
+
+
+.btn-ms-red {
+    .button-variant(@btn-ms-red-color; @btn-ms-red-bg; @btn-ms-red-border);
+}
+
+.btn-ms-turq {
+    .button-variant(@btn-ms-turq-color; @btn-ms-turq-bg; @btn-ms-turq-border);
+}
+
+.btn-ms-ora {
+    .button-variant(@btn-ms-ora-color; @btn-ms-ora-bg; @btn-ms-ora-border);
+}
+
+.btn-ms-blue {
+    .button-variant(@btn-ms-blue-color; @btn-ms-blue-bg; @btn-ms-blue-border);
+}
+
+.btn-ms-grn {
+    .button-variant(@btn-ms-grn-color; @btn-ms-grn-bg; @btn-ms-grn-border);
+}
+
+.alert-pb-action {
+    .alert-variant(@alert-pb-action-bg; @alert-pb-action-border; @alert-pb-action-text);
+}
+
+.alert-pb-question {
+    .alert-variant(@alert-pb-question-bg; @alert-pb-question-border; @alert-pb-question-text);
+}
+
+.playbook-qa-container {
+    background-color: @ms-pastel-bgcolor;
+    padding: 10px;
+}

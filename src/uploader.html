@@ -1,0 +1,45 @@
+<!doctype html5>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title><%= htmlWebpackPlugin.options.title %></title>
+    
+    </head>
+    <body>
+        <script id="progress-template" type="text/x-handlebars-template">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="{{progpct}}" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: {{progpct}}%;">
+                    {{progpct}}%
+                </div>
+            </div>
+        </script>
+        <script id="fileitem-template" type="text/x-handlebars-template">
+            <li><strong>{{name}}</strong>
+                <a class="fileitem-link item-download" href="{{url}}">download</a>
+                <a class="fileitem-link item-delete" href="{{del_url}}">delete</a>
+            </li>
+        </script>
+        
+        <div class="sidebar">
+            <div id="sidebar-form">
+                <form id="testform">
+                    <input multiple type="file" id="filefield" style="display:none;">
+                    <button id="filebtn" class="form-input btn-primary">Choose Files</button>
+                    <input class="form-input btn-primary" type="submit">
+                    <ul id="filelist">
+                    </ul>
+                </form>
+            </div>
+            <div id="up-progress"><span id="prog">progress?</span><span id="upcancel"></span> </div>
+            <div id="listcontainer">
+                <button id="fetchfilelist-btn" class="btn btn-primary">Load List</button>
+                <hr>
+                <ul id="filedirlist">
+                </ul>
+            </div>
+
+        </div>
+        
+    </body>
+</html>
+

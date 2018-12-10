@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+ 
+  <style>
+    <style>
+  @import "bourbon";
+
+body {
+    background: #eee !important;    
+}
+
+.wrapper {  
+    margin-top: 180px;
+  margin-bottom: 80px;
+}
+
+.form-signin {
+  width: 430px;
+  padding: 15px 35px 45px;
+  margin: 0 auto;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,0.1);  
+
+  .form-signin-heading,
+    .checkbox {
+      margin-bottom: 30px;
+    }
+
+    .checkbox {
+      font-weight: normal;
+    }
+
+    .form-control {
+      position: relative;
+      font-size: 16px;
+      height: auto;
+      padding: 10px;
+        @include box-sizing(border-box);
+
+        &:focus {
+          z-index: 2;
+        }
+    }
+
+    input[type="text"] {
+      margin-bottom: -1px;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    input[type="password"] {
+      margin-bottom: 20px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+}
+
+
+
+  </style>
+    
+    <head>
+        <meta charset="UTF-8">
+        <title><%= htmlWebpackPlugin.options.title %></title>
+    </head>
+    <body onload="checkUser()" >
+        <script>
+        (function(){
+            window._logtrace = [];
+            window._realconsolefns = {
+                "log": console.log,
+                "info": console.info,
+                "warn": console.warn,
+                "error": console.error,
+            };
+
+            function logatlevelfn(level) {
+                return function() {
+                    let argsarr = Array.prototype.slice.call(arguments);
+                    window._logtrace.push({
+                        "level": level,
+                        "arguments": argsarr,
+                        "timestamp": Date.now()
+                    });
+                    window._realconsolefns.log.apply(console, argsarr);
+                }
+            }
+
+            console.log   = logatlevelfn("log");
+            console.info  = logatlevelfn("info");
+            console.warn  = logatlevelfn("warn");
+            console.error = logatlevelfn("error");
+
+            window.onerror = function(message, source, lineNo, colNo, error) {
+                // TODO: do something
+            };
+        // don't load this for now
+        }); // ();
+        </script>
+        <script>
+            window.OPENSECRET_UPLOAD_URL = "/upload";
+            window.OPENSECRET_API_URL = "/api";
+        </script>
+        <div class="sidebar homepage"  style="display:none"">
+            <div>
+                <a href="/"><img src="/assets/logo-cropped-red.png" width="250"></a>
+            </div>
+          
+            <div id="mock-info" class="hidden"></div>
+            <div id="sidebar-menu" class="top">
+                <button data-toggle="tooltip" data-placement="bottom" title="Reload node data from server" id="btn-reload" class="btn btn-ms-ora btn-sm"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+                <div id="rhs-view-controls" class="btn-group btn-group-sm" role="group" data-toggle="buttons">
+                    <label class="btn btn-ms-turq active" data-rhs-view="schema" title="Display the class schema in the right hand panel." data-placement="bottom" data-container="body" data-toggle="tooltip">
+                        <input type="radio" name="rhs-view"
+                               id="rhs-schema-btn" autocomplete="off" checked>
+                        Schema
+                    </label>
+                    <label class="btn btn-ms-turq" data-rhs-view="topics" title="Display the available Topics in the right hand panel." data-placement="bottom" data-container="body" data-toggle="tooltip">
+                        <input type="radio" name="rhs-view"
+                               id="rhs-topics-btn" autocomplete="off">
+                        Topics
+                    </label>
+                    <label class="btn btn-ms-turq" data-rhs-view="playbook" title="Display the current Playbook in the right hand panel." data-placement="bottom" data-toggle="tooltip" data-container="body">
+                        <input type="radio" name="rhs-view"
+                               id="rhs-playbook-btn" autocomplete="off">
+                        Playbook
+                    </label>
+                </div>
+                <button data-toggle="tooltip" data-placement="bottom" title="Reset to an empty graph." id="btn-clear-inst" class="btn btn-ms-ora btn-sm pull-right">&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;</button>
+            </div>
+
+            <div id="sidebar-filter">Class Filter: Loading</div>
+            <div id="sidebar-topic-filter">Topic Filter: Loading</div>
+
+            <div id="sidebar-search" class="nothidden">
+                Sidebar Search: Loading
+            </div>
+
+            <div id="sidebar-filter-info" class="nothidden">
+                Filter Info: Loading
+            </div>
+
+            <hr/>
+
+            <div id="sidebar-info" class="nothidden">
+                Sidebar Info: Loading
+            </div>
+
+            <hr/>
+
+            <div id="sidebar-form" class="hidden">
+                Sidebar Editor: Loading
+                <hr />
+            </div>
+            <!-- <button id="btn-init-layout" class="btn btn-default">InitLayout</button>
+                 <button id="btn-relayout" class="btn btn-default">ReLayout</button> -->
+
+            <div><small>User <em id="userinfo"></em>, in <em id="scopeinfo"></em> mode</small> </div>
+            
+
+            <div id="user-mode-switcher" style="display: none">Mode:
+                <div class="btn-group" role="group">
+                    <button id="btn-switchuser-admin" type="button" class="btn btn-default btn-xs">Admin</button>
+                    <!-- <button id="btn-switchuser-editor" type="button" class="btn btn-default btn-xs">Editor</button> -->
+                    <button id="btn-switchuser-viewer" type="button" class="btn btn-default btn-xs">Viewer</button>
+                </div>
+                <input type="checkbox" checked id="chk-su-preserve-state">
+                <label for="chk-su-preserve-state">Preserve Filters</label>
+            </div>
+            <div>
+                <label for="current-state-url">Link to current setup:</label>
+                <input type="text" id="current-state-url" class="form-control" readonly></input>
+            </div>
+        </div>
+         
+          <div class="wrapper login"  style="display:none">
+    <div method="post" class="form-signin">       
+      
+      <img src="logo-cropped-red.png" style="margin-left:17%" width="230" height="50">
+      <p class="form-signin-heading">Login to your Mattersmith Knowledge Account</p>
+      <input type="text" class="form-control" name="username" id="username" placeholder="username" required="" autofocus="" /><p></p>
+      <input type="password" class="form-control" name="password" id="password" placeholder="Password" required=""/>      
+      <p></p>
+      <button class="btn btn btn-primary" onclick="login()">Login</button>   
+    </div>
+  </div>
+        <div class="lhsoverlay" id="lhszoominfo" style="display:none"></div>
+
+        <div class="hoverbars footer" id="countbar " style="display:none;width: 29em;"></div>
+        <div class="hoverbars footer"   style="display:none" id="hoverbar">Hoverbar For Info <span class="glyphicon glyphicon-search" aria-hidden="true"></span> </div>
+    </body>
+</html>
+<script type="text/javascript">
+
+function checkUser()
+{   alert('sd');
+    loggin=localStorage.getItem("mattersmith");
+    console.log("storage",loggin)
+    if(loggin){
+        $('.footer').css("display","block")
+        $('.leftfooter').css("display","block")
+        $('.homepage').css("display","block")
+        $('.login').css("display","none")
+         $('#countbar').css("display","block")
+         $('#countbar').css("width","29em")
+          $('#lhszoominfo').css("display","block")
+       
+        
+        console.log("user in")
+    }
+    else
+    {
+         $('.login').css("display","block")
+          $('body').css("background-color","#003746")
+         console.log("user out")
+    }
+   
+    
+
+}
+
+     function login(){
+    var credential={
+          username: $("#username").val(),
+          password: $("#password").val()
+    };
+    console.log(credential)
+    $.ajax({
+        url: "http://93.93.135.31:9090/user-login/",
+        type: "POST",
+        data: JSON.stringify(credential),
+        dataType: 'json',
+        contentType: 'application/json',
+        async: false,
+        success: function(msg) {
+            console.log(msg.username)
+            if(msg.username)
+            {
+               localStorage.setItem("mattersmith", "true");
+
+               $('.homapage').css("display","block")
+               $('.login').css("display","none")
+               window.location.reload()
+            }
+        }
+    });
+ }
+
+
+
+</script>
