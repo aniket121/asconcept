@@ -35,7 +35,7 @@ export const DEFAULT_VIEWER_RULES = {
     includeManual: new Set([])
 };
 
-export class VisibilityService {
+export  class VisibilityService {
     constructor(graphService, defaultRules) {
         this.callbacks = [];
         this.clearCallbacks = [];
@@ -124,7 +124,7 @@ export class VisibilityService {
         rules.includeKeywords = new Set(keywords);
         this.setRules(rules);
     }
-
+    
     setExpandedNodes(nodeIds) {
 
         let rules = Object.assign({}, this.rules);

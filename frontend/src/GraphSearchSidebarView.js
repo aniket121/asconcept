@@ -145,7 +145,7 @@ export class GraphSearchSidebarView extends View {
             // console.log('candidates (post-sort)=', candidates);
             //let candobjs = candidates.map(cand => ({label: cand.toUpperCase(), value: cand}));
             //resp(candobjs);
-            
+            //alert(candidates)
             resp(candidates);
             //return candidates;
         };
@@ -189,13 +189,24 @@ export class GraphSearchSidebarView extends View {
             }
             return true;
         });
-
+        
+        
         let onChangeFn = (e) => {
 
             let searchKeywords = $(searchfield).tokenfield('getTokens').map(t => t.value);
             console.log('GraphSearchSidebarView new search keywords:', searchKeywords);
             this.kwSet = new Set(searchKeywords);
+            //alert(searchKeywords)
+        
+            window.searchKeywords=searchKeywords;
+            //alert(searchName)
+            // if(searchName)
+            // {
+            //        Snackbar.show({text: 'Search has been saved.'});
+            //        $("#inputsearch").val('');
+            // }
             this.visibilityService.setIncludeKeywords(searchKeywords);
+
         };
 
         this.searchTokenField.on('tokenfield:createdtoken', onChangeFn);

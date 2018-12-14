@@ -199,9 +199,9 @@ body {
                 <div class="dropdown">
                     <!-- three dots -->
                     <ul class="dropbtn icons btn-right showLeft" onclick="showDropdown()">
+                    <!--     <li></li>
                         <li></li>
-                        <li></li>
-                        <li></li>
+                        <li></li> -->
                     </ul>
                     <!-- menu -->
                     <div id="myDropdown" class="dropdown-content">
@@ -242,10 +242,18 @@ body {
             <div id="sidebar-filter">Class Filter: Loading</div>
             <div id="sidebar-topic-filter">Topic Filter: Loading</div>
 
-            <div id="sidebar-search" class="nothidden">
+            <div id="sidebar-search" name="sidebar-search" class="nothidden">
                 Sidebar Search: Loading
             </div>
-
+            <select class="form-control" id="drop_down_id" onchange="OnSearchChange(this)">
+              <option value="">Select Saved Search</option>
+             </select>
+             <br>
+            <div>
+                <input type="text" id="inputsearch" class="form-control" placeholder="Name of search" class="inputsearch">
+               
+            </div>
+            <button type="button"  onclick="SaveSearch()" class="btn btn-success">Save Search</button>
             <button id="btn-relayout" class="btn btn-primary importsandbox"  data-toggle="modal" data-target="#importexport">Import from Sandbox  <i class="fa fa-spinner fa-spin spincls" style="font-size:36px;"></i></button>
             <br><br> 
             <!-- <i class="fa fa-spinner fa-spin spincls" style="font-size:33px;"></i> -->
@@ -414,7 +422,10 @@ body {
     </body>
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript"> import VisibilityService  from './visibilityService.js'</script>
 <script type="text/javascript">
+
+
 
 function checkUser()
 {   
@@ -499,7 +510,8 @@ function checkUser()
       }
 
 
-  getSandboxData() 
+  getSandboxData()
+  loadSearchDropdown() 
   if(localStorage.getItem("role")=="viewer"){
                  
     $('.importsandbox').css("display","none");
@@ -789,5 +801,117 @@ function checkUser()
                     }
                 }
 document.getElementById("usrname").innerHTML =localStorage.getItem("username")
+function SaveSearch()
+{
+      searchName=$("#inputsearch").val()
+      var SerachData={'name':searchName,'keywords':window.searchKeywords}
+       if(searchName){
+       $.ajax({
+        url: "http://localhost:8002/SaveSearch",
+        type: "POST",
+        data: JSON.stringify(SerachData),
+        dataType: 'json',
+        contentType: 'application/json',
+        async: false,
+        success: function(node) {
+           
+         
+            //alert('s')
+            window.location.reload()
+        },
+        error: function() {
+            
+            alert('e')
+            
+        }
 
+    });
+     }
+     else{
+          alert("Please Enter the Name for search to be saved")
+     }
+    // $.ajax({
+    //     url: "http://localhost:8002/SaveSearch",
+    //     type: "GET",
+    //     dataType: 'json',
+    //     contentType: 'application/json',
+    //     async: false,
+    //     success: function(SerchResult) {
+           
+         
+    //       console.log("SerchResult===================",SerchResult)
+          
+    //        var x = document.getElementById("drop_down_id");
+    //       var option = document.createElement("option");
+    //       option.text =SerchResult.data.Name;
+    //        option.value = "Kiwiv";
+    //         x.add(option);
+
+    //     },
+    //     error: function() {
+            
+    //         alert('eGET')
+            
+    //     }
+    // });
+    
+}
+function loadSearchDropdown()
+{
+  $.ajax({
+        url: "http://localhost:8002/SaveSearch",
+        type: "GET",
+        dataType: 'json',
+        contentType: 'application/json',
+        async: false,
+        success: function(SerchResult) {
+           console.log("---------------------",SerchResult)
+           
+            var x = document.getElementById("drop_down_id");
+         for(var i=0;i<SerchResult.data.length;i++){
+          
+         
+          var option = document.createElement("option");
+          option.text =SerchResult.data[i].Name;
+           option.value =SerchResult.data[i].Keywords.replace(/[{}]/g, "");;
+           x.add(option);
+        }
+
+        },
+        error: function() {
+            
+          //  alert('eGET')
+            
+        }
+    });
+}
+
+function OnSearchChange(el)
+{
+  console.log(el.value)
+  //visibilityService.setIncludeKeywords(el.value);
+  window.SavedSearchRule=el.value
+  $(".token-input").val('')
+  $(".tokenfield").find("div").remove();
+   $('.token').find('span').remove()
+   $('.token').find('a').remove()  
+  $(".token-input").val(el.value).focus();
+  $(".token-input").submit();
+  $('.token').submit()
+   $('.tokenfield').submit()
+
+
+
+
+  //$(".token-input").enter();
+  // $("#drop_down_id").keydown(function(e){
+
+  //   if (e.keyCode == 13) {
+  //       alert('Enter Pressed');
+  //   }      
+  // });
+  //$('[name="sidebar-search"]').
+  //VisibilityService.setIncludeKeywords(el.value);
+  
+}
 </script>

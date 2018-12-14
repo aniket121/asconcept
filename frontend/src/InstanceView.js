@@ -179,10 +179,16 @@ export class InstanceView extends GraphView {
 
         // on SELECT_INSTANCE, show just that instance and it's neighborhood
         Action.on(ActionTypes.SELECT_INSTANCES, (e, data) => {
+
+           
+
             console.log("===================>,data",data)
             var cy = this.cy;
             var visibleNodesList = data.nodes.map( id => cy.$id(id) ).filter(o => o.length > 0);
             console.log("=======================>visibleNodesList",visibleNodesList)
+           
+             
+             //this.graphService.getNodeByClass( visibleNodesList[0].data().props.name)
             // var randomNode_name = visibleNodesList[0].data().props.name;
             // var randomNode = this.graphService.instance.$("node[cls='document'][prop_name='" + randomNode_name + "']");
             // var nodes_in_topic = randomNode.connectedNodes();
@@ -200,15 +206,28 @@ export class InstanceView extends GraphView {
             //cy.nodes().unselect();
             nodes.select();
             if(window.location.href.indexOf("filter_includeManual") == -1)
+                if(visibleNodesList[0])
              if(window.location.href.indexOf("playbook_openOid") == -1 && visibleNodesList[0].data().cls =="Playbook")
             
             {
 
               Action.trigger(ActionTypes.SELECT_PLAYBOOK, { node: visibleNodesList[0].id() });
             }
+            window.instance=visibleNodesList[0].data().props.name
+           window.url="/GraphClassNode?className="+window.ClassName+"&nodeName="+window.instance
+           this.graphService.getNodeByClass(visibleNodesList[0].data().props.name)
+           
         
         });
 
+         // Action.on(ActionTypes.SELECT_INSTANCES, (e, data) => {
+         //   alert('on select instance')
+         //    var cy = this.cy;
+         //   var visibleNodesList = data.nodes.map( id => cy.$id(id) ).filter(o => o.length > 0);
+         //   this.graphService.getNodeByClass( visibleNodesList[0].data().props.name)
+         // });
+       
+        
         // on SELECT_CLASS, show all instances of that class
         Action.on(ActionTypes.SELECT_CLASS, (e, data) => {
             this.previousSelection = new Set([]);

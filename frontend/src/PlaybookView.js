@@ -35,8 +35,9 @@ class PlaybookRule {
             // if it's just yes/no, place yes first, because no/yes just feels wrong
             answers.reverse();
         }
-        
-        return answers;
+        var set=new set(answers)
+        var arr=new Array.from(set)
+        return arr;
     }
 
     getAttachments() {
@@ -117,17 +118,32 @@ export class PlaybookView extends View {
         this.state.currentRule = new PlaybookRule(expandRule);
         this.state.ruleHistory.push(this.state.currentRule);
         this.visibilityService.toggleIncludeManualNodeId(this.state.currentRule.ruleNode[0].id())
-        this.setCurrentRule(rule);
+        console.log("========this.state.ruleHistory====",this.state.ruleHistory)
+        this.setCurrentRule(this.state.currentRule);
         
     }
 
     popRule(n) {
         if(n && n > 0) {
             while(n-- > 1) {
+
                 this.state.ruleHistory.pop();
             }
         }
-        this.setCurrentRule(this.state.ruleHistory.pop());
+
+        console.log("before hsitory===",this.state.ruleHistory)
+       
+        //this.state.ruleHistory.pop()
+        //this.setCurrentRule(this.state.ruleHistory[this.state.ruleHistory.length-1]);
+    
+        console.log("arrya lenght",this.state.ruleHistory.length)
+         this.visibilityService.toggleIncludeManualNodeId(this.state.ruleHistory.pop().ruleNode.id())
+        this.setCurrentRule(this.state.ruleHistory[this.state.ruleHistory.length-1])
+        console.log("before hsitory===",this.state.ruleHistory)
+        console.log("=====================popup rule====",this.state.currentRule)
+       
+        //console.log("last element",this.state.ruleHistory.slice(-1)[0]);
+        //console.log("pop ==============element",this.state.ruleHistory)
         //this.visibilityService.onlyExpandedNodeId(this.state.playbookNode.id())
         //this.visibilityService.toggleExpandedNodeId(this.state.currentRule.ruleNode.id())
     }
@@ -142,6 +158,7 @@ export class PlaybookView extends View {
     }
 
     setCurrentRule(rule) {
+        console.log("=================settingup ,",rule)
         this.state.currentRule = rule;
         this.reRender();
     }
@@ -158,9 +175,10 @@ export class PlaybookView extends View {
         console.log('showPlaybook', 'playbookNode=', playbookNode, 'firstRule=', firstRule);
 
         this.state.currentRule = new PlaybookRule(firstRule);
-        this.state.ruleHistory = [];
+        this.state.ruleHistory=[]
         this.state.playbookNode = playbookNode;
-
+        this.state.ruleHistory.push(this.state.currentRule) //line1
+        
         this.reRender();
     }
 
@@ -175,8 +193,10 @@ export class PlaybookView extends View {
         //alert("back")
         if(this.canBack()) {
             this.popRule(n);
+
         }
-        this.visibilityService.toggleIncludeManualNodeId(this.state.currentRule.ruleNode.id())
+        this.reRender();
+        
     }
 
     restart() {
@@ -188,19 +208,25 @@ export class PlaybookView extends View {
     choose(answer) {
         this.pushRule(this.state.currentRule.choose(answer) );
          //alert("select answers"+answer)
-         console.log("this.state.currentRule==========",this.state.currentRule)
+       
+         //this.reRender();
+
          //this.visibilityService.onlyExpandedNodeId(this.state.currentRule.ruleNode.id()) 
     }
 
     render() {
+        alert('render')
         if(this.state.currentRule !== null && this.state.playbookNode !== null) {
             let container = $('<div class="playbook-qa-container">');
             container.append( this.renderButtons() );
             container.append( this.renderBreadcrumbs() );
             container.append( this.renderCurrentRule(this.state.currentRule) );
-
+            console.log("===========this.state.currentRule=================",this.state.currentRule)
             this.state.ruleHistory.slice().reverse().forEach((rule, idx) => {
-                container.append( this.renderChosenRule(rule) );
+                   if(rule.getName()!=this.state.currentRule.ruleNode.data().props.name)//lin 2
+                    container.append( this.renderChosenRule(rule) );
+              
+                
             });
 
             return container;
@@ -247,9 +273,10 @@ export class PlaybookView extends View {
         let playbookItem = $('<li><a href="#">Playbook ' + this.state.playbookNode.data().props.name + '</a></li>').click((ev) => {
             this.restart();
         });
+        console.log("renderBreadcrumbs==========",this.state.ruleHistory)
 
-        let path = this.state.ruleHistory.concat([this.state.currentRule]);
-
+        //let path = this.state.ruleHistory.concat([this.state.currentRule]);
+        let path = this.state.ruleHistory //lin4
         let listItems = [playbookItem].concat(path.map(
             (rule, idx) => $('<li><a href="#">'+rule.getName()+'</a></li>').click((e) => {
                 let numBack = path.length - idx - 1;

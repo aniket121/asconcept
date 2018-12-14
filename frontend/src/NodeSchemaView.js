@@ -28,6 +28,11 @@ export class NodeSchemaView extends GraphView {
         // show only the given class on SELECT_CLASS and SELECT_INSTANCE
         Action.on(ActionTypes.SELECT_CLASS, (e, data) => {
              
+            //alert(data.class_name)
+            window.ClassName=data.class_name
+            window.url="/GraphByClass?name="+window.ClassName
+            this.graphService.getByClass(data.class_name)
+
             console.log('select class', e, data);
             this.highlightClass(data.class_name);
             let node = data.class_node, node_id = node.id();

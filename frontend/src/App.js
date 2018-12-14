@@ -264,7 +264,7 @@ export class App {
 
         if("mock" in hashValues || "mockInstanceGraph" in hashValues || "mockSchemaGraph" in hashValues) {
            
-            if(!("mockInstanceGraph" in hashValues)) { hashValues["mockInstanceGraph"] = API_URL_BASE+"/graph"; }
+            if(!("mockInstanceGraph" in hashValues)) { hashValues["mockInstanceGraph"] = API_URL_BASE+"/graph1"; }
             if(!("mockSchemaGraph"   in hashValues)) { hashValues["mockSchemaGraph"]   = API_URL_BASE+"/schema/graph"; }
 
             let instanceUrl = hashValues.mockInstanceGraph;
@@ -291,8 +291,9 @@ export class App {
         this.graphService.loadSchemaGraph((cy) => {
             Action.trigger(ActionTypes.LOADED_SCHEMA_GRAPH, { cy: cy });
             this.graphService.loadInstanceGraph((cy) => {
-                
+               
                 if(!this.doneFirstLoad) {
+                    //alert('first load')
                     console.log("START onFirstLoad()");
 
                     this.urlService.handleUrlHash(window.location.hash, UrlService.PRE_LOADED, this.graphService, this.visibilityService);
@@ -306,7 +307,9 @@ export class App {
                     Action.trigger(ActionTypes.LOADED_INSTANCE_GRAPH, { cy: cy, reload_data: data });
                    
                 }
-            });
+          
+        });
+
 
         });
 
@@ -317,7 +320,7 @@ export class App {
     }
 
     _loadInstanceData(data) {
-
+        
         this._loadData(data);
     }
 

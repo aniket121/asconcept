@@ -81,9 +81,9 @@ export class TopicView extends GraphView {
 
     onLoadInstanceGraph(allcy) {
         const cy = this.cy;
-
+         //alert('load topic')
         cy.elements().remove();
-
+       
         // only show non-topic instances
         cy.add( allcy.$("node[cls = 'Topic']") );
         cy.add( allcy.$("edge[cls = 'HasSubTopic']") );

@@ -182,7 +182,7 @@ export class GraphService {
         });
     }
 
-    loadInstanceGraph(cb) {
+     loadInstanceGraph(cb) {
         
         $.getJSON(this.url_base + "/graph", (data) => {
             if (this._instancegraph) {
@@ -208,6 +208,58 @@ export class GraphService {
         });
 
     }
+    
+     getByClass(className){
+           $.ajax({
+        url: this.url_base + "/GraphByClass",
+        type: "POST",
+        dataType: 'json',
+        data: JSON.stringify({'className':className}),
+        contentType: 'application/json',
+        
+        success: function(SerchResult) {
+          window.SerchResult==SerchResult
+          console.log("SerchResult",SerchResult)
+           
+          window.nodeData=SerchResult
+        },
+    
+       });
+
+      this.loadInstanceGraph(cytoscape)
+            
+    }
+    getNodeByClass(NodeName){
+             $.ajax({
+        url: this.url_base + "/GraphClassNode",
+        type: "POST",
+        dataType: 'json',
+        data: JSON.stringify({'nodeName':NodeName,'className':window.ClassName}),
+        contentType: 'application/json',
+        async: false,
+        success: function(SerchResult) {
+         
+          console.log("SerchResult",SerchResult)
+           window.nodeData=""
+          window.singNodeData=SerchResult
+          
+        },
+    
+    });
+     this.loadInstanceGraph(cytoscape)
+  
+    //  console.log("this._instancegraph ",window.singNodeData )
+    // this._instancegraph = instanceGraph(window.singNodeData);
+
+           
+
+    //         this._updateKeywordIndex();
+
+    //          cytoscape( this._instancegraph );
+             
+    //         this.onInstanceUpdateCallbacks.forEach( (cytoscape) => cytoscape(this) );
+
+    }
 
     createNodeInstance(className, props) {
 
@@ -215,8 +267,8 @@ export class GraphService {
        
         let data = Object.assign({}, props);
          if(data.RegisteredOffice || data.Legalform){
-         data.RegisteredOffice=props.RegisteredOffice[0];
-         data.Legalform=props.Legalform[0];
+         data.RegisteredOffice=props.RegisteredOffice;
+         data.Legalform=props.Legalform;
         }
         data["class_name"] = className;
        
@@ -237,6 +289,8 @@ export class GraphService {
                 diffs[k] = newProps[k];
             }
         }
+        console.log("===========diffence============",diffs)
+        console.log("===========newProps============",newProps)
         if(diffs.Legalform || diffs.RegisteredOffice){
           //diffs.Legalform=diffs.Legalform[0]
           //diffs.RegisteredOffice=diffs.RegisteredOffice[0]
@@ -244,7 +298,7 @@ export class GraphService {
         let updateUrl = this.url_base + "/instances/" + nodeId + '/';
         return $.ajax(updateUrl, {
             type: 'POST',
-            data: JSON.stringify(diffs),
+            data: JSON.stringify(newProps),
             contentType: 'application/json',
         });
     }
@@ -314,6 +368,7 @@ export class GraphService {
     }   
 
     getTopicByName(name) {
+        //alert("topic",name)
         return this.instance.$("[cls='Topic'][name='"+name+"']");
     }
 

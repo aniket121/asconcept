@@ -189,7 +189,7 @@ function getPatchedAlpaca(uploadService) {
     alpaca.Fields.SimpleKeywordField = alpaca.Fields.TextField.extend({
         getFieldType: function() { return "simplekeyword"; },
         setValue: function(val) {
-            let strval = val.join(', ');
+            let strval = val
             this.base(strval);
         },
         getValue: function() {

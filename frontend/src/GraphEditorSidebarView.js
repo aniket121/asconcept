@@ -282,7 +282,8 @@ export class GraphEditorSidebarView extends View {
 
         console.log('rendering display form, fields=', fields, 'classinfo=', classData, 'data=>', data);
         var editorViewThis = this;
-
+        //alert(data.props.attachment)
+       
 
         let self = this;
         var buttons = (this.userScope === 'viewer') ? {} : {
@@ -323,9 +324,13 @@ export class GraphEditorSidebarView extends View {
                       //alert('cancel')
                       console.log("==========",clone)
                       //window.location.reload()
+                       Action.trigger(ActionTypes.RELOAD_DATA, {
+                            reselect_instance: node.id()
+                        });
 
                       
                     }
+
                     this.reRender();
                 }
             }
@@ -341,7 +346,7 @@ export class GraphEditorSidebarView extends View {
 
                     let newData = this.getValue();
                     console.log('SAVE! new=', newData);
-                    
+                    //alert('save');
                     self.graphService.updateNodeInstance(nodeId, newData).done(function(...args) {
                         console.log('edit success, ret=', args);
                         editorViewThis.state.editing = false;
@@ -355,9 +360,10 @@ export class GraphEditorSidebarView extends View {
                 }
             };
         }
-
+         
         return this.alpaca.generateAndRenderForm(fields, data.props, !this.state.editing, buttons,
                                                  this.state.editing ? 'bootstrap-edit-horizontal' : 'bootstrap-display-horizontal', this.state.editing);
+        //this.graphService.getNodeByClass( node.data().props.name)
     }
 
     renderInstanceRelationForms(node) {
