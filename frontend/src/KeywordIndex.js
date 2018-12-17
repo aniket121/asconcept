@@ -119,7 +119,7 @@ export class KeywordIndex {
 
     lookupNodesFromAllKeywords(keywords) {
         let kwArr = Array.from(keywords);
-        return kwArr.map(k => this.lookupNodesFromSubstring(k)).reduce((a, b) => SetIntersection(a, b));
+        return kwArr.map(k => this.lookupNodesFromSubstring(k)).reduce((a, b) => SetUnion(a, b));
         //return kwArr.map(k => this.lookupNodesFromKeyword(k)).reduce((a, b) => SetIntersection(a, b));
     }
 

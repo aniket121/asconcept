@@ -475,9 +475,11 @@ export class InstanceView extends GraphView {
         });
 
         console.log('InstanceView.onVisibilityChange', 'reload=', reload, 'result=', result);
-
+        var that=this
         if(reload || result.numAddedNodes > 0 || result.numRemovedNodes >0 ) {
-            this.onLayout();
+            setTimeout(function(){ 
+            that.onLayout(); }, 300);
+
         }
     }
 

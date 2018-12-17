@@ -109,10 +109,19 @@ export class GraphSearchSidebarView extends View {
         if (visNodes.size == 0) {
             this.keywordCache = Array.from(keywordIndex.getPossibleKeywords());
         } else {
-            this.keywordCache = Array.from(keywordIndex.getPossibleKeywords(Array.from(visNodes)));
+            //this.keywordCache = Array.from(keywordIndex.getPossibleKeywords(Array.from(visNodes)));
+            this.keywordCache = Array.from(keywordIndex.getPossibleKeywords());
         }
         console.log('vis nodes=%O, avail kws=%O', visNodes, this.keywordCache);
     }
+      intersect(a, b) {
+            var t;
+            if (b.length > a.length) t = b, b = a, a = t; // indexOf to loop over shorter
+            return a.filter(function (e) {
+                return b.indexOf(e) > -1;
+            });
+        }
+
 
     render() {
         console.warn('Search ReRender');
@@ -192,20 +201,53 @@ export class GraphSearchSidebarView extends View {
         
         
         let onChangeFn = (e) => {
-
+            var thesaurus = require('thesaurus-synonyms');
             let searchKeywords = $(searchfield).tokenfield('getTokens').map(t => t.value);
             console.log('GraphSearchSidebarView new search keywords:', searchKeywords);
             this.kwSet = new Set(searchKeywords);
             //alert(searchKeywords)
-        
             window.searchKeywords=searchKeywords;
-            //alert(searchName)
-            // if(searchName)
-            // {
-            //        Snackbar.show({text: 'Search has been saved.'});
-            //        $("#inputsearch").val('');
-            // }
-            this.visibilityService.setIncludeKeywords(searchKeywords);
+            var thesaurus = require('thesaurus-synonyms');
+            var that=this;
+            var keywordsbuket=[]
+            var thesaurusKeywords=[]
+            var promise=[]
+            try{
+            for (var i=0;i<searchKeywords.length;i++){
+
+               promise[i]=thesaurus.similar(searchKeywords[i])
+               
+
+
+            }
+
+            var totalPromised=[]
+            var concatedarray=[]
+            var finalarray=[]
+             var resultarray;
+             
+             for(var i=0;i<promise.length;i++){
+                  promise[i].then(function(result){
+                    totalPromised.push(result)
+                   
+                    resultarray = [totalPromised].reduce((a, b) => a.map((c, i) => Object.assign({}, c, b[i])));
+                    for(var len=0;len<resultarray.length;len++){
+                        finalarray +=resultarray[0].concat(resultarray[len]).concat(searchKeywords)
+                        that.visibilityService.setIncludeKeywords(finalarray.split(","));
+                      
+                  }
+            });
+
+             }
+            
+            }
+            catch(err){
+                console.log("catch block")
+                that.visibilityService.setIncludeKeywords(searchKeywords);
+            }
+
+           
+
 
         };
 

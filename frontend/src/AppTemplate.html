@@ -430,7 +430,7 @@ body {
 function checkUser()
 {   
     $(".spincls").css("display","none");
-    loggin=localStorage.getItem("mattersmith");
+    var loggin=localStorage.getItem("mattersmith");
     console.log("storage",loggin)
    
     if(loggin){
@@ -873,7 +873,14 @@ function loadSearchDropdown()
          
           var option = document.createElement("option");
           option.text =SerchResult.data[i].Name;
-           option.value =SerchResult.data[i].Keywords.replace(/[{}]/g, "");;
+           try {
+               option.value =SerchResult.data[i].Keywords.replace(/[{}]/g, "");
+          }
+          catch(err) {
+              option.value =SerchResult.data[i].Keywords
+
+          }
+         
            x.add(option);
         }
 
