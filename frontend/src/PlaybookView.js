@@ -35,9 +35,7 @@ class PlaybookRule {
             // if it's just yes/no, place yes first, because no/yes just feels wrong
             answers.reverse();
         }
-        var set=new set(answers)
-        var arr=new Array.from(set)
-        return arr;
+        return answers
     }
 
     getAttachments() {

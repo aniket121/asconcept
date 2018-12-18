@@ -114,14 +114,6 @@ export class GraphSearchSidebarView extends View {
         }
         console.log('vis nodes=%O, avail kws=%O', visNodes, this.keywordCache);
     }
-      intersect(a, b) {
-            var t;
-            if (b.length > a.length) t = b, b = a, a = t; // indexOf to loop over shorter
-            return a.filter(function (e) {
-                return b.indexOf(e) > -1;
-            });
-        }
-
 
     render() {
         console.warn('Search ReRender');
@@ -242,15 +234,20 @@ export class GraphSearchSidebarView extends View {
             
             }
             catch(err){
-                console.log("catch block")
                 that.visibilityService.setIncludeKeywords(searchKeywords);
+            }
+            if(searchKeywords.length){
+                
+            }else{
+                 this.visibilityService.setIncludeKeywords(searchKeywords);
             }
 
            
+         
 
 
         };
-
+        
         this.searchTokenField.on('tokenfield:createdtoken', onChangeFn);
         this.searchTokenField.on('tokenfield:editedtoken',  onChangeFn);
         this.searchTokenField.on('tokenfield:removedtoken', onChangeFn);

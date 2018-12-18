@@ -226,7 +226,7 @@ export class GraphService {
     
        });
 
-      this.loadInstanceGraph(cytoscape)
+      //this.loadInstanceGraph(cytoscape)
             
     }
     getNodeByClass(NodeName){
@@ -246,7 +246,7 @@ export class GraphService {
         },
     
     });
-     this.loadInstanceGraph(cytoscape)
+     //this.loadInstanceGraph(cytoscape)
   
     //  console.log("this._instancegraph ",window.singNodeData )
     // this._instancegraph = instanceGraph(window.singNodeData);

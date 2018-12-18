@@ -31,7 +31,7 @@ export class NodeSchemaView extends GraphView {
             //alert(data.class_name)
             window.ClassName=data.class_name
             window.url="/GraphByClass?name="+window.ClassName
-            this.graphService.getByClass(data.class_name)
+            //this.graphService.getByClass(data.class_name)
 
             console.log('select class', e, data);
             this.highlightClass(data.class_name);
@@ -95,6 +95,7 @@ export class NodeSchemaView extends GraphView {
             "contentType": "application/json",
             });
             window.location.reload()
+            
             console.log("Name",name,"Descriptions",desc,"ID",_oid,"COLOUR",colour,"SUPERclass",supercls);
             }, 'Create Child', 'fa-thumb-tack', true));
 
