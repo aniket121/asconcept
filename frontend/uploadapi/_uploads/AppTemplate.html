@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title><%= htmlWebpackPlugin.options.title %></title>
+    </head>
+    <body>
+        <script>
+        (function(){
+            window._logtrace = [];
+            window._realconsolefns = {
+                "log": console.log,
+                "info": console.info,
+                "warn": console.warn,
+                "error": console.error,
+            };
+
+            function logatlevelfn(level) {
+                return function() {
+                    let argsarr = Array.prototype.slice.call(arguments);
+                    window._logtrace.push({
+                        "level": level,
+                        "arguments": argsarr,
+                        "timestamp": Date.now()
+                    });
+                    window._realconsolefns.log.apply(console, argsarr);
+                }
+            }
+
+            console.log   = logatlevelfn("log");
+            console.info  = logatlevelfn("info");
+            console.warn  = logatlevelfn("warn");
+            console.error = logatlevelfn("error");
+
+            window.onerror = function(message, source, lineNo, colNo, error) {
+                // TODO: do something
+            };
+        // don't load this for now
+        }); // ();
+        </script>
+        <script>
+            window.OPENSECRET_UPLOAD_URL = "/upload";
+            window.OPENSECRET_API_URL = "/api";
+        </script>
+        <div class="sidebar">
+            <div>
+                <a href="/"><img src="/assets/logo-cropped-red.png" width="250"></a>
+            </div>
+            <div id="mock-info" class="hidden"></div>
+            <div id="sidebar-menu" class="top">
+                <button data-toggle="tooltip" data-placement="bottom" title="Reload node data from server" id="btn-reload" class="btn btn-ms-ora btn-sm"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+                <div id="rhs-view-controls" class="btn-group btn-group-sm" role="group" data-toggle="buttons">
+                    <label class="btn btn-ms-turq active" data-rhs-view="schema" title="Display the class schema in the right hand panel." data-placement="bottom" data-container="body" data-toggle="tooltip">
+                        <input type="radio" name="rhs-view"
+                               id="rhs-schema-btn" autocomplete="off" checked>
+                        Schema
+                    </label>
+                    <label class="btn btn-ms-turq" data-rhs-view="topics" title="Display the available Topics in the right hand panel." data-placement="bottom" data-container="body" data-toggle="tooltip">
+                        <input type="radio" name="rhs-view"
+                               id="rhs-topics-btn" autocomplete="off">
+                        Topics
+                    </label>
+                    <label class="btn btn-ms-turq" data-rhs-view="playbook" title="Display the current Playbook in the right hand panel." data-placement="bottom" data-toggle="tooltip" data-container="body">
+                        <input type="radio" name="rhs-view"
+                               id="rhs-playbook-btn" autocomplete="off">
+                        Playbook
+                    </label>
+                </div>
+                <button data-toggle="tooltip" data-placement="bottom" title="Reset to an empty graph." id="btn-clear-inst" class="btn btn-ms-ora btn-sm pull-right">&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-times-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;</button>
+            </div>
+
+            <div id="sidebar-filter">Class Filter: Loading</div>
+            <div id="sidebar-topic-filter">Topic Filter: Loading</div>
+
+            <div id="sidebar-search" class="nothidden">
+                Sidebar Search: Loading
+            </div>
+
+            <div id="sidebar-filter-info" class="nothidden">
+                Filter Info: Loading
+            </div>
+
+            <hr/>
+
+            <div id="sidebar-info" class="nothidden">
+                Sidebar Info: Loading
+            </div>
+
+            <hr/>
+
+            <div id="sidebar-form" class="hidden">
+                Sidebar Editor: Loading
+                <hr />
+            </div>
+            <!-- <button id="btn-init-layout" class="btn btn-default">InitLayout</button>
+                 <button id="btn-relayout" class="btn btn-default">ReLayout</button> -->
+
+            <div><small>User <em id="userinfo"></em>, in <em id="scopeinfo"></em> mode</small> </div>
+            <div id="user-mode-switcher" style="display: none">Mode:
+                <div class="btn-group" role="group">
+                    <button id="btn-switchuser-admin" type="button" class="btn btn-default btn-xs">Admin</button>
+                    <!-- <button id="btn-switchuser-editor" type="button" class="btn btn-default btn-xs">Editor</button> -->
+                    <button id="btn-switchuser-viewer" type="button" class="btn btn-default btn-xs">Viewer</button>
+                </div>
+                <input type="checkbox" checked id="chk-su-preserve-state">
+                <label for="chk-su-preserve-state">Preserve Filters</label>
+            </div>
+            <div>
+                <label for="current-state-url">Link to current setup:</label>
+                <input type="text" id="current-state-url" class="form-control" readonly></input>
+            </div>
+        </div>
+        <div class="lhsoverlay" id="lhszoominfo"></div>
+
+        <div class="hoverbars" id="countbar"></div>
+        <div class="hoverbars" id="hoverbar">Hoverbar For Info <span class="glyphicon glyphicon-search" aria-hidden="true"></span> </div>
+    </body>
+</html>
