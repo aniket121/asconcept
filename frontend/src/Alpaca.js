@@ -219,7 +219,7 @@ function getPatchedAlpaca(uploadService) {
            
 
             // FIXME: this line is just a hack to make pre-migration broken keywords prop work, remove it later
-             console.log("window--ch",this.SelectFieldValue)
+             //console.log("window--ch",this.SelectFieldValue)
             return this.SelectFieldValue;
         }
         
@@ -274,12 +274,12 @@ export class Alpaca {
 
             };
             //alert(k)
-            if(k=="Legalform"){
+            if(k=="C"){
                 
                schemaProperties[k]["enum"]=["Company", "Partnership", "Limited Liability Partnership", "Individual", "Sole Trader","Unincorporated Association","Others"]
                 
             }
-             if(k=="RegisteredOffice"){
+             if(k=="F"){
                
                schemaProperties[k]["enum"]=["yes","No"] 
             }
@@ -289,6 +289,9 @@ export class Alpaca {
             optionsFields[k] = {
                 "type": fieldTypes.field,
                 "label": fields[k].label,
+                "dependencies": {
+                     "C": "Others" // Specify the required value for the dependant field to show
+                   },
 
             };
         });
@@ -310,11 +313,17 @@ export class Alpaca {
             "schema": {
                 "type": "object",
                 "properties": schemaProperties,
-            },
+            "dependencies": {
+                 "B": "C"
+            }
+        },
+
             "options": options,
+            
            
              
             "postRender": function(control) {
+                //console.log(control)
                 if (control.form) {
                     control.form.registerSubmitHandler(function (e) {
                         e.preventDefault();

@@ -168,16 +168,12 @@ export class GraphService {
               
 
             }
-            localStorage.setItem("schemaNodes",JSON.stringify(dumpClass))
-
-            console.log("=================>",localStorage.getItem("schemaNodes"))
+            localStorage.setItem("schemaNodes",JSON.stringify(dumpClass));
             cb( this._schemagraph );
             var nodes=[]
             var edges=[]
             nodes.push(schemadata.nodes)
             edges.push(schemadata.edges)
-            console.log("====================sss nodes=============",nodes.concat(edges))
-            console.log("====================edges=============",{"nodes":nodes[0]},{"edges":nodes[1]})
             this.onSchemaUpdateCallbacks.forEach( (cb) => cb(this) );
         });
     }
@@ -209,26 +205,26 @@ export class GraphService {
 
     }
     
-     getByClass(className){
-           $.ajax({
-        url: this.url_base + "/GraphByClass",
-        type: "POST",
-        dataType: 'json',
-        data: JSON.stringify({'className':className}),
-        contentType: 'application/json',
+    //  getByClass(className){
+    //        $.ajax({
+    //     url: this.url_base + "/GraphByClass",
+    //     type: "POST",
+    //     dataType: 'json',
+    //     data: JSON.stringify({'className':className}),
+    //     contentType: 'application/json',
         
-        success: function(SerchResult) {
-          window.SerchResult==SerchResult
-          console.log("SerchResult",SerchResult)
+    //     success: function(SerchResult) {
+    //       window.SerchResult==SerchResult
+    //       console.log("SerchResult",SerchResult)
            
-          window.nodeData=SerchResult
-        },
+    //       window.nodeData=SerchResult
+    //     },
     
-       });
+    //    });
 
-      //this.loadInstanceGraph(cytoscape)
+    //   //this.loadInstanceGraph(cytoscape)
             
-    }
+    // }
     getNodeByClass(NodeName){
              $.ajax({
         url: this.url_base + "/GraphClassNode",

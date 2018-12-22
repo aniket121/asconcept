@@ -109,8 +109,8 @@ export class GraphSearchSidebarView extends View {
         if (visNodes.size == 0) {
             this.keywordCache = Array.from(keywordIndex.getPossibleKeywords());
         } else {
-            //this.keywordCache = Array.from(keywordIndex.getPossibleKeywords(Array.from(visNodes)));
-            this.keywordCache = Array.from(keywordIndex.getPossibleKeywords());
+            this.keywordCache = Array.from(keywordIndex.getPossibleKeywords(Array.from(visNodes)));
+            //this.keywordCache = Array.from(keywordIndex.getPossibleKeywords());
         }
         console.log('vis nodes=%O, avail kws=%O', visNodes, this.keywordCache);
     }
@@ -199,50 +199,50 @@ export class GraphSearchSidebarView extends View {
             this.kwSet = new Set(searchKeywords);
             //alert(searchKeywords)
             window.searchKeywords=searchKeywords;
-            var thesaurus = require('thesaurus-synonyms');
-            var that=this;
-            var keywordsbuket=[]
-            var thesaurusKeywords=[]
-            var promise=[]
-            try{
-            for (var i=0;i<searchKeywords.length;i++){
+            // var thesaurus = require('thesaurus-synonyms');
+            // var that=this;
+            // var keywordsbuket=[]
+            // var thesaurusKeywords=[]
+            // var promise=[]
+            // try{
+            // for (var i=0;i<searchKeywords.length;i++){
 
-               promise[i]=thesaurus.similar(searchKeywords[i])
+            //    promise[i]=thesaurus.similar(searchKeywords[i])
                
 
 
-            }
+            // }
 
-            var totalPromised=[]
-            var concatedarray=[]
-            var finalarray=[]
-             var resultarray;
+            // var totalPromised=[]
+            // var concatedarray=[]
+            // var finalarray=[]
+            //  var resultarray;
              
-             for(var i=0;i<promise.length;i++){
-                  promise[i].then(function(result){
-                    totalPromised.push(result)
+            //  for(var i=0;i<promise.length;i++){
+            //       promise[i].then(function(result){
+            //         totalPromised.push(result)
                    
-                    resultarray = [totalPromised].reduce((a, b) => a.map((c, i) => Object.assign({}, c, b[i])));
-                    for(var len=0;len<resultarray.length;len++){
-                        finalarray +=resultarray[0].concat(resultarray[len]).concat(searchKeywords)
-                        that.visibilityService.setIncludeKeywords(finalarray.split(","));
+            //         resultarray = [totalPromised].reduce((a, b) => a.map((c, i) => Object.assign({}, c, b[i])));
+            //         for(var len=0;len<resultarray.length;len++){
+            //             finalarray +=resultarray[0].concat(resultarray[len]).concat(searchKeywords)
+            //             that.visibilityService.setIncludeKeywords(finalarray.split(","));
                       
-                  }
-            });
+            //       }
+            // });
 
-             }
+            //  }
             
-            }
-            catch(err){
-                that.visibilityService.setIncludeKeywords(searchKeywords);
-            }
-            if(searchKeywords.length){
+            // }
+            // catch(err){
+            //     that.visibilityService.setIncludeKeywords(searchKeywords);
+            // }
+            // if(searchKeywords.length){
                 
-            }else{
-                 this.visibilityService.setIncludeKeywords(searchKeywords);
-            }
+            // }else{
+            //      this.visibilityService.setIncludeKeywords(searchKeywords);
+            // }
 
-           
+           this.visibilityService.setIncludeKeywords(searchKeywords);
          
 
 

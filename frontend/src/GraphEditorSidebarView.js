@@ -186,6 +186,8 @@ export class GraphEditorSidebarView extends View {
         });
 
         Action.on(ActionTypes.SELECT_CLASS, (e, data) => {
+            //alert('====')
+            //console.log(data)
             this.state.showing = 'newInstanceForm';
             this.state.classNode = data.class_node;
 			      this.state.editing = false;
@@ -269,6 +271,7 @@ export class GraphEditorSidebarView extends View {
     }
 
     renderInstanceNodePropsInfo(node) {
+
         var nodeObject=node;
         console.log("===============node============",node)
         var nodeData = node.data();

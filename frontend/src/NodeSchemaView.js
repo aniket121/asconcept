@@ -16,7 +16,7 @@ export class NodeSchemaView extends GraphView {
             console.log("on node tab event",e)
             //var class_name="Agreement"
             var class_name = e.target.data().name;
-        
+            window.class_name=class_name
             Action.triggerElement(this.getContainer(), ActionTypes.SELECT_CLASS, { class_name: class_name, class_node: e.target });
         });
 
@@ -63,7 +63,9 @@ export class NodeSchemaView extends GraphView {
             }
         });
 
+       
         let mkCtxCommand = (command, name, icon, enabled) => {
+         
             return {
             content: `<span class="fa ${icon}"></span> ${name}`,
             select: command,
@@ -75,6 +77,7 @@ export class NodeSchemaView extends GraphView {
             selector: 'node',
             activePadding : 2,
             commands: (nele) => {
+            if(nele.data().name !="Any" && localStorage.getItem("role") !="viewer"){
             let ndata = nele.data;
             let selection = this.getSelectedNodes();
             let mselect = selection.length > 0;
@@ -93,20 +96,34 @@ export class NodeSchemaView extends GraphView {
             "data": JSON.stringify(childClass),
             "type": "POST",
             "contentType": "application/json",
-            });
+            }).done(function(){
             window.location.reload()
+           });
             
             console.log("Name",name,"Descriptions",desc,"ID",_oid,"COLOUR",colour,"SUPERclass",supercls);
             }, 'Create Child', 'fa-thumb-tack', true));
 
-            // cmds.push(mkCtxCommand((ele) => {
-            // let name=prompt("Child Name");
+            cmds.push(mkCtxCommand((ele) => {
+             if (confirm('Are you sure you want to delete Class?')) {
+                $.ajax("http://localhost:8001" + "/schema/graph/deleteClass", {
+                    "data": JSON.stringify({"class_name":nele.data().name}),
+                    "type": "POST",
+                    "contentType": "application/json",
+                    }).done(function(){
+                            //window.location.reload()
 
-            // }, 'Delete Child', 'fa-thumb-tack', true));
+                   });
+            } else {
+               // alert('cancel')
+                console.log(ele.connectedNodes())
+            };
+
+            }, 'Delete Child Class', 'fa-thumb-tack', true));
 
             return cmds;
 
       }
+    }
 });
 
     }
