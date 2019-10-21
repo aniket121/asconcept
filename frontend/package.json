@@ -34,7 +34,7 @@
     "bootstrap": "^3.3.7",
     "bootstrap-tokenfield": "^0.12.0",
     "bootstrap-treeview": "^1.2.0",
-    "bower": "^1.8.4",
+    "bower": "^1.8.8",
     "cytoscape": "^3.2.6",
     "cytoscape-cola": "^2.0.1",
     "cytoscape-cxtmenu": "^2.10.3",
