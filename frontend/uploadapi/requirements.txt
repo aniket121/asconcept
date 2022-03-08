@@ -12,7 +12,7 @@ flask-restplus==0.10.1
 flask-shell-ipython==0.3.0
 functools32==3.2.3.post2
 hashids==1.2.0
-httpie==0.9.9
+httpie==3.1.0
 idna==2.6
 ipdb==0.10.3
 ipython==5.5.0
