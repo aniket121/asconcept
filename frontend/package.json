@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "alpaca": "^1.5.24",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^3.4.1",
     "bootstrap-tokenfield": "^0.12.0",
     "bootstrap-treeview": "^1.2.0",
     "bower": "^1.8.4",
